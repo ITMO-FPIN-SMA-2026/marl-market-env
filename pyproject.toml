@@ -1,0 +1,9 @@
+[project]
+name = "marl-social-market-env"
+version = "0.1.0"
+description = "MVP environment for a dynamic network market MARL laboratory"
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
