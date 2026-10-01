@@ -1,9 +1,21 @@
 [project]
-name = "marl-social-market-env"
-version = "0.1.0"
-description = "MVP environment for a dynamic network market MARL laboratory"
-requires-python = ">=3.10"
+name = "social-market-env"
+version = "2.0.0.dev0"
+description = "Environment for the MARL market lab with endogenous coalitions and a social arbiter"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26", "pyyaml>=6.0"]
+
+[project.optional-dependencies]
+viewer = ["streamlit>=1.37", "plotly>=5.22"]
+dev = ["pytest>=8.0"]
 
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
