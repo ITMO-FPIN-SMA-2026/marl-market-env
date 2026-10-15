@@ -14,9 +14,9 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m social_market_env.run experiments/demo.yaml
 ```
 
-Pytest создаёт временные файлы в `.pytest_tmp` внутри проекта: это обходит ошибки
-доступа к системной папке `%TEMP%` в некоторых конфигурациях Windows. Кеш pytest
-отключён, поэтому проверка не зависит от прав доступа к `.pytest_cache`.
+На Windows pytest создаёт временные файлы в отдельной папке `.pytest_tmp_<SID>`
+для каждой учётной записи, которая запускает тесты. Это предотвращает конфликт
+прав между обычным PowerShell и средой Codex. Кеш pytest отключён.
 
 Linux/macOS:
 

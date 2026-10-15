@@ -19,4 +19,4 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-p no:cacheprovider --basetemp=.pytest_tmp"
+addopts = "-p no:cacheprovider"
