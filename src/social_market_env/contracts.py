@@ -57,6 +57,38 @@ class CoalitionOffer:
 
 
 @dataclass(frozen=True)
+class AgentExpectations:
+    """Agent-local one-step forecasts, initially unknown.
+
+    The environment supplies a persistence baseline from the last realized step;
+    learning agents may maintain their own richer forecasts internally.
+    """
+
+    average_price: float | None = None
+    quantity: float | None = None
+    gross_profit: float | None = None
+    coalition_payout: float | None = None
+    reward: float | None = None
+
+
+@dataclass(frozen=True)
+class AgentEvaluation:
+    """Realized outcome and forecast errors for one agent action."""
+
+    step: int
+    price: float | None
+    quantity: float
+    gross_profit: float
+    coalition_payout: float
+    fine: float
+    link_fee: float
+    reward: float
+    profit_error: float | None
+    reward_error: float | None
+    joined_plan_id: int | None
+
+
+@dataclass(frozen=True)
 class AgentObservation:
     """Everything a market agent sees before choosing an action."""
 
@@ -86,6 +118,14 @@ class AgentObservation:
     """Current cost of forming a link to every other active agent."""
     offer: CoalitionOffer | None
     """Coalition plan offered to this agent on this step."""
+    expectations: AgentExpectations = field(default_factory=AgentExpectations)
+    """Forecast based on the preceding realized step."""
+    last_evaluation: AgentEvaluation | None = None
+    """Evaluation of this agent's preceding action."""
+    last_coalition_plan_ids: tuple[int, ...] = ()
+    """Plan IDs indexing last_coalition_join_vector."""
+    last_coalition_join_vector: tuple[int, ...] = ()
+    """One-hot choice among accepted plans on the preceding step."""
 
 
 @dataclass(frozen=True)

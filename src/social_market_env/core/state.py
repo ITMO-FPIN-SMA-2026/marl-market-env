@@ -6,6 +6,8 @@ import numpy as np
 
 from social_market_env.contracts import (
     AgentAction,
+    AgentEvaluation,
+    AgentExpectations,
     AgentObservation,
     ArbiterAction,
     ArbiterObservation,
@@ -24,6 +26,18 @@ from social_market_env.core.scoring import ArbiterVerdict, HarmFootprint
 
 
 @dataclass
+class AgentState:
+    """Complete per-episode record available to the environment and centralized training."""
+
+    observations: list[AgentObservation] = field(default_factory=list)
+    expectations: AgentExpectations = field(default_factory=AgentExpectations)
+    expectation_history: list[AgentExpectations] = field(default_factory=list)
+    evaluations: list[AgentEvaluation] = field(default_factory=list)
+    coalition_plan_ids: tuple[int, ...] = ()
+    coalition_join_vector: tuple[int, ...] = ()
+
+
+@dataclass
 class EnvState:
     """Mutable state of one episode."""
 
@@ -35,6 +49,8 @@ class EnvState:
     """Whether components are allowed to learn."""
     accounts: dict[int, Account]
     """Reserve and status per agent."""
+    agent_state: dict[int, AgentState]
+    """Per-agent observations, forecasts, evaluations and coalition choices."""
     network: NetworkState
     """Hidden network."""
     last_prices: dict[int, float] = field(default_factory=dict)
@@ -127,6 +143,46 @@ def remember_step(*, state: EnvState, context: StepContext) -> None:
     state.fines_history.extend(
         FineRecord(step=state.step, target=target, fine=fine) for target, fine in sorted(context.fines.items())
     )
+    _remember_agents(state=state, context=context)
+
+
+def _remember_agents(*, state: EnvState, context: StepContext) -> None:
+    plan_ids = tuple(plan.plan_id for plan in context.plans)
+    for agent_id, observation in context.agent_observations.items():
+        memory = state.agent_state[agent_id]
+        action = context.actions[agent_id]
+        gross_profit = context.outcome.gross_profits.get(agent_id, 0.0)
+        payout = context.received.get(agent_id, 0.0) - gross_profit
+        reward = context.agent_rewards[agent_id]
+        chosen = next(
+            (plan.plan_id for plan in context.plans
+             if agent_id in plan.members and action.participate and action.coalition_choice == plan.plan_id),
+            None,
+        )
+        expected = observation.expectations
+        memory.coalition_plan_ids = plan_ids
+        memory.coalition_join_vector = tuple(int(plan_id == chosen) for plan_id in plan_ids)
+        memory.evaluations.append(AgentEvaluation(
+            step=state.step,
+            price=context.outcome.prices.get(agent_id),
+            quantity=context.outcome.quantities.get(agent_id, 0.0),
+            gross_profit=gross_profit,
+            coalition_payout=payout,
+            fine=context.fines.get(agent_id, 0.0),
+            link_fee=context.link_fees.get(agent_id, 0.0),
+            reward=reward,
+            profit_error=None if expected.gross_profit is None else gross_profit - expected.gross_profit,
+            reward_error=None if expected.reward is None else reward - expected.reward,
+            joined_plan_id=chosen,
+        ))
+        memory.expectations = AgentExpectations(
+            average_price=context.outcome.average_price,
+            quantity=context.outcome.quantities.get(agent_id, 0.0),
+            gross_profit=gross_profit,
+            coalition_payout=payout,
+            reward=reward,
+        )
+        memory.expectation_history.append(memory.expectations)
 
 
 def _remember_compliance(*, state: EnvState, record: PlanCompliance) -> None:

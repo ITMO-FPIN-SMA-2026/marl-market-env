@@ -7,6 +7,7 @@ from social_market_env.contracts import CoalitionPlan, Pair
 from social_market_env.core.coalitions import PlanCompliance
 from social_market_env.core.guard import GuardEvent
 from social_market_env.core.state import EnvState, StepContext
+from social_market_env.gametheory.graphs import graph_matrices
 
 DIGITS: int = 6
 
@@ -23,6 +24,17 @@ def build_step_record(*, state: EnvState, context: StepContext, events: list[Gua
         **_market_part(context),
         **_agents_part(state=state, context=context),
         'edges': {pair_key(pair): round(weight, DIGITS) for pair, weight in context.edges_snapshot.items()},
+        'graph_nodes': sorted(state.accounts),
+        'graph_matrices': graph_matrices(
+            nodes=state.accounts,
+            edges=context.edges_snapshot,
+            coalitions=(record.compliers + record.defectors for record in context.compliance),
+        ),
+        'coalition_plan_ids': [plan.plan_id for plan in context.plans],
+        'coalition_join_vectors': {
+            agent_id: list(memory.coalition_join_vector)
+            for agent_id, memory in sorted(state.agent_state.items())
+        },
         'link_costs': {
             pair_key(pair): round(cost, DIGITS) for pair, cost in sorted(state.network.link_costs.items()) if cost > 0
         },
@@ -63,6 +75,14 @@ def _agents_part(*, state: EnvState, context: StepContext) -> dict[str, Any]:
         'fines': _rounded(context.fines),
         'link_fees': _rounded(context.link_fees),
         'agent_rewards': _rounded(context.agent_rewards),
+        'agent_expectations': {
+            agent_id: asdict(memory.expectations)
+            for agent_id, memory in sorted(state.agent_state.items())
+        },
+        'agent_evaluations': {
+            agent_id: asdict(memory.evaluations[-1]) if memory.evaluations else None
+            for agent_id, memory in sorted(state.agent_state.items())
+        },
         'balances': {agent_id: round(account.balance, DIGITS) for agent_id, account in accounts},
         'active': {agent_id: account.active for agent_id, account in accounts},
         'restricted': {agent_id: account.restricted for agent_id, account in accounts},

@@ -51,7 +51,7 @@ from social_market_env.core.sanitize import (
 )
 from social_market_env.core.scoring import arbiter_reward, find_harm, judge_arbiter, social_welfare
 from social_market_env.core.seeding import spawn_seeds
-from social_market_env.core.state import EnvState, StepContext, remember_step
+from social_market_env.core.state import AgentState, EnvState, StepContext, remember_step
 from social_market_env.core.transitions import TransitionBuffer
 from social_market_env.gametheory.equilibrium import (
     CharacteristicFunction,
@@ -59,7 +59,7 @@ from social_market_env.gametheory.equilibrium import (
     coalition_equilibrium,
     nash_equilibrium,
 )
-from social_market_env.gametheory.graphs import all_pairs
+from social_market_env.gametheory.graphs import all_pairs, graph_matrices
 from social_market_env.gametheory.payouts import coalition_surplus
 
 
@@ -108,6 +108,11 @@ class SocialMarketEnvironment:
         return self._state
 
     @property
+    def agent_state(self) -> dict[int, AgentState]:
+        """Per-agent histories for inspection and centralized training."""
+        return self.state.agent_state
+
+    @property
     def done(self) -> bool:
         """True when the horizon is reached or nobody is active."""
         return self.state.step >= self.config.horizon or not self.state.active_ids()
@@ -122,8 +127,11 @@ class SocialMarketEnvironment:
             rng=rng,
             training=training,
             accounts={agent_id: Account(balance=self.config.finance.initial_balance) for agent_id in ids},
+            agent_state={agent_id: AgentState() for agent_id in ids},
             network=create_network(agent_ids=ids, costs=self.costs, config=self.config.network, rng=rng),
         )
+        for memory in self.state.agent_state.values():
+            memory.expectation_history.append(memory.expectations)
         self.transitions.clear()
         self.guard.drain_events()
         for agent_id, agent_seed in zip(ids, agent_seeds):
@@ -162,8 +170,14 @@ class SocialMarketEnvironment:
             'balances': {agent_id: account.balance for agent_id, account in state.accounts.items()},
             'active': sorted(active),
             'edges': state.network.edge_weights(active=active),
+            'graph_nodes': list(sorted(state.accounts)),
+            'graph_matrices': graph_matrices(
+                nodes=state.accounts,
+                edges=state.network.edge_weights(active=active),
+            ),
             'link_costs': dict(state.network.link_costs),
             'last_prices': dict(state.last_prices),
+            'agent_state': state.agent_state,
         }
 
     def _coalition_phase(self, *, state: EnvState, context: StepContext) -> None:
@@ -194,6 +208,7 @@ class SocialMarketEnvironment:
             )
             self.transitions.release(key=f'agent:{agent_id}', next_observation=observation, done=False)
             context.agent_observations[agent_id] = observation
+            state.agent_state[agent_id].observations.append(observation)
             context.actions[agent_id] = self._agent_action(state=state, agent_id=agent_id, observation=observation)
 
     def _agent_action(self, *, state: EnvState, agent_id: int, observation: AgentObservation) -> AgentAction:

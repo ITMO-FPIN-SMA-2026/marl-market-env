@@ -3,6 +3,7 @@
 import math
 from dataclasses import dataclass
 
+import networkx as nx
 import numpy as np
 
 from social_market_env.config import NetworkConfig
@@ -140,7 +141,11 @@ def evolve_edges(
     """Draw G_{t+1}: each pair keeps or forms a link with its own probability."""
     if config.mode == 'static':
         return EdgeChanges(formed=frozenset(), dropped=frozenset())
-    new_edges: set[Pair] = set()
+    previous = nx.Graph()
+    previous.add_nodes_from(state.agent_ids)
+    previous.add_edges_from(state.edges)
+    evolved = nx.Graph()
+    evolved.add_nodes_from(state.agent_ids)
     for pair in sorted(state.history):
         # Draw for every pair so skipped pairs do not shift the random stream of the others.
         draw = rng.uniform()
@@ -149,9 +154,12 @@ def evolve_edges(
         gain = expected_gain.get(pair, 0.0)
         bonus = requests.bonuses.get(pair, 0)
         if draw < _link_probability(state=state, pair=pair, expected_gain=gain, bonus=bonus, config=config):
-            new_edges.add(pair)
-    changes = EdgeChanges(formed=frozenset(new_edges - state.edges), dropped=frozenset(state.edges - new_edges))
-    state.edges = new_edges
+            evolved.add_edge(*pair)
+    changes = EdgeChanges(
+        formed=frozenset(as_pair(edge) for edge in nx.difference(evolved, previous).edges),
+        dropped=frozenset(as_pair(edge) for edge in nx.difference(previous, evolved).edges),
+    )
+    state.edges = {as_pair(edge) for edge in evolved.edges}
     return changes
 
 
@@ -223,13 +231,19 @@ def _initial_edges(
     *, config: NetworkConfig, agent_ids: list[int], affinity: dict[Pair, float], rng: np.random.Generator
 ) -> set[Pair]:
     if config.topology == 'complete':
-        return set(all_pairs(agent_ids))
+        return {as_pair(edge) for edge in nx.complete_graph(agent_ids).edges}
     if config.topology == 'star':
-        return {as_pair((agent_ids[0], other)) for other in agent_ids[1:]}
+        graph = nx.star_graph(len(agent_ids) - 1)
+        return {as_pair((agent_ids[first], agent_ids[second])) for first, second in graph.edges}
     if config.topology == 'path':
-        return {as_pair(agent_ids[index:index + 2]) for index in range(len(agent_ids) - 1)}
+        graph = nx.path_graph(len(agent_ids))
+        return {as_pair((agent_ids[first], agent_ids[second])) for first, second in graph.edges}
     if config.topology == 'inner_coalitions':
         blocks = np.array_split(np.array(agent_ids), max(1, config.inner_groups))
-        return {pair for block in blocks for pair in all_pairs(int(agent_id) for agent_id in block)}
+        return {
+            as_pair(edge)
+            for block in blocks
+            for edge in nx.complete_graph([int(agent_id) for agent_id in block]).edges
+        }
     offset = _density_offset(affinity=affinity, density=config.initial_density)
     return {pair for pair in sorted(affinity) if rng.uniform() < float(sigmoid(affinity[pair] + offset))}

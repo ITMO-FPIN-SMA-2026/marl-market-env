@@ -16,6 +16,7 @@ def build_agent_observation(
 ) -> AgentObservation:
     """Return the agent's private data, public market data and its own neighborhood."""
     account = state.accounts[agent_id]
+    memory = state.agent_state[agent_id]
     active = set(state.active_ids())
     return AgentObservation(
         agent_id=agent_id,
@@ -37,6 +38,10 @@ def build_agent_observation(
             other: state.network.link_costs[as_pair((agent_id, other))] for other in sorted(active - {agent_id})
         },
         offer=offer,
+        expectations=memory.expectations,
+        last_evaluation=memory.evaluations[-1] if memory.evaluations else None,
+        last_coalition_plan_ids=memory.coalition_plan_ids,
+        last_coalition_join_vector=memory.coalition_join_vector,
     )
 
 

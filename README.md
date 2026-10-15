@@ -5,6 +5,17 @@
 
 ## Установка
 
+Windows PowerShell (Python 3.11 или новее):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e '.[dev]'
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m social_market_env.run experiments/demo.yaml
+```
+
+Linux/macOS:
+
 ```bash
 uv venv --python 3.14 .venv
 uv pip install --python .venv/bin/python -e '.[dev]'
@@ -141,6 +152,18 @@ for episode in range(100):
 - Без явного `guard=CallGuard(strict=False, ...)` среда, созданная конструктором, падает на первой ошибке
   в командном коде; `build_environment` берёт `strict` из конфига.
 - Для централизованного обучения (MAPPO, QMIX) есть `env.global_state()`.
+- `env.agent_state[agent_id]` хранит полную историю `observations`, `expectation_history`,
+  `evaluations`, а также текущий прогноз `expectations`. Прогноз по умолчанию повторяет
+  результат предыдущего шага; ошибки прогноза записываются в `AgentEvaluation`.
+- В `AgentObservation` доступны собственные `expectations`, `last_evaluation` и
+  `last_coalition_join_vector`. Последний вектор индексируется по
+  `last_coalition_plan_ids`; один элемент равен 1, если агент присоединился к плану.
+  Запись шага содержит `coalition_plan_ids` и векторы всех агентов.
+- В записи шага `graph_nodes` задаёт порядок строк и столбцов трёх матриц
+  `graph_matrices`: `adjacency` (прямые связи), `reachability` (связность по путям)
+  и `coalition_membership` (фактическое присоединение к одному плану). Они относятся
+  к графу в начале шага `G_t`. Эволюция `G_t` через NetworkX и вероятности из
+  `NetworkConfig` формирует граф следующего шага.
 
 ## Тесты
 
