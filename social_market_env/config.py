@@ -13,7 +13,8 @@ class EnvironmentConfig:
     horizon: int = 100
     seed: int = 42
 
-    # Network evolution (MVP heuristic; replaceable later)
+    # Network evolution. An undirected link needs bilateral consent to force
+    # creation; the stochastic rule handles pairs without explicit decisions.
     initial_edge_probability: float = 0.25
     base_link_probability: float = 0.10
     similarity_weight: float = 0.25
@@ -27,8 +28,11 @@ class EnvironmentConfig:
     min_allowed_balance: float = -250.0
     max_negative_steps: int = 3
 
-    # Coalition reward distribution: MVP supports equal split only.
+    # Coalition surplus is allocated by the exact Myerson value.
     coalition_bonus_scale: float = 0.05
+    max_exact_coalition_size: int = 12
+    myerson_samples: int = 2048
+    expectation_smoothing: float = 0.5
 
     # Arbiter reward (matches the structure from the assignment)
     target_social_welfare: float = 0.0

@@ -2,13 +2,17 @@ from __future__ import annotations
 
 import math
 import random
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from statistics import mean
 from typing import Dict, Iterable, List, Optional, Tuple
+
+import networkx as nx
 
 from .config import EnvironmentConfig
 from .contracts import (
     AgentAction,
+    AgentEvaluation,
+    AgentExpectations,
     AgentObservation,
     ArbiterAction,
     ArbiterActionType,
@@ -19,6 +23,7 @@ from .contracts import (
     CoalitionPolicyAPI,
     MarketAgentAPI,
 )
+from .myerson import graph_matrices, myerson_value
 
 
 @dataclass
@@ -29,18 +34,14 @@ class AgentState:
     negative_steps: int = 0
     last_profit: float = 0.0
     last_price: Optional[float] = None
+    observations: List[AgentObservation] = field(default_factory=list)
+    expectations: AgentExpectations = field(default_factory=AgentExpectations)
+    expectation_history: List[AgentExpectations] = field(default_factory=list)
+    evaluations: List[AgentEvaluation] = field(default_factory=list)
+    coalition_join_vector: Tuple[int, ...] = ()
 
 
 class SocialMarketEnvironment:
-    """
-    MVP environment for the assignment:
-
-      G_t -> coalition formation -> agent actions -> market clearing
-          -> SW_t -> arbiter action -> G_{t+1}
-
-    It deliberately keeps Agent / Coalition / Arbiter as black boxes behind
-    strict Python APIs.
-    """
 
     def __init__(
         self,
@@ -62,16 +63,21 @@ class SocialMarketEnvironment:
 
         self.step_index = 0
         self.agent_state: Dict[int, AgentState] = {}
-        self.edges: set[Tuple[int, int]] = set()
+        self.graph = nx.Graph()
         self.edge_similarity: Dict[Tuple[int, int], float] = {}
         self.pair_history: Dict[Tuple[int, int], float] = {}
         self.link_cost_pressure: float = 0.0
         self.current_coalitions: Tuple[Tuple[int, ...], ...] = ()
+        self._candidate_coalitions: Tuple[Tuple[int, ...], ...] = ()
         self.last_average_price: float = 0.0
         self.last_social_welfare: float = 0.0
         self.history: List[dict] = []
         self._last_agent_obs: Dict[int, AgentObservation] = {}
         self._last_arbiter_obs: Optional[ArbiterObservation] = None
+
+    @property
+    def edges(self) -> set[Tuple[int, int]]:
+        return {tuple(sorted(edge)) for edge in self.graph.edges}
 
     # ------------------------------------------------------------------
     # Public interface
@@ -84,6 +90,7 @@ class SocialMarketEnvironment:
         self.history.clear()
         self.link_cost_pressure = 0.0
         self.current_coalitions = ()
+        self._candidate_coalitions = ()
         self.last_average_price = 0.0
         self.last_social_welfare = 0.0
         self._last_arbiter_obs = None
@@ -102,6 +109,9 @@ class SocialMarketEnvironment:
 
         self._initialize_graph()
         obs = {aid: self._agent_observation(aid) for aid in self.agents}
+        for aid, observation in obs.items():
+            self.agent_state[aid].observations.append(observation)
+            self.agent_state[aid].expectation_history.append(observation.expectations)
         self._last_agent_obs = obs
         return obs
 
@@ -112,23 +122,28 @@ class SocialMarketEnvironment:
         # 1) G_t -> coalition formation
         coalition_obs = self._coalition_observation()
         decision = self.coalition_policy.propose(coalition_obs)
-        self.current_coalitions = self._sanitize_coalitions(decision)
+        self._candidate_coalitions = self._sanitize_coalition_candidates(decision)
 
         # 2) agent actions
         observations = {aid: self._agent_observation(aid) for aid in self.agents}
         actions: Dict[int, AgentAction] = {}
         for aid, agent in self.agents.items():
+            self.agent_state[aid].observations.append(observations[aid])
             action = agent.act(observations[aid])
             actions[aid] = self._sanitize_agent_action(aid, action)
 
-        # Optional explicit link actions proposed by agents.
-        self._apply_agent_link_actions(actions)
+        self.current_coalitions = self._resolve_coalitions(actions)
+        # Keep matrix dimensions stable for downstream MARL models even after
+        # agents are eliminated. Inactive nodes are isolated after evolution.
+        graph_nodes = tuple(sorted(self.agents))
+        matrices = graph_matrices(self.graph, self.current_coalitions, graph_nodes)
+        edges_before = sorted(self.edges)
 
         # 3) market clearing
         prices, quantities, profits, total_quantity, average_price = self._clear_market(actions)
 
-        # Coalition bonus is an MVP placeholder. The assignment requires later
-        # comparison with Shapley/Myerson/Owen; this base implements equal split.
+        # The graph-restricted characteristic function gives each connected
+        # coalition a surplus; Myerson allocates it by marginal contribution.
         coalition_bonus = self._coalition_bonus(profits)
 
         # 4) SW_t. Exact SW formula is not explicit in the supplied text, so
@@ -155,7 +170,8 @@ class SocialMarketEnvironment:
         for aid in self.agents:
             reward = profits.get(aid, 0.0) + coalition_bonus.get(aid, 0.0) - fines.get(aid, 0.0)
             rewards[aid] = reward
-            self._update_balance(aid, reward, prices.get(aid))
+            self._update_balance(aid, reward, profits.get(aid, 0.0), prices.get(aid))
+            self._evaluate_agent(aid, observations[aid], prices, quantities, profits, coalition_bonus, fines, reward)
 
         harmful_agents = self._harmful_coalition_agents(prices, average_price)
         arbiter_reward, fp, fn = self._arbiter_reward(
@@ -166,12 +182,17 @@ class SocialMarketEnvironment:
 
         # 6) G_t -> G_{t+1}
         self._update_pair_history(profits)
-        self._evolve_graph(profits)
+        self._evolve_graph(profits, actions)
+        self._candidate_coalitions = ()
 
         self.step_index += 1
         done = self.step_index >= self.config.horizon or not any(s.active for s in self.agent_state.values())
+        self.last_average_price = average_price
+        self.last_social_welfare = social_welfare
 
         next_obs = {aid: self._agent_observation(aid) for aid in self.agents}
+        for aid, observation in next_obs.items():
+            self.agent_state[aid].observations.append(observation)
         for aid, agent in self.agents.items():
             agent.observe_transition(
                 observations[aid], actions[aid], rewards[aid], next_obs[aid] if not done else None, done
@@ -192,7 +213,13 @@ class SocialMarketEnvironment:
             "balances": {a: s.balance for a, s in self.agent_state.items()},
             "active": {a: s.active for a, s in self.agent_state.items()},
             "edges": sorted(self.edges),
+            "edges_before": edges_before,
+            "graph_nodes": graph_nodes,
+            "graph_matrices": matrices,
             "coalitions": [list(c) for c in self.current_coalitions],
+            "coalition_join_vectors": {a: s.coalition_join_vector for a, s in self.agent_state.items()},
+            "agent_expectations": {a: asdict(s.expectations) for a, s in self.agent_state.items()},
+            "agent_evaluations": {a: asdict(s.evaluations[-1]) for a, s in self.agent_state.items()},
             "average_price": average_price,
             "total_quantity": total_quantity,
             "social_welfare": social_welfare,
@@ -202,8 +229,6 @@ class SocialMarketEnvironment:
             "false_negative": fn,
         }
         self.history.append(record)
-        self.last_average_price = average_price
-        self.last_social_welfare = social_welfare
         self._last_agent_obs = next_obs
         self._last_arbiter_obs = arbiter_obs
 
@@ -272,23 +297,52 @@ class SocialMarketEnvironment:
             members = [a for a in coalition if a in profits]
             if len(members) < 2:
                 continue
-            positive_joint_profit = max(0.0, sum(profits[a] for a in members))
-            extra = self.config.coalition_bonus_scale * positive_joint_profit
-            equal_share = extra / len(members)
-            for aid in members:
-                bonus[aid] += equal_share
+            def worth(group: frozenset[int]) -> float:
+                return (
+                    self.config.coalition_bonus_scale * max(0.0, sum(profits[a] for a in group))
+                    if len(group) >= 2 else 0.0
+                )
+
+            allocation = myerson_value(
+                self.graph,
+                members,
+                worth,
+                max_exact_players=self.config.max_exact_coalition_size,
+                samples=self.config.myerson_samples,
+                rng=self.rng,
+            )
+            for aid, value in allocation.items():
+                bonus[aid] += value
         return bonus
 
-    def _sanitize_coalitions(self, decision: CoalitionDecision) -> Tuple[Tuple[int, ...], ...]:
+    def _sanitize_coalition_candidates(self, decision: CoalitionDecision) -> Tuple[Tuple[int, ...], ...]:
         active = {a for a, s in self.agent_state.items() if s.active}
         result = []
-        used = set()
         for c in decision.coalitions:
             members = tuple(sorted(set(c) & active))
-            if len(members) >= 2 and not (set(members) & used):
+            if len(members) >= 2 and members not in result:
                 result.append(members)
-                used.update(members)
         return tuple(result)
+
+    def _resolve_coalitions(self, actions: Dict[int, AgentAction]) -> Tuple[Tuple[int, ...], ...]:
+        """Apply each agent's one-hot join choice, then enforce graph connectivity."""
+        selected: dict[int, set[int]] = {index: set() for index in range(len(self._candidate_coalitions))}
+        for aid, state in self.agent_state.items():
+            choices = [i for i, candidate in enumerate(self._candidate_coalitions) if aid in candidate]
+            requested = actions[aid].coalition_choice
+            chosen = choices[0] if requested is None and choices else requested
+            if not state.active or chosen not in choices:
+                chosen = None
+            state.coalition_join_vector = tuple(int(i == chosen) for i in range(len(self._candidate_coalitions)))
+            if chosen is not None:
+                selected[chosen].add(aid)
+
+        result: list[Tuple[int, ...]] = []
+        for members in selected.values():
+            for component in nx.connected_components(self.graph.subgraph(members)):
+                if len(component) >= 2:
+                    result.append(tuple(sorted(component)))
+        return tuple(sorted(result))
 
     # ------------------------------------------------------------------
     # Arbiter
@@ -336,7 +390,8 @@ class SocialMarketEnvironment:
     # Dynamic network
     # ------------------------------------------------------------------
     def _initialize_graph(self) -> None:
-        self.edges.clear()
+        self.graph.clear()
+        self.graph.add_nodes_from(self.agents)
         self.edge_similarity.clear()
         self.pair_history.clear()
         ids = sorted(self.agents)
@@ -348,11 +403,16 @@ class SocialMarketEnvironment:
                 self.pair_history[key] = 0.0
                 p = min(1.0, max(0.0, self.config.initial_edge_probability * (0.5 + similarity)))
                 if self.rng.random() < p:
-                    self.edges.add(key)
+                    self.graph.add_edge(u, v)
 
-    def _evolve_graph(self, profits: Dict[int, float]) -> None:
+    def _evolve_graph(self, profits: Dict[int, float], actions: Dict[int, AgentAction]) -> None:
         active = {a for a, s in self.agent_state.items() if s.active}
         ids = sorted(active)
+        requested = {
+            aid: action.link_action
+            for aid, action in actions.items()
+            if aid in active and action.link_action is not None
+        }
         coalition_pairs = {
             tuple(sorted((u, v)))
             for coalition in self.current_coalitions
@@ -360,10 +420,20 @@ class SocialMarketEnvironment:
             for v in coalition[i + 1 :]
         }
 
-        new_edges = set()
+        next_graph = nx.Graph()
+        next_graph.add_nodes_from(self.agents)
         for i, u in enumerate(ids):
             for v in ids[i + 1 :]:
                 key = (u, v)
+                u_request = requested.get(u)
+                v_request = requested.get(v)
+                u_op = u_request[0] if u_request and u_request[1] == v else None
+                v_op = v_request[0] if v_request and v_request[1] == u else None
+                if "remove" in (u_op, v_op):
+                    continue
+                if u_op == v_op == "add" or (self.graph.has_edge(u, v) and u_op == v_op == "maintain"):
+                    next_graph.add_edge(u, v)
+                    continue
                 similarity = self.edge_similarity.get(key, 0.5)
                 hist = self.pair_history.get(key, 0.0)
                 utility = self._pair_utility_signal(u, v, profits)
@@ -382,8 +452,8 @@ class SocialMarketEnvironment:
                 )
                 p = min(0.98, max(0.02, score))
                 if self.rng.random() < p:
-                    new_edges.add(key)
-        self.edges = new_edges
+                    next_graph.add_edge(u, v)
+        self.graph = next_graph
 
     def _update_pair_history(self, profits: Dict[int, float]) -> None:
         for key in self.pair_history:
@@ -406,12 +476,7 @@ class SocialMarketEnvironment:
     # ------------------------------------------------------------------
     def _agent_observation(self, aid: int) -> AgentObservation:
         state = self.agent_state[aid]
-        neighbors = []
-        for u, v in self.edges:
-            if u == aid:
-                neighbors.append(v)
-            elif v == aid:
-                neighbors.append(u)
+        neighbors = sorted(self.graph.neighbors(aid))
         return AgentObservation(
             agent_id=aid,
             step=self.step_index,
@@ -422,6 +487,14 @@ class SocialMarketEnvironment:
             market_average_price=self.last_average_price if self.step_index > 0 else None,
             local_neighbors=tuple(sorted(neighbors)),
             active=state.active,
+            candidate_coalitions=tuple(
+                (index, coalition)
+                for index, coalition in enumerate(self._candidate_coalitions)
+                if aid in coalition
+            ),
+            coalition_join_vector=state.coalition_join_vector,
+            expectations=state.expectations,
+            last_evaluation=state.evaluations[-1] if state.evaluations else None,
         )
 
     def _coalition_observation(self) -> CoalitionObservation:
@@ -449,12 +522,54 @@ class SocialMarketEnvironment:
             delta_social_welfare=0.0,
         )
 
-    def _update_balance(self, aid: int, reward: float, price: Optional[float]) -> None:
+    def _evaluate_agent(
+        self,
+        aid: int,
+        observation: AgentObservation,
+        prices: Dict[int, float],
+        quantities: Dict[int, float],
+        profits: Dict[int, float],
+        bonuses: Dict[int, float],
+        fines: Dict[int, float],
+        reward: float,
+    ) -> None:
+        state = self.agent_state[aid]
+        expected = observation.expectations
+        profit = profits.get(aid, 0.0)
+        evaluation = AgentEvaluation(
+            step=self.step_index,
+            price=prices.get(aid),
+            quantity=quantities.get(aid, 0.0),
+            profit=profit,
+            coalition_bonus=bonuses.get(aid, 0.0),
+            fine=fines.get(aid, 0.0),
+            reward=reward,
+            profit_error=None if expected.profit is None else profit - expected.profit,
+            reward_error=None if expected.reward is None else reward - expected.reward,
+            joined_coalition=next((c for c in self.current_coalitions if aid in c), None),
+        )
+        state.evaluations.append(evaluation)
+
+        alpha = min(1.0, max(0.0, self.config.expectation_smoothing))
+
+        def update(previous: Optional[float], realized: float) -> float:
+            return realized if previous is None else (1.0 - alpha) * previous + alpha * realized
+
+        state.expectations = AgentExpectations(
+            market_average_price=update(expected.market_average_price, mean(prices.values()) if prices else 0.0),
+            quantity=update(expected.quantity, evaluation.quantity),
+            profit=update(expected.profit, profit),
+            coalition_bonus=update(expected.coalition_bonus, evaluation.coalition_bonus),
+            reward=update(expected.reward, reward),
+        )
+        state.expectation_history.append(state.expectations)
+
+    def _update_balance(self, aid: int, reward: float, profit: float, price: Optional[float]) -> None:
         state = self.agent_state[aid]
         if not state.active:
             return
         state.balance += reward
-        state.last_profit = reward
+        state.last_profit = profit
         state.last_price = price
         if state.balance < 0:
             state.negative_steps += 1
@@ -464,27 +579,24 @@ class SocialMarketEnvironment:
         if state.balance < self.config.min_allowed_balance or state.negative_steps >= self.config.max_negative_steps:
             state.active = False
 
-    def _apply_agent_link_actions(self, actions: Dict[int, AgentAction]) -> None:
-        for aid, action in actions.items():
-            if not action.link_action or not self.agent_state[aid].active:
-                continue
-            op, target = action.link_action
-            if target not in self.agent_state or target == aid:
-                continue
-            key = tuple(sorted((aid, target)))
-            if op == "add":
-                self.edges.add(key)
-            elif op == "remove":
-                self.edges.discard(key)
-
     def _sanitize_agent_action(self, aid: int, action: AgentAction) -> AgentAction:
         price = min(self.config.max_price, max(self.config.min_price, float(action.price)))
         participate = bool(action.participate and self.agent_state[aid].active)
+        link_action = action.link_action
+        if link_action is not None:
+            if (
+                not isinstance(link_action, tuple)
+                or len(link_action) != 2
+                or link_action[0] not in {"add", "remove", "maintain"}
+                or link_action[1] not in self.agent_state
+                or link_action[1] == aid
+            ):
+                link_action = None
         return AgentAction(
             price=price,
             participate=participate,
             coalition_choice=action.coalition_choice,
-            link_action=action.link_action,
+            link_action=link_action,
         )
 
     def _sanitize_arbiter_action(self, action: ArbiterAction) -> ArbiterAction:

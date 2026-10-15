@@ -7,6 +7,33 @@ from typing import Dict, List, Optional, Sequence, Tuple
 
 
 @dataclass(frozen=True)
+class AgentExpectations:
+    """Agent-local forecasts available before choosing the next action."""
+
+    market_average_price: Optional[float] = None
+    quantity: Optional[float] = None
+    profit: Optional[float] = None
+    coalition_bonus: Optional[float] = None
+    reward: Optional[float] = None
+
+
+@dataclass(frozen=True)
+class AgentEvaluation:
+    """Realized outcome of one action and its forecast error."""
+
+    step: int
+    price: Optional[float]
+    quantity: float
+    profit: float
+    coalition_bonus: float
+    fine: float
+    reward: float
+    profit_error: Optional[float]
+    reward_error: Optional[float]
+    joined_coalition: Optional[Tuple[int, ...]]
+
+
+@dataclass(frozen=True)
 class AgentObservation:
     agent_id: int
     step: int
@@ -17,14 +44,18 @@ class AgentObservation:
     market_average_price: Optional[float]
     local_neighbors: Tuple[int, ...]
     active: bool
+    candidate_coalitions: Tuple[Tuple[int, Tuple[int, ...]], ...] = ()  # (global offer index, members)
+    coalition_join_vector: Tuple[int, ...] = ()
+    expectations: AgentExpectations = field(default_factory=AgentExpectations)
+    last_evaluation: Optional[AgentEvaluation] = None
 
 
 @dataclass(frozen=True)
 class AgentAction:
     price: float
     participate: bool = True
-    coalition_choice: Optional[int] = None
-    link_action: Optional[Tuple[str, int]] = None  # ('add'|'remove'|'maintain', target_id)
+    coalition_choice: Optional[int] = None  # candidate index; -1 declines; None accepts first offer
+    link_action: Optional[Tuple[str, int]] = None  # add needs both endpoints; remove is unilateral
 
 
 @dataclass(frozen=True)
