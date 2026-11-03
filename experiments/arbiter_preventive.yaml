@@ -1,0 +1,27 @@
+name: preventive_arbiter
+horizon: 64
+seeds: [2000, 2001, 2002]
+mode: eval
+strict: true
+agents:
+  count: 12
+  default: {impl: "social_market_env.baselines.agents:CartelAgent"}
+coalitions:
+  policy: {impl: "social_market_env.baselines.coalitions:ConnectedComponentsCoalitions"}
+network:
+  topology: path
+  mode: evolving
+  link_cost_decay: 0.0
+arbiter:
+  max_link_cost_delta: 5.0
+  policy:
+    impl: "preventive_arbiter:PreventiveArbiter"
+    kwargs:
+      network_mode: evolving
+      link_cost_decay: 0.0
+      welfare_gap_threshold: 0.08
+      patience: 2
+      price_margin: 2.0
+      pair_budget: 24
+      link_cost_delta: 5.0
+      link_cost_cap: 10.0

@@ -1,0 +1,15 @@
+name: preventive_arbiter_static
+horizon: 64
+seeds: [2000, 2001, 2002]
+mode: eval
+strict: true
+agents:
+  count: 12
+  default: {impl: "social_market_env.baselines.agents:CartelAgent"}
+coalitions:
+  policy: {impl: "social_market_env.baselines.coalitions:ConnectedComponentsCoalitions"}
+network: {topology: path, mode: static, link_cost_decay: 0.0}
+arbiter:
+  policy:
+    impl: "preventive_arbiter:PreventiveArbiter"
+    kwargs: {network_mode: static, link_cost_decay: 0.0}

@@ -1,174 +1,92 @@
-# SMA environment
+# Профилактический арбитр
 
-Среда для ЛР «MARL в динамической сетевой рыночной игре с эндогенными коалициями и
-социально-ориентированным арбитражем».
+[`PreventiveArbiter`](src/preventive_arbiter/policy.py) ограничивает вредную
+координацию продавцов: по публичным ценам и благосостоянию выбирает пары участников
+и повышает стоимость их связей. Политика детерминирована и не требует обучения.
 
-## Установка
+## Как работает
 
-Windows PowerShell (Python 3.11 или новее):
+Арбитр получает текущие цены, список активных участников, потребительский излишек
+`SW`, его конкурентный ориентир `SW*` и собственное предыдущее действие. Истинный
+граф, коалиционные договорённости, издержки и резервы продавцов ему недоступны.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e '.[dev]'
-.\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\python.exe -m social_market_env.run experiments/demo.yaml
-```
+1. **Определяет устойчивое ухудшение рынка.** Если `(SW* − SW) / SW* > 0.08`
+   два шага подряд, рассматривает вмешательство. Ожидание отсекает одиночные
+   колебания; одного скачка цены недостаточно.
+2. **Находит ценовой ориентир.** При линейном спросе `Q = A − B × P` и
+   потребительском излишке `SW = Q² / (2B)` конкурентная средняя цена равна
+   `P* = (A − sqrt(2 × B × SW*)) / B`. Если `SW*` не положителен, арбитр наблюдает.
+3. **Выбирает предполагаемые пары.** Рассматривает активных торгующих продавцов
+   с ценой выше `P* + 2`. Балл продавца учитывает превышение ориентира и рост цены
+   относительно его истории. Балл пары выше при высоких баллах обоих участников,
+   близких ценах и устойчивой разнице между ними. Хранятся последние 20 шагов.
+4. **Распределяет воздействие.** Сначала выбирает пары с меньшей уже внесённой
+   стоимостью, затем — с большим баллом. За шаг меняет до 24 пар, прибавляя до 5
+   к стоимости каждой. Оценка стоимости ограничена 10 на пару.
+5. **Возвращается к наблюдению**, когда дефицит благосостояния исчезает, нет
+   подходящих пар или достигнут лимит стоимости. В статической сети наблюдает
+   постоянно: этот инструмент там не меняет граф.
 
-Linux/macOS:
+## Почему выбран такой механизм
 
-```bash
-uv venv --python 3.14 .venv
-uv pip install --python .venv/bin/python -e '.[dev]'
-```
+Повышение стоимости влияет на условия координации через сеть, даже если продавцы
+не меняют стратегию в ответ на штраф. В режиме `evolving` среда использует стоимость
+при расчёте вероятности образования и сохранения связей; для эффекта нужен
+ненулевой `network.w_link_cost`. Арбитр не удаляет рёбра напрямую.
 
-## Запуск эксперимента
+История помогает замечать длительно завышенные цены, даже когда новых скачков нет.
+Порог по `SW` связывает вмешательство с положением покупателей. Ограничения числа
+пар и стоимости сдерживают масштаб давления. Значения порогов настраиваются —
+они не гарантируют оптимального решения для любого набора агентов.
 
-```bash
-.venv/bin/python -m social_market_env.run experiments/demo.yaml
-```
+Высокие или похожие цены не доказывают сговор: продавцы с разными издержками могут
+вести себя так независимо. Поэтому ложные воздействия возможны. Штрафов в этой
+политике нет. Действие принимается после расчёта рынка и влияет на следующие шаги.
 
-Результат — папка `runs/<дата>_<имя>/`: `meta.json` (конфиг и версии) и
-`seed_<s>/episode_<e>/`: `episode.json` (себестоимости, сид эпизода, реализации компонентов),
-`steps.jsonl` (одна строка на шаг), `summary.json`, `timings.json`.
+## Запуск
 
-## Как подключить свою модель
-
-1. Сделайте Python-пакет в своём репозитории и реализуйте один из контрактов из
-   `social_market_env.contracts`: `MarketAgentAPI`, `CoalitionPolicyAPI` или `ArbiterAPI`.
-2. Установите пакет в окружение среды: `uv pip install --python .venv/bin/python git+https://github.com/ITMO-FPIN-SMA-2026/<repo>`.
-3. Укажите класс в конфиге: `impl: "your_package.module:YourClass"`, аргументы конструктора — в `kwargs`.
-
-Пример агента:
-
-```python
-from social_market_env.contracts import AgentAction, AgentObservation, MarketAgentAPI
-
-
-class MyAgent(MarketAgentAPI):
-    def reset(self, *, agent_id: int, seed: int, training: bool) -> None:
-        self.training = training
-
-    def act(self, observation: AgentObservation) -> AgentAction:
-        if observation.offer is not None:
-            return AgentAction(price=observation.offer.recommended_price, coalition_choice=observation.offer.plan_id)
-        return AgentAction(price=observation.cost + 5.0)
-
-    def observe_transition(self, *, observation, action, reward, next_observation, done) -> None:
-        ...  # обучение здесь, если training=True
-```
-
-Готовые простые реализации для соперников и тестов — в `social_market_env.baselines`.
-
-Пример политики коалиций — предлагает картель первой паре связанных агентов:
-
-```python
-from social_market_env.contracts import CoalitionDecision, CoalitionObservation, CoalitionPlan, CoalitionPolicyAPI
-
-
-class FirstPairCartel(CoalitionPolicyAPI):
-    def reset(self, *, seed: int, training: bool) -> None:
-        self.training = training
-
-    def act(self, observation: CoalitionObservation) -> CoalitionDecision:
-        eligible = set(observation.active_agents) - set(observation.restricted)
-        pairs = [pair for pair in observation.edges if set(pair) <= eligible]
-        if not pairs:
-            return CoalitionDecision()
-        first, second = pairs[0]
-        plan = CoalitionPlan(
-            plan_id=0,
-            members=(first, second),
-            recommended_prices={first: 60.0, second: 60.0},
-            payout_weights={first: 0.5, second: 0.5},
-        )
-        return CoalitionDecision(plans=(plan,))
-
-    def observe_transition(self, *, observation, action, reward, next_observation, done) -> None:
-        ...  # reward — доход котла соблюдавших участников минус их штрафы
-```
-
-Пример арбитра — штрафует самого дорогого продавца после скачка средней цены:
-
-```python
-from social_market_env.contracts import ArbiterAction, ArbiterActionKind, ArbiterAPI, ArbiterObservation
-
-
-class JumpArbiter(ArbiterAPI):
-    def reset(self, *, seed: int, training: bool) -> None:
-        self.training = training
-
-    def act(self, observation: ArbiterObservation) -> ArbiterAction:
-        if observation.delta_average_price > 5.0 and observation.prices:
-            target = max(observation.prices, key=observation.prices.get)
-            return ArbiterAction(kind=ArbiterActionKind.sanction, target=target, fine=50.0)
-        return ArbiterAction()  # observe; поднять стоимость связи:
-        # ArbiterAction(kind=ArbiterActionKind.change_link_cost, link_cost_changes={(0, 3): 2.0})
-```
-
-Скаляры numpy (`np.int64`, `np.float32`, `np.bool_`, например результат `np.argmax`) в действиях
-принимаются и приводятся к обычным `int`/`float`/`bool`.
-
-**Как оценивается арбитр.** Награда `−α·|SW − SW*|/SW* − β·I − λ_FP·FP − λ_FN·FN`. FP — штраф агенту вне
-вредной коалиции или повышение стоимости связи хотя бы для одной пары вне вредной коалиции. FN — вредная
-коалиция есть, а арбитр не оштрафовал её участника и не поднял стоимость связи внутри неё; повышение
-стоимости засчитывается только при `network.mode: evolving`. Штраф меньше `arbiter.min_fine` считается
-наблюдением, изменения стоимости связи обрезаются до `±arbiter.max_link_cost_delta`.
-
-## Конфиг
-
-Все ключи и значения по умолчанию описаны в `src/social_market_env/config.py` (докстринги у каждого поля);
-неизвестные ключи считаются ошибкой. `mode: eval` — компоненты получают `training=False` и должны работать
-замороженными, `mode: train` — `training=True`. `strict: true` (или `--strict` в CLI) останавливает прогон на
-первой ошибке в командном коде; по умолчанию ошибка пишется в лог, а вместо действия подставляется безопасное.
-Baselines с параметром `market` в конструкторе получают секцию `market` из конфига эксперимента автоматически.
-
-## Режим библиотеки
-
-Для своего цикла обучения среду можно создать напрямую — все аргументы конструктора только именованные:
-
-```python
-from social_market_env.environment import SocialMarketEnvironment
-
-env = SocialMarketEnvironment(agents=agents, costs=costs, coalition_policy=policy, arbiter=arbiter, config=config)
-```
-
-или собрать всё из конфига так же, как это делает раннер:
-
-```python
-from social_market_env.config import config_from_dict
-from social_market_env.runner.experiment import build_environment
-
-env = build_environment(config=config_from_dict({'mode': 'train', 'horizon': 200}), seed=0)
-for episode in range(100):
-    env.reset(seed=episode, training=True)
-    while not env.done:
-        record = env.step().record  # тот же словарь, что строка в steps.jsonl
-```
-
-- Метода `step(actions)` нет: среда сама вызывает `act` у всех ролей. Обучение происходит внутри
-  `observe_transition`; он вызывается и при `training=False` (там модель не должна обновляться) и получает
-  **санированное** действие — после обрезки цены, ограничений и приведения типов.
-- `env.done` — достигнут горизонт или выбыли все агенты; отдельного флага truncation нет.
-- Без явного `guard=CallGuard(strict=False, ...)` среда, созданная конструктором, падает на первой ошибке
-  в командном коде; `build_environment` берёт `strict` из конфига.
-- Для централизованного обучения (MAPPO, QMIX) есть `env.global_state()`.
-- `env.agent_state[agent_id]` хранит полную историю `observations`, `expectation_history`,
-  `evaluations`, а также текущий прогноз `expectations`. Прогноз по умолчанию повторяет
-  результат предыдущего шага; ошибки прогноза записываются в `AgentEvaluation`.
-- В `AgentObservation` доступны собственные `expectations`, `last_evaluation` и
-  `last_coalition_join_vector`. Последний вектор индексируется по
-  `last_coalition_plan_ids`; один элемент равен 1, если агент присоединился к плану.
-  Запись шага содержит `coalition_plan_ids` и векторы всех агентов.
-- В записи шага `graph_nodes` задаёт порядок строк и столбцов трёх матриц
-  `graph_matrices`: `adjacency` (прямые связи), `reachability` (связность по путям)
-  и `coalition_membership` (фактическое присоединение к одному плану). Они относятся
-  к графу в начале шага `G_t`. Эволюция `G_t` через NetworkX и вероятности из
-  `NetworkConfig` формирует граф следующего шага.
-
-## Тесты
+Нужен Python 3.11 или новее.
 
 ```bash
-.venv/bin/pytest -q
+python -m pip install -e .
+python -m social_market_env.run experiments/arbiter_preventive.yaml
 ```
 
+Для статической сети есть `experiments/arbiter_preventive_static.yaml`.
+Агенты и политика коалиций подключаются через свои `impl` в конфигурации среды.
 
+## Настройка
+
+Публичный класс для подключения: `preventive_arbiter:PreventiveArbiter`.
+Параметры передаются через `arbiter.policy.kwargs`.
+
+| Параметр | По умолчанию | Назначение |
+|---|---:|---|
+| `network_mode` | `evolving` | Режим сети; при `static` арбитр наблюдает |
+| `history_window` | 20 | Длина истории цен |
+| `welfare_gap_threshold` | 0.08 | Порог относительного дефицита `SW` |
+| `patience` | 2 | Число последовательных шагов с дефицитом |
+| `price_margin` | 2.0 | Превышение `P*` для включения продавца |
+| `pair_budget` | 24 | Максимум изменяемых пар за шаг |
+| `link_cost_delta` | 5.0 | Запрашиваемая прибавка стоимости |
+| `link_cost_cap` | 10.0 | Максимальная оценка стоимости пары |
+| `link_cost_decay` | 0.0 | Затухание стоимости за шаг |
+
+Среда автоматически передаёт публичные параметры `market`. Значения
+`network_mode` и `link_cost_decay` в `kwargs` должны совпадать с секцией `network`.
+`link_cost_delta` желательно задавать не выше `arbiter.max_link_cost_delta`.
+
+Учёт стоимости повторяет порядок среды: сначала затухание, затем прибавка.
+На следующем шаге арбитр использует реально применённое действие из `last_action`,
+поэтому обрезанный или отклонённый запрос не расходует лишний бюджет. При нулевом
+затухании стоимость сохраняется до конца эпизода.
+
+## Диагностика
+
+`last_decision` содержит причину решения, разрыв `SW`, ценовой ориентир и число
+выбранных пар. Перед каждым эпизодом вызывается `reset`; `act` вызывается один раз
+на каждом последовательном шаге. В режиме `training=True` политика также
+детерминирована: обновления весов нет.
+
+Проверки, сравнение стратегий и результаты находятся в отдельном репозитории
+[arbiter-research-and-design](https://github.com/ITMO-FPIN-SMA-2026/arbiter-research-and-design).
