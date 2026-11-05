@@ -1,0 +1,8 @@
+# Isolated agent environment; shared pyproject.toml is intentionally unchanged.
+numpy==2.5.4
+PyYAML==6.0.3
+networkx==3.7
+pytest==9.2.0
+# Optional report generation (training/inference do not import matplotlib).
+matplotlib==3.11.2
+# Install torch==2.15.0 separately from the CPU wheel index; see README.md.

@@ -1,0 +1,27 @@
+name: zhmurenko_vladimir_final_locked
+mode: eval
+strict: true
+horizon: 50
+# Locked before training; never used for choosing a configuration/checkpoint.
+seeds: [200, 201, 202, 203, 204, 205, 206, 207, 208, 209]
+episodes_per_seed: 3
+market: {demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit}
+agents:
+  count: 12
+  default: {impl: "social_market_env.baselines.agents:CartelAgent"}
+  cost_low: 15
+  cost_high: 22
+  overrides:
+    0:
+      impl: "social_market_env.implementations.zhmurenko_vladimir.agent:ZhmurenkoVladimirAgent"
+      kwargs: {checkpoint_path: null, model_seed: 0, evaluation_mode: greedy}
+    3: {impl: "social_market_env.baselines.agents:BestResponseAgent"}
+    7: {impl: "social_market_env.baselines.agents:RandomAgent", kwargs: {low: 20, high: 60}}
+coalitions:
+  policy: {impl: "social_market_env.baselines.coalitions:ConnectedComponentsCoalitions", kwargs: {payout: equal}}
+  compliance_tolerance: 0.5
+arbiter:
+  policy: {impl: "social_market_env.baselines.arbiters:ThresholdArbiter", kwargs: {jump_threshold: 4, fine: 50}}
+  max_fine: 100
+network: {topology: random, mode: evolving, initial_density: 0.3}
+scoring: {alpha: 1, beta: 0.1, lambda_fp: 0.5, lambda_fn: 0.5, harm_margin: 0.05}
