@@ -3,7 +3,7 @@
 Этап 1 плана. Условие среды: группа связна по рёбрам между её же участниками.
 Поэтому все генераторы здесь возвращают только такие группы.
 
-Этап 2 добавит удаление предателей и рост группы от надёжного ядра.
+На этапе 2 сюда добавлено исключение нарушителей (параметр blocked).
 """
 
 import math
@@ -23,10 +23,18 @@ def eligible_agents(observation: CoalitionObservation) -> set[int]:
 
 
 def generate_candidates(
-    *, observation: CoalitionObservation, previous: Iterable[Group], settings: PolicySettings
+    *,
+    observation: CoalitionObservation,
+    previous: Iterable[Group],
+    settings: PolicySettings,
+    blocked: set[int] | frozenset[int] = frozenset(),
 ) -> list[Group]:
-    """Вернуть кандидатов для выбранного режима структуры."""
-    eligible = eligible_agents(observation)
+    """Вернуть кандидатов для выбранного режима структуры.
+
+    blocked — временно исключённые агенты (этап 2). Группа считается заново без них, поэтому
+    исключение точки сочленения может разделить бывшую группу на части.
+    """
+    eligible = eligible_agents(observation) - blocked
     components = _groups(connected_components(nodes=eligible, edges=observation.edges))
     if settings.structure == 'antagonism':
         return []

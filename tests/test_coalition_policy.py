@@ -6,7 +6,7 @@ import pytest
 from coalition_policy import AdaptiveCoalitionPolicy, PolicySettings
 from coalition_policy.candidates import generate_candidates
 from coalition_policy.payouts import level_game, payout_weights, restrict_to_graph, shapley_table
-from coalition_policy.pricing import blended_prices, mean_price_cap
+from coalition_policy.pricing import cap_share, mean_price_cap, path_prices
 from coalition_policy.structure import maximal_packings, select_partition
 from social_market_env.config import MarketConfig, config_from_dict
 from social_market_env.contracts import CoalitionObservation
@@ -104,7 +104,8 @@ def test_price_cap_gives_requested_welfare_gap() -> None:
     welfare = consumer_surplus(total_quantity=96.0, market=market)
     cap = mean_price_cap(target_welfare=welfare, gap=0.08, market=market)
 
-    prices = blended_prices(nash=nash, target=target, members={0, 1, 2, 3}, mean_cap=cap, market=market)
+    share = cap_share(nash=nash, target=target, members={0, 1, 2, 3}, mean_cap=cap)
+    prices = path_prices(nash=nash, target=target, members={0, 1, 2, 3}, share=share, market=market)
     quantity = market.demand_a - np.mean(list(prices.values()))
 
     assert consumer_surplus(total_quantity=quantity, market=market) == pytest.approx(0.92 * welfare)
@@ -112,12 +113,7 @@ def test_price_cap_gives_requested_welfare_gap() -> None:
 
 def test_cap_does_not_hold_back_price_cuts() -> None:
     # При tz_linear сговор снижает цену, такому плану потолок мешать не должен.
-    market = MarketConfig(share_model='tz_linear')
-
-    prices = blended_prices(nash={0: 100.0, 1: 100.0}, target={0: 70.0, 1: 70.0}, members={0, 1}, mean_cap=100.0,
-                            market=market)
-
-    assert prices == {0: 70.0, 1: 70.0}
+    assert cap_share(nash={0: 100.0, 1: 100.0}, target={0: 70.0, 1: 70.0}, members={0, 1}, mean_cap=100.0) == 1.0
 
 
 def test_packings_are_disjoint_and_maximal() -> None:
@@ -181,7 +177,7 @@ def run_config(**overrides) -> list[dict]:
 
 @pytest.mark.parametrize('topology', ['complete', 'star', 'path', 'inner_coalitions', 'random'])
 @pytest.mark.parametrize('mode', ['static', 'evolving'])
-@pytest.mark.parametrize('payout', ['equal', 'shapley', 'myerson'])
+@pytest.mark.parametrize('payout', ['equal', 'shapley', 'myerson', 'owen', 'hybrid'])
 def test_no_rejected_plans_in_any_environment(topology: str, mode: str, payout: str) -> None:
     records = run_config(network={'topology': topology, 'mode': mode}, kwargs={'payout': payout})
 
@@ -199,7 +195,8 @@ def test_grand_mode_covers_everyone_on_complete_static_graph() -> None:
 
 
 def test_compliant_market_stays_within_price_level() -> None:
-    records = run_config(network={'topology': 'complete', 'mode': 'static'}, kwargs={'price_level': 'moderate'})
+    records = run_config(network={'topology': 'complete', 'mode': 'static'},
+                         kwargs={'price_level': 'moderate', 'pricing': 'fixed'})
 
     gaps = [1 - record['social_welfare'] / record['target_social_welfare'] for record in records]
     assert 0.05 < max(gaps) <= 0.07 + 1e-6
@@ -214,6 +211,6 @@ def test_policy_is_deterministic() -> None:
 
 def test_unknown_settings_are_rejected() -> None:
     with pytest.raises(ValueError):
-        AdaptiveCoalitionPolicy(payout='owen')
+        AdaptiveCoalitionPolicy(payout='nucleolus')
     with pytest.raises(TypeError):
         AdaptiveCoalitionPolicy(unknown=1)

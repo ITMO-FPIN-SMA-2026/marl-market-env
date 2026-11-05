@@ -4,7 +4,9 @@
 Себестоимости внутри seed не меняются, поэтому кэш живёт между шагами и эпизодами
 и сбрасывается сам: себестоимости входят в ключ, а выбывание меняет их набор.
 
-Этап 2 добавит сюда внешнюю опцию безбилетника o_i и соблазн предать T_i.
+Внешняя опция участника здесь равна его прибыли по Нэшу, а не прибыли безбилетника из плана:
+предатель получает разовую выгоду T_i (pricing.temptation), а затем лестница опускает цену
+его бывшей группы, так что продолжение действительно близко к Нэшу.
 """
 
 from collections.abc import Iterable
@@ -51,6 +53,10 @@ class ValueOracle:
             groups = [tuple(sorted(group)) for group in key[1]] + singles
             self._partitions[key] = group_equilibrium(groups=groups, costs=costs, market=self.market)
         return self._partitions[key]
+
+    def knows(self, *, costs: dict[int, float], partition: Partition) -> bool:
+        """Проверить, посчитано ли уже равновесие этого разбиения."""
+        return (frozenset(costs.items()), canonical(partition)) in self._partitions
 
     def gain(self, *, costs: dict[int, float], prices: dict[int, float], members: Iterable[int]) -> float:
         """Вернуть прирост прибыли участников над Нэшем при заданных ценах всех продавцов."""

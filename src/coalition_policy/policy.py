@@ -1,25 +1,37 @@
 """AdaptiveCoalitionPolicy: фасад контракта CoalitionPolicyAPI.
 
-Конвейер шага (план, раздел 4.1). Шаги, помеченные этапом, ещё не реализованы.
+Конвейер шага (план, раздел 4.1):
 
-    1. Убеждения: доверие, связи, давление арбитра   — этап 2
-    2. Кандидаты                                     — candidates.py
-    3. Стратегические рычаги                         — этап 3, сейчас настройки
-    4. Выбор разбиения                               — structure.py
-    5. Цены                                          — pricing.py
-    6. Доли котла                                    — payouts.py
-    7. Восстановленная награда и обучение            — этапы 2 и 3
+    1. Убеждения: доверие, связи, штрафы      — beliefs.py, rewards.py (этап 2)
+    2. Кандидаты                              — candidates.py
+    3. Стратегические рычаги                  — этап 3, пока настройки
+    4. Выбор разбиения по оценке V(C)         — structure.py, _group_value
+    5. Цены: лестница и соблазн               — pricing.py (этап 2)
+    6. Доли котла                             — payouts.py
+    7. Исход шага и обновление убеждений      — observe_transition
 """
 
 from typing import Any
 
+import numpy as np
+
+from coalition_policy.beliefs import Beliefs
 from coalition_policy.candidates import eligible_agents, generate_candidates
-from coalition_policy.payouts import level_game, payout_weights
-from coalition_policy.pricing import blended_prices, mean_price_cap
+from coalition_policy.payouts import core_excess, level_game, payout_weights, restrict_to_graph
+from coalition_policy.pricing import (
+    PriceLadder,
+    cap_share,
+    future_weight,
+    incentive_holds,
+    largest_incentive_share,
+    mean_price_cap,
+    path_prices,
+)
+from coalition_policy.rewards import StepOutcome, restore_outcome
 from coalition_policy.settings import PolicySettings
 from coalition_policy.structure import select_partition
 from coalition_policy.value import Group, Partition, ValueOracle
-from social_market_env.config import MarketConfig
+from social_market_env.config import CoalitionsConfig, MarketConfig, NetworkConfig
 from social_market_env.contracts import CoalitionDecision, CoalitionObservation, CoalitionPlan, CoalitionPolicyAPI
 from social_market_env.core.coalitions import validate_plans
 from social_market_env.core.scoring import social_welfare
@@ -29,58 +41,155 @@ from social_market_env.gametheory.payouts import equal_split
 class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
     """Предлагает связные коалиции с удерживаемой ценой и долями по вкладу."""
 
-    def __init__(self, *, market: dict[str, Any] | None = None, **settings: Any) -> None:
+    def __init__(
+        self,
+        *,
+        market: dict[str, Any] | None = None,
+        network: dict[str, Any] | None = None,
+        compliance_tolerance: float = CoalitionsConfig.compliance_tolerance,
+        **settings: Any,
+    ) -> None:
         # Секцию market среда подставит сама, остальные ключи приходят из kwargs в YAML.
         self.market = MarketConfig(**(market or {}))
         self.settings = PolicySettings(**settings)
+        self.compliance_tolerance = compliance_tolerance
         # Оракул живёт дольше эпизода: себестоимости внутри seed те же, и кэш остаётся полезным.
         self.oracle = ValueOracle(market=self.market)
+        self.beliefs = Beliefs(settings=self.settings, network=NetworkConfig(**(network or {})))
         self.reset(seed=0, training=False)
 
     def reset(self, *, seed: int, training: bool) -> None:
         """Забыть память эпизода; обученные параметры появятся на этапе 3 и здесь сбрасываться не будут."""
         self.training = training
+        self.beliefs.reset()
+        self.ladder = PriceLadder(settings=self.settings)
         self._previous: Partition = ()
         self._plan_ids: dict[Group, int] = {}
+        self._unions: dict[Group, tuple[Group, ...]] = {}
+        self._fresh_left = 0
+        self.last_outcome: StepOutcome | None = None
+        self.last_report: dict[str, float] = {}
+        """Показатели последнего шага для экспериментов; на решения не влияют."""
 
     def act(self, observation: CoalitionObservation) -> CoalitionDecision:
         """Предложить планы на текущий шаг."""
-        candidates = generate_candidates(observation=observation, previous=self._previous, settings=self.settings)
+        self._fresh_left = self.settings.max_fresh_equilibria
+        blocked = self.beliefs.blocked(observation.step)
+        candidates = generate_candidates(
+            observation=observation, previous=self._previous, settings=self.settings, blocked=blocked
+        )
         partition = select_partition(
             candidates=candidates,
             previous=self._previous,
             score=lambda option: self._score(option, observation),
             settings=self.settings,
         )
+        self._remember_unions(partition)
         self._previous = partition
+        self.last_report = {'gap': self.ladder.gap, 'ceiling': self.ladder.ceiling, 'blocked': float(len(blocked))}
         if not partition:
             return CoalitionDecision()
-        prices = self._planned_prices(partition, observation)
+        prices = self._final_prices(partition, observation)
         plans = tuple(self._plan(group, prices, observation) for group in partition)
+        self._pay_insurance(plans)
+        if self.settings.diagnostics:
+            self.last_report['core_gap'] = max(self._core_gap(plan, prices, observation) for plan in plans)
         return self._validated(plans, observation)
 
-    def _planned_prices(self, partition: Partition, observation: CoalitionObservation) -> dict[int, float]:
-        """Вернуть цены всех активных продавцов: участники по плану, остальные по Нэшу."""
+    def observe_transition(
+        self,
+        *,
+        observation: CoalitionObservation,
+        action: CoalitionDecision,
+        reward: float,
+        next_observation: CoalitionObservation | None,
+        done: bool,
+    ) -> None:
+        """Восстановить исход шага и обновить убеждения.
+
+        Убеждения меняются и при training=False: это память внутри эпизода, а не обучение весов.
+        """
+        outcome = restore_outcome(
+            observation=observation,
+            decision=action,
+            next_observation=next_observation,
+            oracle=self.oracle,
+            tolerance=self.compliance_tolerance,
+        )
+        if outcome is None:
+            return
+        self.last_outcome = outcome
+        self.beliefs.learn(outcome)
+        if self.settings.pricing == 'adaptive':
+            self.ladder.update(outcome)
+
+    def _allowed_gap(self) -> float:
+        return self.ladder.gap if self.settings.pricing == 'adaptive' else self.settings.welfare_gap
+
+    def _path(
+        self, partition: Partition, observation: CoalitionObservation
+    ) -> tuple[dict[int, float], dict[int, float], set[int], float]:
+        """Вернуть данные пути цен: Нэш, цель, участников и наибольшую долю под потолком SW."""
         costs = observation.costs
         nash = self.oracle.nash(costs)
         target = self.oracle.partition_equilibrium(costs=costs, partition=partition).prices
+        members = set().union(*partition)
         welfare = social_welfare(total_quantity=nash.total_quantity, market=self.market)
-        return blended_prices(
-            nash=nash.prices,
-            target=target,
-            members=set().union(*partition),
-            mean_cap=mean_price_cap(target_welfare=welfare, gap=self.settings.welfare_gap, market=self.market),
-            market=self.market,
-        )
+        cap = mean_price_cap(target_welfare=welfare, gap=self._allowed_gap(), market=self.market)
+        return nash.prices, target, members, cap_share(nash=nash.prices, target=target, members=members, mean_cap=cap)
+
+    def _capped_prices(self, partition: Partition, observation: CoalitionObservation) -> dict[int, float]:
+        nash, target, members, share = self._path(partition, observation)
+        return path_prices(nash=nash, target=target, members=members, share=share, market=self.market)
+
+    def _final_prices(self, partition: Partition, observation: CoalitionObservation) -> dict[int, float]:
+        """Вернуть цены плана: потолок SW, затем ограничение на соблазн предать."""
+        nash, target, members, share = self._path(partition, observation)
+
+        def at(value: float) -> dict[int, float]:
+            return path_prices(nash=nash, target=target, members=members, share=value, market=self.market)
+
+        if self.settings.pricing == 'fixed':
+            return at(share)
+        costs = observation.costs
+        nash_profits = self.oracle.nash(costs).profits
+        # Веса считаем один раз на верхней цене: иначе каждый шаг бисекции стоил бы счёта долей.
+        groups = {index: self._weights(group, at(share), observation) for index, group in enumerate(partition)}
+        steps_left = self.settings.horizon - observation.step - 1
+        future = {
+            member: future_weight(
+                patience=self.settings.patience * self.beliefs.trust.trust(member), steps_left=steps_left
+            )
+            for member in members
+        }
+
+        def holds(value: float) -> bool:
+            return incentive_holds(prices=at(value), groups=groups, future=future, nash_profits=nash_profits,
+                                   costs=costs, market=self.market)
+
+        result = largest_incentive_share(upper=share, holds=holds)
+        self.last_report['ic_share'] = result / share if share > 0 else 1.0
+        return at(result)
 
     def _score(self, partition: Partition, observation: CoalitionObservation) -> float:
-        """Оценить разбиение по приросту над Нэшем при ценах, которые оно реально предложит.
+        """Оценить разбиение суммой V(C) групп; непосчитанные сверх бюджета отбрасываются."""
+        if not self.oracle.knows(costs=observation.costs, partition=partition):
+            if self._fresh_left <= 0:
+                return float('-inf')
+            self._fresh_left -= 1
+        prices = self._capped_prices(partition, observation)
+        return sum(self._group_value(group, prices, observation) for group in partition)
 
-        Именно при них, а не при равновесных: потолок цены уравнивает разбиения, и большая
-        группа перестаёт выигрывать только за счёт цены картеля.
+    def _group_value(self, group: Group, prices: dict[int, float], observation: CoalitionObservation) -> float:
+        """Вернуть V(C) из раздела 4.3 плана: дисконтированный дополнительный доход группы.
+
+        Цены здесь уже учитывают соседние планы, поэтому внешние эффекты разбиения внутри оценки.
         """
-        prices = self._planned_prices(partition, observation)
-        return self.oracle.gain(costs=observation.costs, prices=prices, members=set().union(*partition))
+        gain = self.oracle.gain(costs=observation.costs, prices=prices, members=group)
+        rho = self.beliefs.expected_compliance(group)
+        survival = self.beliefs.links.group_survival(group=group, observation=observation)
+        fines = self.beliefs.fines.expected(group)
+        return (rho * gain - fines) / (1.0 - self.settings.discount * survival)
 
     def _plan(self, group: Group, prices: dict[int, float], observation: CoalitionObservation) -> CoalitionPlan:
         members = sorted(group)
@@ -88,30 +197,50 @@ class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
             plan_id=self._plan_id(group),
             members=tuple(members),
             recommended_prices={member: prices[member] for member in members},
-            payout_weights=self._weights(members, prices, observation),
+            payout_weights=self._weights(group, prices, observation),
         )
 
     def _plan_id(self, group: Group) -> int:
         # Один состав сохраняет id весь эпизод: так историю соблюдения можно связать с группой.
         return self._plan_ids.setdefault(group, len(self._plan_ids))
 
-    def _weights(
-        self, members: list[int], prices: dict[int, float], observation: CoalitionObservation
-    ) -> dict[int, float]:
+    def _remember_unions(self, partition: Partition) -> None:
+        """Запомнить, из каких прошлых групп собрана новая: это априорные союзы Оуэна.
+
+        Союзы закрепляются при первом появлении группы и живут, пока группа существует.
+        """
+        for group in partition:
+            if group in self._unions:
+                continue
+            parts = [group & old for old in self._previous if len(group & old) >= 2]
+            covered = frozenset().union(*parts) if parts else frozenset()
+            self._unions[group] = (*parts, *(frozenset({member}) for member in sorted(group - covered)))
+
+    def _blocks(self, group: Group, members: list[int]) -> list[int]:
+        index = {member: position for position, member in enumerate(members)}
+        return [sum(1 << index[member] for member in union) for union in self._unions.get(group, ())]
+
+    def _weights(self, group: Group, prices: dict[int, float], observation: CoalitionObservation) -> dict[int, float]:
+        members = sorted(group)
         scheme = self.settings.payout
-        # Этап 2: заменить равное деление для больших групп выборкой перестановок.
+        # N в ЛР равно 12. Для больших групп таблица 2^n не влезет, тогда делим поровну.
         if scheme == 'equal' or len(members) > self.settings.max_exact_players:
             return equal_split(members)
+        values = self._level_table(members, prices, observation)
+        bonus = self.beliefs.fines.peek_compensation(members) if scheme == 'hybrid' else None
+        return payout_weights(scheme=scheme, players=members, values=values, edges=observation.edges,
+                              blocks=self._blocks(group, members), bonus=bonus)
+
+    def _level_table(self, members: list[int], prices: dict[int, float], observation: CoalitionObservation):
         nash = self.oracle.nash(observation.costs)
-        values = level_game(
-            players=members,
-            prices=prices,
-            nash_prices=nash.prices,
-            nash_profits=nash.profits,
-            costs=observation.costs,
-            market=self.market,
-        )
-        return payout_weights(scheme=scheme, players=members, values=values, edges=observation.edges)
+        return level_game(players=members, prices=prices, nash_prices=nash.prices, nash_profits=nash.profits,
+                          costs=observation.costs, market=self.market)
+
+    def _pay_insurance(self, plans: tuple[CoalitionPlan, ...]) -> None:
+        """Списать долг страховки ровно один раз за шаг: веса могут считаться несколько раз."""
+        if self.settings.payout == 'hybrid':
+            for plan in plans:
+                self.beliefs.fines.settle(self.beliefs.fines.peek_compensation(plan.members))
 
     def _validated(self, plans: tuple[CoalitionPlan, ...], observation: CoalitionObservation) -> CoalitionDecision:
         """Прогнать планы через проверку среды: отклонённый план — потерянный шаг."""
@@ -126,3 +255,11 @@ class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
         if validation.rejected:
             raise ValueError(f'Policy built invalid plans: {validation.rejected}')
         return decision
+
+    def _core_gap(self, plan: CoalitionPlan, prices: dict[int, float], observation: CoalitionObservation) -> float:
+        """Вернуть долю котла, которую недополучает самая недовольная подгруппа плана."""
+        members = sorted(plan.members)
+        table = self._level_table(members, prices, observation)
+        game = restrict_to_graph(table, players=members, edges=observation.edges)
+        payouts = game[-1] * np.array([plan.payout_weights[member] for member in members])
+        return max(0.0, core_excess(payouts, game)) / max(float(game[-1]), 1e-9)
