@@ -1,0 +1,25 @@
+# The public class requires a trained table; it never silently falls back to empty Q.
+# By default it loads models/q_agent.json bundled inside our implementation package.
+name: zhmurenko_agent
+mode: eval
+strict: true
+horizon: 50
+seeds: [400, 401, 402]
+episodes_per_seed: 1
+market: {demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit}
+agents:
+  count: 12
+  default: {impl: 'social_market_env.baselines.agents:CartelAgent'}
+  cost_low: 15
+  cost_high: 22
+  overrides:
+    0: {impl: 'social_market_env.implementations.zhmurenko_vladimir:ZhmurenkoVladimirAgent'}
+    3: {impl: 'social_market_env.baselines.agents:BestResponseAgent'}
+    7: {impl: 'social_market_env.baselines.agents:RandomAgent', kwargs: {low: 20, high: 60}}
+coalitions:
+  policy: {impl: 'social_market_env.baselines.coalitions:ConnectedComponentsCoalitions', kwargs: {payout: equal}}
+  compliance_tolerance: 0.5
+arbiter:
+  policy: {impl: 'social_market_env.baselines.arbiters:ThresholdArbiter', kwargs: {jump_threshold: 4, fine: 50}}
+  max_fine: 100
+network: {topology: random, mode: evolving, initial_density: 0.3}
