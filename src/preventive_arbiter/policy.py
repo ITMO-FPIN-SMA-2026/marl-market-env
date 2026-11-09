@@ -1,73 +1,61 @@
-"""Prevent harmful coordination using public prices and bounded link-cost changes.
-
-The original five-policy experiment is preserved in research/arbiter_comparison.
-This policy needs no neural-network, plotting or research dependencies.
-"""
+"""Bounded fines based on persistent public market signals."""
 
 from collections import deque
 from dataclasses import dataclass
-from itertools import combinations
 import math
-from statistics import fmean, pstdev
+from statistics import fmean
 from typing import Any
 
 from social_market_env.config import MarketConfig
-from social_market_env.contracts import ArbiterAction, ArbiterActionKind, ArbiterAPI, ArbiterObservation, Pair
+from social_market_env.contracts import ArbiterAction, ArbiterActionKind, ArbiterAPI, ArbiterObservation
 
 
 @dataclass(frozen=True)
 class Decision:
-    """Public explanation of the last decision; does not represent a hidden graph."""
+    """Public explanation; a suspicious price is not proof of coalition membership."""
 
     reason: str
     welfare_gap: float = 0.0
     competitive_average_price: float | None = None
-    candidate_pairs: int = 0
-    changed_pairs: int = 0
+    candidate_agents: int = 0
+    sanction_target: int | None = None
+    sanction_fine: float = 0.0
 
 
 class PreventiveArbiter(ArbiterAPI):
-    """Raise costs of suspected pairs after a persistent consumer-surplus deficit.
+    """Observe or fine one seller using public prices and consumer surplus.
 
-    In a static network, a healthy market or after exhausting the cost budget,
-    observe. No sanctions, direct edge deletion or access to private state.
-
-    ``market``, ``network_mode`` and ``link_cost_decay`` are public configuration.
-    The runner injects market automatically; pass mode/decay explicitly in kwargs.
-    The defaults reproduce the prototype's prevention parameters. The old fine
-    fallback is intentionally replaced with observation.
+    The import name is retained for runner configurations. This version never
+    requests link-cost changes and works in static and evolving networks alike.
+    Public market parameters are injected by the runner. No graph, coalition
+    membership, seller costs, balances or implementation names are inspected.
     """
 
     def __init__(
         self,
         *,
         market: dict[str, Any] | None = None,
-        network_mode: str = 'evolving',
         history_window: int = 20,
         welfare_gap_threshold: float = 0.08,
-        patience: int = 2,
+        patience: int = 4,
         price_margin: float = 2.0,
-        pair_budget: int = 24,
-        link_cost_delta: float = 5.0,
-        link_cost_cap: float = 10.0,
-        link_cost_decay: float = 0.0,
+        fine_amount: float = 25.0,
+        fine_cooldown: int = 5,
+        fine_budget: float = 100.0,
+        min_fine: float = 1.0,
     ) -> None:
-        if network_mode not in ('static', 'evolving'):
-            raise ValueError('network_mode must be static or evolving')
-        for name, value in [('history_window', history_window), ('patience', patience), ('pair_budget', pair_budget)]:
+        for name, value in [('history_window', history_window), ('patience', patience),
+                            ('fine_cooldown', fine_cooldown)]:
             if isinstance(value, bool) or not isinstance(value, int) or value < 1:
                 raise ValueError(f'{name} must be a positive integer')
         for name, value in [('welfare_gap_threshold', welfare_gap_threshold), ('price_margin', price_margin),
-                            ('link_cost_delta', link_cost_delta), ('link_cost_cap', link_cost_cap),
-                            ('link_cost_decay', link_cost_decay)]:
-            if isinstance(value, bool) or not math.isfinite(value) or value < 0:
+                            ('fine_amount', fine_amount), ('fine_budget', fine_budget), ('min_fine', min_fine)]:
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
                 raise ValueError(f'{name} must be a finite non-negative number')
         if welfare_gap_threshold >= 1:
             raise ValueError('welfare_gap_threshold must be less than 1')
-        if link_cost_decay > 1:
-            raise ValueError('link_cost_decay must be in [0, 1]')
-        if link_cost_delta == 0 or link_cost_cap == 0:
-            raise ValueError('link_cost_delta and link_cost_cap must be positive')
+        if min_fine <= 0 or min(fine_amount, fine_budget) < min_fine:
+            raise ValueError('fine_amount and fine_budget must be at least min_fine > 0')
         self.market = MarketConfig(**(market or {}))
         if not math.isfinite(self.market.demand_a) or self.market.demand_a <= 0:
             raise ValueError('market.demand_a must be finite and positive')
@@ -77,43 +65,38 @@ class PreventiveArbiter(ArbiterAPI):
             raise ValueError('market price bounds must be finite')
         if not 0 < self.market.p_min < self.market.p_max:
             raise ValueError('market price bounds must satisfy 0 < p_min < p_max')
-        self.network_mode = network_mode
         self.history_window = history_window
         self.welfare_gap_threshold = welfare_gap_threshold
         self.patience = patience
         self.price_margin = price_margin
-        self.pair_budget = pair_budget
-        self.link_cost_delta = link_cost_delta
-        self.link_cost_cap = link_cost_cap
-        self.link_cost_decay = link_cost_decay
+        self.fine_amount = fine_amount
+        self.fine_cooldown = fine_cooldown
+        self.fine_budget = fine_budget
+        self.min_fine = min_fine
         self.reset(seed=0, training=False)
 
     def reset(self, *, seed: int, training: bool) -> None:
-        """Clear all episode memory. This deterministic policy does not fit weights."""
+        """Clear episode memory. The rule itself does not train."""
         self._prices: deque[dict[int, float]] = deque(maxlen=self.history_window)
-        self._applied_costs: dict[Pair, float] = {}
+        self._streaks: dict[int, int] = {}
+        self._paid_fines: dict[int, float] = {}
+        self._last_fined: dict[int, int] = {}
+        self._last_fine_step: int | None = None
         self._last_step: int | None = None
         self._pending = ArbiterAction()
-        self._persistence = 0
         self.last_decision = Decision('reset')
 
     def _reconcile(self, observation: ArbiterObservation) -> None:
-        """Track actual sanitised actions using public last_action, not requested deltas.
-
-        At act(t), costs reflect the end of t-1. The environment will decay them
-        once more before applying the new action, which is accounted for below.
-        """
+        """Charge the episode budget only for the actual sanitised previous fine."""
         if self._last_step is not None:
             if observation.step != self._last_step + 1:
                 raise ValueError('Observations must be consecutive; reset before a new episode')
-            retain = 1.0 - self.link_cost_decay
-            self._applied_costs = {pair: cost * retain for pair, cost in self._applied_costs.items()
-                                   if cost * retain > 0}
             applied = observation.last_action if observation.last_action is not None else self._pending
-            if applied.kind == ArbiterActionKind.change_link_cost:
-                for pair, delta in applied.link_cost_changes.items():
-                    canonical = tuple(sorted(pair))
-                    self._applied_costs[canonical] = max(0.0, self._applied_costs.get(canonical, 0.0) + delta)
+            if applied.kind == ArbiterActionKind.sanction and applied.target is not None and applied.fine > 0:
+                target = applied.target
+                self._paid_fines[target] = self._paid_fines.get(target, 0.0) + applied.fine
+                self._last_fined[target] = self._last_step
+                self._last_fine_step = self._last_step
         self._last_step = observation.step
 
     def act(self, observation: ArbiterObservation) -> ArbiterAction:
@@ -125,50 +108,41 @@ class PreventiveArbiter(ArbiterAPI):
         scale = self.market.p_max - self.market.p_min
         competitive = ((self.market.demand_a - math.sqrt(2.0 * self.market.demand_b * target))
                        / self.market.demand_b) if target > 0 else None
-        harmful_signal = target > 0 and bool(prices) and gap > self.welfare_gap_threshold
-        self._persistence = self._persistence + 1 if harmful_signal else 0
-
-        # Scores use prior quotes only. Keeping price snapshots avoids retaining
-        # complete observation/fines histories and never requires private data.
-        risks = {}
-        for i, price in prices.items():
-            old = [frame[i] for frame in self._prices if i in frame]
-            level = max(0.0, (price - competitive) / scale) if competitive is not None else 0.0
-            trend = max(0.0, (price - fmean(old)) / scale) if old else 0.0
-            risks[i] = level + 0.25 * trend
         candidates = [i for i in sorted(prices)
                       if competitive is not None and prices[i] > competitive + self.price_margin]
-        pairs = list(combinations(candidates, 2))
-        retain = 1.0 - self.link_cost_decay
-        effective_costs = {pair: cost * retain for pair, cost in self._applied_costs.items()}
-
-        def pair_key(pair: Pair) -> tuple[float, float, Pair]:
-            i, j = pair
-            diffs = [frame[i] - frame[j] for frame in self._prices if i in frame and j in frame]
-            instability = pstdev(diffs) / scale if len(diffs) >= 2 else 0.0
-            score = min(risks[i], risks[j]) - 0.25 * abs(prices[i] - prices[j]) / scale - instability
-            return effective_costs.get(pair, 0.0), -score, pair
-
-        pairs.sort(key=pair_key)
+        harmful_signal = target > 0 and gap > self.welfare_gap_threshold
+        # Each seller needs their own consecutive evidence, alongside a group
+        # and a market deficit. A newcomer cannot inherit others' history.
+        self._streaks = {i: self._streaks.get(i, 0) + 1 for i in candidates} if (
+            harmful_signal and len(candidates) >= 2) else {}
+        risks = {}
+        for i in candidates:
+            old = [frame[i] for frame in self._prices if i in frame]
+            trend = max(0.0, (prices[i] - fmean(old)) / scale) if old else 0.0
+            risks[i] = (prices[i] - competitive) / scale + 0.25 * trend
         self._prices.append(dict(prices))
-        if self.network_mode == 'static':
-            reason = 'static_network'
-        elif target <= 0:
+        eligible = [i for i in candidates if self._streaks.get(i, 0) >= self.patience]
+        remaining = {i: max(0.0, self.fine_budget - self._paid_fines.get(i, 0.0)) for i in eligible}
+        affordable = [i for i in eligible if remaining[i] >= self.min_fine]
+
+        if target <= 0:
             reason = 'no_competitive_reference'
         elif not harmful_signal:
             reason = 'no_welfare_deficit'
-        elif self._persistence < self.patience:
+        elif len(candidates) < 2:
+            reason = 'no_suspected_group'
+        elif not eligible:
             reason = 'waiting_for_persistence'
-        elif not pairs:
-            reason = 'no_suspected_pairs'
+        elif not affordable:
+            reason = 'fine_budget_reached'
+        elif self._last_fine_step is not None and observation.step - self._last_fine_step < self.fine_cooldown:
+            reason = 'fine_cooldown'
         else:
-            selected = [p for p in pairs if effective_costs.get(p, 0) < self.link_cost_cap - 1e-9][:self.pair_budget]
-            changes = {p: min(self.link_cost_delta, self.link_cost_cap - effective_costs.get(p, 0.0)) for p in selected}
-            if changes:
-                self._pending = ArbiterAction(kind=ArbiterActionKind.change_link_cost, link_cost_changes=changes)
-                self.last_decision = Decision('prevention', gap, competitive, len(pairs), len(changes))
-                return self._pending
-            reason = 'cost_cap_reached'
+            seller = min(affordable, key=lambda i: (-risks[i], self._last_fined.get(i, -1), i))
+            fine = min(self.fine_amount, remaining[seller])
+            self._pending = ArbiterAction(kind=ArbiterActionKind.sanction, target=seller, fine=fine)
+            self.last_decision = Decision('sanction', gap, competitive, len(candidates), seller, fine)
+            return self._pending
         self._pending = ArbiterAction()
-        self.last_decision = Decision(reason, gap, competitive, len(pairs))
+        self.last_decision = Decision(reason, gap, competitive, len(candidates))
         return self._pending

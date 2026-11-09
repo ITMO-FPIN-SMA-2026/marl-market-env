@@ -9,6 +9,7 @@ dependencies = ["numpy>=1.26", "pyyaml>=6.0", "networkx>=3.0"]
 [project.optional-dependencies]
 viewer = ["streamlit>=1.37", "plotly>=5.22"]
 dev = ["pytest>=8.0"]
+learning = ["torch>=2.6"]
 
 [build-system]
 requires = ["setuptools>=68"]

@@ -13,15 +13,15 @@ network:
   mode: evolving
   link_cost_decay: 0.0
 arbiter:
-  max_link_cost_delta: 5.0
+  min_fine: 1.0
+  max_fine: 100.0
   policy:
     impl: "preventive_arbiter:PreventiveArbiter"
     kwargs:
-      network_mode: evolving
-      link_cost_decay: 0.0
       welfare_gap_threshold: 0.08
-      patience: 2
+      patience: 4
       price_margin: 2.0
-      pair_budget: 24
-      link_cost_delta: 5.0
-      link_cost_cap: 10.0
+      fine_amount: 25.0
+      fine_cooldown: 5
+      fine_budget: 100.0
+      min_fine: 1.0

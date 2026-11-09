@@ -1,0 +1,38 @@
+{
+  "checkpoint": "runs/ppo_arbiter/both_seed_0_best.pt",
+  "sha256": "37fae270a48adde11d583adc0295a9bf7c39964d34f3d14d989830d7b91ee013",
+  "model_seed": 0,
+  "evaluation": "greedy",
+  "settings": {
+    "hidden_size": 32,
+    "history_window": 20,
+    "batch_episodes": 8,
+    "epochs": 4,
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_ratio": 0.2,
+    "entropy_coef": 0.01,
+    "value_coef": 0.5,
+    "max_gradient_norm": 0.5,
+    "target_kl": 0.03,
+    "fine_amount": 25.0,
+    "fine_budget": 100.0,
+    "fine_cooldown": 5,
+    "min_fine": 1.0,
+    "max_fine": 100.0,
+    "use_previous_reward": true,
+    "separate_critic": true
+  },
+  "source_snapshot": "ppo_arbiter_feedback_20261109",
+  "source_hashes": {
+    "policy.py": "e2dc38ab1b5375739b53b09501d821d3ca8287588882fdf36d93ca1cd8b96937",
+    "__init__.py": "21c24b816cabca6388b0c4b7b19e373da015f40f78116aad50447384fdaffcd9",
+    "features.py": "b4c75057f9e56594a45d2e845a87341193e70eb8f1db8b78d3918be460f9bf2d",
+    "model.py": "24c42e7947907b938e5ae1316f67bdb7ae7e2a1e9e0731ed1bf96d8dcb21b9e5",
+    "settings.py": "d7cbb43b704401001fd7dcfc51e4a8586764f644e2ca11efa1da11c6c180926c"
+  },
+  "training_episodes": 768,
+  "training_horizon": 32,
+  "checkpoint_episode": 768
+}

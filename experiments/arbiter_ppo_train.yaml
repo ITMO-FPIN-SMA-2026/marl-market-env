@@ -1,0 +1,26 @@
+name: arbiter_ppo_train
+horizon: 64
+seeds: [0]
+episodes_per_seed: 128
+mode: train
+strict: true
+agents:
+  count: 4
+  default: {impl: 'social_market_env.baselines.agents:CartelAgent'}
+coalitions:
+  policy: {impl: 'social_market_env.baselines.coalitions:ConnectedComponentsCoalitions'}
+network: {topology: complete, mode: static}
+arbiter:
+  min_fine: 1.0
+  max_fine: 100.0
+  policy:
+    impl: 'ppo_arbiter:PPOArbiter'
+    kwargs:
+      model_seed: 0
+      settings:
+        fine_amount: 25.0
+        fine_cooldown: 5
+        fine_budget: 100.0
+        use_previous_reward: true
+        separate_critic: true
+      checkpoint_out: 'runs/ppo_arbiter/latest.pt'
