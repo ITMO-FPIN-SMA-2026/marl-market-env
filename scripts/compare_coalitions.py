@@ -33,6 +33,12 @@ POLICIES: dict[str, dict[str, Any]] = {
     'adaptive': ours(),
     'no-memory': ours(memory=False),
     'fixed-bold': ours(pricing='fixed', price_level='bold', payout='myerson', memory=False),
+    # Контрольные версии бандита: каждый его вариант, зафиксированный на весь эпизод.
+    'cap-cautious': ours(price_level='cautious', payout='myerson'),
+    'cap-moderate': ours(price_level='moderate', payout='myerson'),
+    'cap-bold': ours(price_level='bold', payout='myerson'),
+    'cap-cartel': ours(price_level='cartel', payout='myerson'),
+    'bandit': ours(learning='bandit', payout='myerson', checkpoint_path='experiments/coalition_bandit.json'),
     'equal': ours(payout='equal'),
     'shapley': ours(payout='shapley'),
     'myerson': ours(payout='myerson'),
@@ -45,6 +51,8 @@ ARBITERS: dict[str, dict[str, Any]] = {
     'preventive': {'impl': 'preventive_arbiter:PreventiveArbiter'},
     # Тот же арбитр с другим порогом: проверка, что политика не подогнана под 8 %.
     'preventive4': {'impl': 'preventive_arbiter:PreventiveArbiter', 'kwargs': {'welfare_gap_threshold': 0.04}},
+    # Этого арбитра нет в обучении бандита: на нём проверяется обобщение.
+    'preventive6': {'impl': 'preventive_arbiter:PreventiveArbiter', 'kwargs': {'welfare_gap_threshold': 0.06}},
 }
 LAB = 'coalition_lab.agents:'
 FLAKY = {'impl': LAB + 'FlakyAgent', 'kwargs': {'betray_rate': 0.3}}
@@ -116,6 +124,7 @@ def main() -> None:
     """Напечатать таблицу по всем сочетаниям."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--seeds', type=int, default=5)
+    parser.add_argument('--first-seed', type=int, default=0)
     parser.add_argument('--warmup', type=int, default=0)
     parser.add_argument('--arbiters', nargs='+', default=['observe'], choices=sorted(ARBITERS))
     parser.add_argument('--populations', nargs='+', default=['cartel'], choices=sorted(POPULATIONS))
@@ -130,7 +139,7 @@ def main() -> None:
                 for name in args.policies:
                     runs = [play(policy=POLICIES[name], arbiter=ARBITERS[arbiter], topology=topology, seed=seed,
                                  population=POPULATIONS[population], warmup=args.warmup)
-                            for seed in range(args.seeds)]
+                            for seed in range(args.first_seed, args.first_seed + args.seeds)]
                     mean = {key: fmean(run[key] for run in runs) for key in runs[0]}
                     print(f'{arbiter:10} {population:10} {topology[:10]:10} {name:11} {mean["profit"]:7.1f} '
                           f'{100 * mean["gap"]:6.1f} {100 * mean["harm"]:6.1f} {100 * mean["kept"]:6.1f} '

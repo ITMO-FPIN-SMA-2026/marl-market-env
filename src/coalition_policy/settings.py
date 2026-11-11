@@ -104,6 +104,20 @@ class PolicySettings:
     diagnostics: bool = False
     """Считать показатели для отчётов: они стоят времени и на решения не влияют."""
 
+    # --- Этап 3: обучение ---
+    learning: str = 'off'
+    """off — потолок задан price_level; bandit — потолок выбирает контекстный бандит."""
+    block_steps: int = 8
+    """Сколько шагов держится выбор бандита: эффект цены проявляется не сразу."""
+    exploration: float = 0.5
+    """Масштаб случайности Thompson Sampling при обучении."""
+    link_penalty: float = 3.0
+    """Штраф в награде бандита за долю пар, подорожавших за шаг.
+
+    Награда блока не видит будущего, а поднятая арбитром стоимость связи не затухает.
+    Без штрафа бандит не отличил бы высокую прибыль сейчас от разрушения сети.
+    """
+
     def __post_init__(self) -> None:
         choices = [(self.structure, STRUCTURES, 'structure'), (self.payout, PAYOUTS, 'payout'),
                    (self.price_level, PRICE_LEVELS, 'price_level'), (self.pricing, PRICINGS, 'pricing'),
@@ -115,6 +129,12 @@ class PolicySettings:
                   self.trust_decay, self.ban_trust, self.discount, self.insurance_rate]
         if not all(0 < value <= 1 for value in shares):
             raise ValueError('shares and rates must be in (0, 1]')
+        if self.learning not in {'off', 'bandit'}:
+            raise ValueError('learning must be off or bandit')
+        if self.learning == 'bandit' and self.pricing != 'adaptive':
+            raise ValueError('bandit needs adaptive pricing')
+        if self.block_steps < 1 or self.exploration <= 0 or self.link_penalty < 0:
+            raise ValueError('block_steps and exploration must be positive, link_penalty non-negative')
         if self.hysteresis < 0 or self.ban_steps < 0 or self.max_fresh_equilibria < 0:
             raise ValueError('hysteresis, ban_steps and max_fresh_equilibria must be non-negative')
         if min(self.max_packings, self.max_evaluations, self.max_exact_players, self.horizon) < 1:

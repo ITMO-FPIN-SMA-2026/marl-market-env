@@ -4,7 +4,7 @@
 
     1. Убеждения: доверие, связи, штрафы      — beliefs.py, rewards.py (этап 2)
     2. Кандидаты                              — candidates.py
-    3. Стратегические рычаги                  — этап 3, пока настройки
+    3. Стратегический рычаг                   — learner.py (этап 3)
     4. Выбор разбиения по оценке V(C)         — structure.py, _group_value
     5. Цены: лестница и соблазн               — pricing.py (этап 2)
     6. Доли котла                             — payouts.py
@@ -17,6 +17,7 @@ import numpy as np
 
 from coalition_policy.beliefs import Beliefs
 from coalition_policy.candidates import eligible_agents, generate_candidates
+from coalition_policy.learner import ARMS, Block, LinearThompson
 from coalition_policy.payouts import core_excess, level_game, payout_weights, restrict_to_graph
 from coalition_policy.pricing import (
     PriceLadder,
@@ -28,13 +29,14 @@ from coalition_policy.pricing import (
     path_prices,
 )
 from coalition_policy.rewards import StepOutcome, restore_outcome
-from coalition_policy.settings import PolicySettings
+from coalition_policy.settings import PRICE_LEVELS, PolicySettings
 from coalition_policy.structure import select_partition
 from coalition_policy.value import Group, Partition, ValueOracle
 from social_market_env.config import CoalitionsConfig, MarketConfig, NetworkConfig
 from social_market_env.contracts import CoalitionDecision, CoalitionObservation, CoalitionPlan, CoalitionPolicyAPI
 from social_market_env.core.coalitions import validate_plans
 from social_market_env.core.scoring import social_welfare
+from social_market_env.gametheory.graphs import connected_components
 from social_market_env.gametheory.payouts import equal_split
 
 
@@ -47,6 +49,7 @@ class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
         market: dict[str, Any] | None = None,
         network: dict[str, Any] | None = None,
         compliance_tolerance: float = CoalitionsConfig.compliance_tolerance,
+        checkpoint_path: str | None = None,
         **settings: Any,
     ) -> None:
         # Секцию market среда подставит сама, остальные ключи приходят из kwargs в YAML.
@@ -56,11 +59,20 @@ class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
         # Оракул живёт дольше эпизода: себестоимости внутри seed те же, и кэш остаётся полезным.
         self.oracle = ValueOracle(market=self.market)
         self.beliefs = Beliefs(settings=self.settings, network=NetworkConfig(**(network or {})))
+        # Бандит живёт дольше эпизода: это единственная часть политики, которая учится между эпизодами.
+        self.learner = LinearThompson(exploration=self.settings.exploration)
+        if checkpoint_path is not None:
+            self.learner.load(checkpoint_path)
         self.reset(seed=0, training=False)
 
     def reset(self, *, seed: int, training: bool) -> None:
-        """Забыть память эпизода; обученные параметры появятся на этапе 3 и здесь сбрасываться не будут."""
+        """Забыть память эпизода; обученный бандит при этом сохраняется."""
         self.training = training
+        self.learner.reseed(seed)
+        self._block: Block | None = None
+        self._arm_cap = 1.0
+        self._pressure = 0.0
+        self._compliance = 1.0
         self.beliefs.reset()
         self.ladder = PriceLadder(settings=self.settings)
         self._previous: Partition = ()
@@ -74,6 +86,7 @@ class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
     def act(self, observation: CoalitionObservation) -> CoalitionDecision:
         """Предложить планы на текущий шаг."""
         self._fresh_left = self.settings.max_fresh_equilibria
+        self._pull_lever(observation)
         blocked = self.beliefs.blocked(observation.step)
         candidates = generate_candidates(
             observation=observation, previous=self._previous, settings=self.settings, blocked=blocked
@@ -116,15 +129,70 @@ class AdaptiveCoalitionPolicy(CoalitionPolicyAPI):
             oracle=self.oracle,
             tolerance=self.compliance_tolerance,
         )
-        if outcome is None:
+        if outcome is not None:
+            self.last_outcome = outcome
+            self.beliefs.learn(outcome)
+            self._remember_signals(outcome, observation)
+            if self.settings.pricing == 'adaptive':
+                self.ladder.update(outcome)
+        if done:
+            self._close_block()
+
+    def _remember_signals(self, outcome: StepOutcome, observation: CoalitionObservation) -> None:
+        """Обновить сглаженные сигналы контекста и копилку текущего блока бандита."""
+        reacted = float(outcome.arbiter_reacted)
+        self._pressure = 0.8 * self._pressure + 0.2 * reacted
+        if outcome.compliance is not None:
+            self._compliance = 0.8 * self._compliance + 0.2 * outcome.compliance
+        if self._block is not None:
+            pairs = max(1, len(observation.link_costs))
+            agents = max(1, len(observation.active_agents))
+            self._block.total += outcome.reward / agents
+            self._block.total -= self.settings.link_penalty * len(outcome.raised_pairs) / pairs
+            self._block.steps += 1
+
+    def _pull_lever(self, observation: CoalitionObservation) -> None:
+        """На границе блока закрыть прошлый выбор и сделать новый."""
+        if self.settings.learning != 'bandit':
             return
-        self.last_outcome = outcome
-        self.beliefs.learn(outcome)
-        if self.settings.pricing == 'adaptive':
-            self.ladder.update(outcome)
+        if observation.step % self.settings.block_steps == 0:
+            self._close_block()
+            context = self._context(observation)
+            arm = self.learner.choose(context, explore=self.training)
+            self._block = Block(arm=arm, context=context)
+            self._arm_cap = PRICE_LEVELS[ARMS[arm]]
+        # Лестница не должна расти выше варианта: иначе смена варианта дала бы резкий скачок цены.
+        self.ladder.gap = min(self.ladder.gap, self._arm_cap)
+
+    def _close_block(self) -> None:
+        block, self._block = self._block, None
+        if block is not None and block.steps > 0 and self.training:
+            self.learner.update(arm=block.arm, context=block.context, reward=block.total / block.steps)
+
+    def _context(self, observation: CoalitionObservation) -> np.ndarray:
+        """Собрать признаки ситуации для бандита, все примерно в [0, 1]."""
+        active = observation.active_agents
+        pairs = max(1, len(active) * (len(active) - 1) // 2)
+        parts = connected_components(nodes=active, edges=observation.edges)
+        costs = observation.link_costs.values()
+        history = observation.edges.values()
+        outcome = self.last_outcome
+        return np.array([
+            1.0,
+            len(observation.edges) / pairs,
+            max((len(part) for part in parts), default=0) / max(1, len(active)),
+            sum(history) / len(observation.edges) if observation.edges else 0.0,
+            self._compliance,
+            min(1.0, sum(costs) / max(1, len(observation.link_costs)) / 10.0),
+            self._pressure,
+            max(0.0, outcome.welfare_gap) if outcome is not None else 0.0,
+            1.0 - observation.step / self.settings.horizon,
+        ])
 
     def _allowed_gap(self) -> float:
-        return self.ladder.gap if self.settings.pricing == 'adaptive' else self.settings.welfare_gap
+        if self.settings.pricing != 'adaptive':
+            return self.settings.welfare_gap
+        return min(self.ladder.gap, self._arm_cap)
 
     def _path(
         self, partition: Partition, observation: CoalitionObservation
