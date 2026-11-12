@@ -10,7 +10,7 @@
     python -m coalitions_badretdinov.research.tz_experiments arbitrage --seeds 10
 
 Арбитры preventive и adaptive берутся из пакетов preventive_arbiter и arbiter_lab,
-агент askarov — из askarov_agent: их нужно положить в PYTHONPATH.
+агент askarov — из agent_askarov: их нужно положить в PYTHONPATH.
 """
 
 import argparse
@@ -36,7 +36,7 @@ LAB = 'coalitions_badretdinov.research.agents:'
 
 POPULATIONS: dict[str, dict[str, Any]] = {
     'patient90': {'default': {'impl': LAB + 'PatientAgent', 'kwargs': {'patience': 0.9}}},
-    'askarov': {'default': {'impl': 'askarov_agent:AskarovAgent'}},
+    'askarov': {'default': {'impl': 'agent_askarov:AskarovAgent'}},
 }
 ARBITERS: dict[str, dict[str, Any]] = {
     'observe': {'impl': 'social_market_env.baselines.arbiters:AlwaysObserve'},

@@ -11,7 +11,7 @@ agents:
   cost_low: 15
   cost_high: 22
   overrides:
-    0: {impl: "askarov_agent:AskarovAgent"}
+    0: {impl: "agent_askarov:AskarovAgent"}
     3: {impl: "social_market_env.baselines.agents:BestResponseAgent"}
     7: {impl: "social_market_env.baselines.agents:RandomAgent", kwargs: {low: 20, high: 60}}
 coalitions:
