@@ -14,6 +14,7 @@ import yaml
 from agent_tverdokhleb import TverdokhlebAgent
 from social_market_env.baselines.agents import BestResponseAgent
 from social_market_env.config import ComponentSpec, ExperimentConfig, config_from_dict, config_to_dict, load_config
+from social_market_env.core.seeding import spawn_seeds
 from social_market_env.runner.experiment import build_environment, episode_seed
 
 IMPL = 'agent_tverdokhleb:TverdokhlebAgent'
@@ -155,24 +156,35 @@ def train_model(base: ExperimentConfig, *, state_mode: str, seed: int, episodes:
 def evaluation_config(base: ExperimentConfig, *, checkpoint: Path, seeds: list[int], agent_id: int) -> ExperimentConfig:
     """Emit a config directly usable by the native runner, with a portable relative path."""
     agent = TverdokhlebAgent.load(checkpoint)
-    validate_eval_seeds([agent], seeds)
+    validate_eval_seeds([agent], seeds, agent_count=base.agents.count)
     config = config_from_dict(config_to_dict(base))
     config.mode, config.strict, config.seeds, config.episodes_per_seed = 'eval', True, seeds, 1
     config.agents.overrides[agent_id] = ComponentSpec(IMPL, {'model_path': str(checkpoint)})
     return config
 
 
-def validate_eval_seeds(agents: list[TverdokhlebAgent], seeds: list[int]) -> None:
+def validate_eval_seeds(agents: list[TverdokhlebAgent], seeds: list[int], *, agent_count: int) -> None:
+    """Reject reused root seeds and native per-agent reset seeds."""
     if not seeds or len(set(seeds)) != len(seeds) or any(seed < 0 for seed in seeds):
         raise ValueError('Evaluation seeds must be distinct nonnegative integers')
     training = {seed for agent in agents for seed in agent.metadata.get('training_root_seeds', [])}
-    if overlap := training & set(seeds):
+    overlap = training & set(seeds)
+    training_resets = {seed for agent in agents for seed in agent.metadata.get('training_reset_seeds', [])}
+    if training_resets:
+        for seed in seeds:
+            reset_seed = episode_seed(seed=seed, episode=0)
+            # SocialMarketEnvironment.reset reserves the first three streams for other roles.
+            # Check every seller slot so moving the learner does not hide a reused market.
+            agent_seeds = spawn_seeds(seed=reset_seed, count=3 + agent_count)[3:]
+            if training_resets.intersection(agent_seeds):
+                overlap.add(seed)
+    if overlap:
         raise ValueError(f'Training/evaluation seed overlap: {sorted(overlap)}')
 
 
 def evaluate(base: ExperimentConfig, *, models: dict[str, TverdokhlebAgent], seeds: list[int],
              agent_id: int, conditions=None) -> list[dict]:
-    validate_eval_seeds(list(models.values()), seeds)
+    validate_eval_seeds(list(models.values()), seeds, agent_count=base.agents.count)
     if not models or set(models) & set(BASELINES):
         raise ValueError('Supply models with names distinct from the comparison baselines')
     reference = next(iter(models.values()))
@@ -315,7 +327,7 @@ def main(argv=None):
     base = load_config(args.config)
     if args.horizon is not None:
         base.horizon = args.horizon
-    validate_eval_seeds([], args.eval_seeds)
+    validate_eval_seeds([], args.eval_seeds, agent_count=base.agents.count)
     # Fail before training or writing a checkpoint if requested evaluation overlaps it.
     if args.command == 'train' and set(args.eval_seeds) & set(range(args.seed, args.seed + args.episodes)):
         raise ValueError('Training/evaluation seed overlap')

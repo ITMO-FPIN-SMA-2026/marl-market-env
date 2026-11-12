@@ -430,7 +430,7 @@ def test_checkpoint_evaluation_rejects_training_seeds_and_market_changes(tmp_pat
     with pytest.raises(ValueError, match='overlap'):
         evaluation_config(base, checkpoint=path, seeds=[43], agent_id=0)
     with pytest.raises(ValueError, match='distinct'):
-        validate_eval_seeds([agent], [1000, 1000])
+        validate_eval_seeds([agent], [1000, 1000], agent_count=base.agents.count)
     base.market.tau = 10
     with pytest.raises(ValueError, match='market differs'):
         evaluate(base, models={'history': agent}, seeds=[1000], agent_id=0)
