@@ -1,5 +1,13 @@
 # Продолжение на другом компьютере
 
+Канонический пакет арбитра Miroshnik: [`src/arbiter_miroshnik`](src/arbiter_miroshnik/README.md).
+Старые импорты и состояния PPO+GRU поддерживаются.
+
+Для Linux с AMD RX 6600 XT проверена установка ROCm и обучение исходного
+PPO+GRU на GPU. Команды и текущее состояние моделей: [инструкции AMD](src/arbiter_miroshnik/docs/amd.md).
+Прежние два архива остаются исходным снимком переноса; новые локальные состояния
+PPO+GRU в Git не входят.
+
 Ветка: `arbiter-transfer-portable` в `ITMO-FPIN-SMA-2026/marl-market-env`.
 Она сохраняет исходную среду, изменения прежнего арбитра, новый пакет
 `transferred_ppo_gru`, весь проект `research/pure_market`, отчёты и инструкции.

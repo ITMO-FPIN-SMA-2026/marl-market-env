@@ -1,4 +1,7 @@
-Продолжение на другом компьютере, NVIDIA/CUDA и все веса: [NEXT_COMPUTER.md](NEXT_COMPUTER.md).
+Арбитр **Miroshnik, PPO + GRU**: [`src/arbiter_miroshnik`](src/arbiter_miroshnik/README.md).
+Подключение, именной YAML, эксперименты и документация собраны внутри пакета.
+
+Продолжение на другом компьютере, NVIDIA/CUDA, AMD/ROCm и все веса: [NEXT_COMPUTER.md](NEXT_COMPUTER.md).
 
 # Арбитр
 
