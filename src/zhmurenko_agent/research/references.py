@@ -9,7 +9,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-from .agent import output_path
+from ..agent import output_path
 
 PEERS = {'askarov_agent': 'e2d6e7ae9813125c772bcca64e220dd39f548244',
          'tverdokhleb_agent': '1c1a437127afbe44eed8fad77243b37be82410b9',

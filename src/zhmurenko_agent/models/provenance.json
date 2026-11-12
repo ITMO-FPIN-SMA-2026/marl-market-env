@@ -1,7 +1,6 @@
 {
   "selected": {
     "policy": "regime_1",
-    "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_1\\regime\\model.json",
     "worst_ratio": 0.9734530084367923,
     "mean_ratio": 1.2840301737275903,
     "survival": 1,
@@ -11,7 +10,6 @@
   "ranking": [
     {
       "policy": "regime_1",
-      "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_1\\regime\\model.json",
       "worst_ratio": 0.9734530084367923,
       "mean_ratio": 1.2840301737275903,
       "survival": 1,
@@ -20,7 +18,6 @@
     },
     {
       "policy": "flat_0",
-      "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_0\\flat\\model.json",
       "worst_ratio": 0.9255736188955409,
       "mean_ratio": 1.2298488921039634,
       "survival": 1,
@@ -29,7 +26,6 @@
     },
     {
       "policy": "flat_1",
-      "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_1\\flat\\model.json",
       "worst_ratio": 0.8225996604352064,
       "mean_ratio": 0.9874024548113813,
       "survival": 1,
@@ -38,7 +34,6 @@
     },
     {
       "policy": "flat_2",
-      "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_2\\flat\\model.json",
       "worst_ratio": 0.7722339541504196,
       "mean_ratio": 0.9031996044711815,
       "survival": 1,
@@ -47,7 +42,6 @@
     },
     {
       "policy": "regime_0",
-      "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_0\\regime\\model.json",
       "worst_ratio": 0.60305683650055,
       "mean_ratio": 1.1887013992153854,
       "survival": 1,
@@ -56,7 +50,6 @@
     },
     {
       "policy": "regime_2",
-      "path": "C:\\Users\\darte\\Downloads\\ITMO_Qlearning_Rebuild_2026-11-06\\repeat_2\\regime\\model.json",
       "worst_ratio": 0.4956952776616385,
       "mean_ratio": 1.132882515254781,
       "survival": 1,

@@ -15,7 +15,7 @@
 $env:PYTHONPATH = (Resolve-Path 'src').Path
 $env:PYTHONDONTWRITEBYTECODE = '1'
 python -m social_market_env.run experiments/zhmurenko_agent.yaml `
-  --runs-dir "$env:USERPROFILE/Downloads/ITMO_Zhmurenko_Q/runs" --strict
+  --runs-dir runs/zhmurenko_agent --strict
 ```
 
 Можно передать собственный checkpoint через `kwargs: {model_path: 'путь/к/таблице.json'}`.
@@ -78,8 +78,8 @@ Q обновляется по настоящей награде среды: `Q �
 ## Обучение и сокращённая проверка
 
 ```powershell
-$module = 'zhmurenko_agent'
-$root = "$env:USERPROFILE/Downloads/ITMO_Q_NEW_RUN"
+$module = 'zhmurenko_agent.research'
+$root = (Join-Path ([IO.Path]::GetTempPath()) 'ITMO_Q_NEW_RUN')
 python -m "$module.experiment" train --root $root --repeat 0
 # Повторы 1 и 2 выполняются с --repeat 1 и --repeat 2.
 python -m "$module.analysis" bundle --root $root

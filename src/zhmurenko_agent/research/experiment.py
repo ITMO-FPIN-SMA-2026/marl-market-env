@@ -23,11 +23,11 @@ from social_market_env.config import ComponentSpec, config_from_dict, config_to_
 from social_market_env.runner.experiment import build_environment, episode_info, episode_seed
 from social_market_env.runner.loader import instantiate
 
-from .agent import ACTIONS, JOIN, PACKAGE, ZhmurenkoVladimirAgent, output_path
+from ..agent import ACTIONS, JOIN, PACKAGE, ZhmurenkoVladimirAgent, output_path
 from .references import activate, prepare
 
 IMPL = 'zhmurenko_agent:ZhmurenkoVladimirAgent'
-LOCAL = 'zhmurenko_agent.'
+LOCAL = 'zhmurenko_agent.research.'
 REPOSITORY = next(p for p in PACKAGE.parents if (p / '.git').exists())
 BASE_CONFIG = REPOSITORY / 'experiments' / 'zhmurenko_agent.yaml'
 TRAIN_SCENARIOS = ('mixed', 'competition', 'random', 'pairs', 'wave', 'wave2')

@@ -17,7 +17,7 @@ from statistics import mean
 import numpy as np
 
 from social_market_env.config import load_config
-from .agent import PACKAGE, output_path
+from ..agent import PACKAGE, output_path
 from .components import MarkupStrategy
 from .experiment import (BASE_CONFIG, EVAL_SCENARIOS, FINAL_SEEDS, IMPL, REPOSITORY, TRAIN_SCENARIOS,
                          VALIDATION_SEEDS, aggregate, digest, model_variants, play, scenario_config, write_json)
@@ -75,7 +75,9 @@ def bundle(root):
     ranked.sort(key=lambda r:(r['survival'],r['worst_ratio'],r['mean_ratio']),reverse=True)
     selected=ranked[0];destination=PACKAGE/'models'/'q_agent.json';destination.parent.mkdir(exist_ok=True)
     shutil.copy2(selected['path'],destination)
-    provenance=dict(selected=selected,ranking=ranked,selection='validation_only_maximin_relative_reward_then_mean',
+    published_ranking = [{key: value for key, value in item.items() if key != 'path'} for item in ranked]
+    provenance=dict(selected=published_ranking[0],ranking=published_ranking,
+                    selection='validation_only_maximin_relative_reward_then_mean',
                     model_sha256=digest(destination),validation_seeds=VALIDATION_SEEDS,
                     final_seeds_not_used=True)
     write_json(PACKAGE/'models'/'provenance.json',provenance)

@@ -10,7 +10,7 @@ from social_market_env.config import load_config
 from zhmurenko_agent.agent import (
     ACTIONS, JOIN, WAIT, PACKAGE, QSettings, ZhmurenkoVladimirAgent, output_path,
 )
-from zhmurenko_agent.experiment import (
+from zhmurenko_agent.research.experiment import (
     BASE_CONFIG, IMPL, play, scenario_config,
 )
 
@@ -220,7 +220,7 @@ def test_real_environment_delivers_learning_and_coalition_experience(tmp_path):
 
 def test_block_resume_matches_uninterrupted_q_learning(tmp_path):
     from types import SimpleNamespace
-    from zhmurenko_agent.experiment import train_pair
+    from zhmurenko_agent.research.experiment import train_pair
     base=load_config(BASE_CONFIG);base.horizon=2
     settings=dict(repeat=0,variants=['flat','regime'],block=2,min_episodes=2,patience=99)
     train_pair(SimpleNamespace(root=tmp_path/'full',max_episodes=4,resume=False,**settings),base)
@@ -234,7 +234,7 @@ def test_block_resume_matches_uninterrupted_q_learning(tmp_path):
 
 def test_reduced_final_plan_excludes_v4_and_pytorch(tmp_path):
     import sys
-    from zhmurenko_agent.experiment import FINAL_SEEDS,EVAL_SCENARIOS,model_variants
+    from zhmurenko_agent.research.experiment import FINAL_SEEDS,EVAL_SCENARIOS,model_variants
     names=[name for name,_ in model_variants(tmp_path)]
     assert len(FINAL_SEEDS)==12 and len(EVAL_SCENARIOS)==7 and len(names)==8
     assert len(FINAL_SEEDS)*len(EVAL_SCENARIOS)*len(names)==672
