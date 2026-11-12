@@ -17,8 +17,8 @@ python -m venv .venv
 Linux/macOS:
 
 ```bash
-uv venv --python 3.14 .venv
-uv pip install --python .venv/bin/python -e '.[dev]'
+$ python3 -m venv .venv 
+$ .venv/bin/python -m pip install -e '.[dev]'
 ```
 
 ## Запуск эксперимента
