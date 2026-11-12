@@ -1,0 +1,27 @@
+# Арбитр Miroshnik: проверка подключения PPO + GRU.
+# Из корня репозитория после pip install -e '.[learning]':
+# python -m social_market_env.run src/arbiter_miroshnik/arbiter_miroshnik.yaml
+# Для командных экспериментов используйте research/cli.py и закреплённые состояния.
+name: arbiter_miroshnik
+horizon: 16
+seeds: [0]
+mode: eval
+strict: true
+market: {demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit}
+agents:
+  count: 4
+  default: {impl: "social_market_env.baselines.agents:BestResponseAgent"}
+  cost_low: 15
+  cost_high: 22
+coalitions:
+  policy: {impl: "social_market_env.baselines.coalitions:NoCoalitions"}
+network: {topology: random, mode: evolving, initial_density: 0.3}
+arbiter:
+  min_fine: 1.0
+  max_fine: 100.0
+  policy:
+    impl: "arbiter_miroshnik:PPOGRUArbiter"
+    kwargs:
+      checkpoint_path: "src/arbiter_miroshnik/checkpoints/initial_model_0.pt"
+      device: cpu
+      evaluation: greedy

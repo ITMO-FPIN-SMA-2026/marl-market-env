@@ -6,6 +6,12 @@ __pycache__/
 .vscode/
 .DS_Store
 runs/
+*.pt
+*.pth
+*.ckpt
+!src/arbiter_miroshnik/checkpoints/initial_model_0.pt
 *.egg-info/
 .pytest_cache/
 .pytest_tmp*/
+
+artifacts/*.tar.gz

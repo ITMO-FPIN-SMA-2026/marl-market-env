@@ -9,6 +9,7 @@ dependencies = ["numpy>=1.26", "pyyaml>=6.0", "networkx>=3.0"]
 [project.optional-dependencies]
 viewer = ["streamlit>=1.37", "plotly>=5.22"]
 dev = ["pytest>=8.0"]
+learning = ["torch>=2.6"]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -19,7 +20,8 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 agent_askarov = ["experiments/*.yaml"]
+arbiter_miroshnik = ["*.yaml", "README.md", "checkpoints/*.pt", "checkpoints/README.md", "docs/*.md", "research/README.md", "research/results.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "src/agent_askarov/tests"]
+testpaths = ["tests", "src/agent_askarov/tests", "src/arbiter_miroshnik/research/tests"]
 addopts = "-p no:cacheprovider"
