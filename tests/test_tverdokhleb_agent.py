@@ -436,7 +436,11 @@ def test_checkpoint_evaluation_rejects_training_seeds_and_market_changes(tmp_pat
         evaluate(base, models={'history': agent}, seeds=[1000], agent_id=0)
 
 
-def test_benchmark_has_independent_training_repeats_and_paired_memory_comparison(tmp_path):
+def test_benchmark_has_independent_training_repeats_and_paired_memory_comparison(tmp_path, monkeypatch):
+    import tverdokhleb_agent.experiment as experiment
+
+    monkeypatch.setattr(experiment, 'CONDITIONS', (('competition', 'path', 'static'),
+                                                  ('mixed', 'star', 'evolving')))
     output = tmp_path / 'benchmark'
     assert main(['benchmark', '--episodes', '2', '--horizon', '3', '--min-updates', '4',
                  '--train-seeds', '42', '52', '--eval-seeds', '1000', '--output', str(output)]) == 0
@@ -444,9 +448,64 @@ def test_benchmark_has_independent_training_repeats_and_paired_memory_comparison
     assert set(report['aggregate']) == {'context', 'history', 'untrained', 'best_response'}
     assert len(report['training']) == 4
     assert len(report['history_minus_context_by_training_repeat']) == 2
+    assert len(report['episodes']) == 16
+    assert set(report['by_scenario']) == {'competition', 'mixed'}
+    for scenario, policies in report['by_scenario'].items():
+        for policy, metrics in policies.items():
+            rewards = [row['return'] for row in report['episodes']
+                       if row['condition'][0] == scenario and row['policy'] == policy]
+            assert metrics['return'] == pytest.approx(sum(rewards) / len(rewards))
     assert {tuple(row['training_root_seeds']) for row in report['training']} == {(42, 43), (52, 53)}
     for name in ('comparison.md', 'repeat_0/history.json', 'repeat_1/context.json'):
         assert (output / name).is_file()
+
+
+@pytest.mark.parametrize('suite', ['base', 'matrix'])
+def test_evaluate_checkpoint_cli_preserves_market_and_model(tmp_path, monkeypatch, suite):
+    import tverdokhleb_agent.experiment as experiment
+
+    base = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    base.horizon = 3
+    model = tmp_path / 'policy.json'
+    train_model(base, state_mode='history', seed=42, episodes=2,
+                min_updates=4, agent_id=0, output=model)
+    saved = model.read_bytes()
+    seen = []
+
+    def record_environment(*, config, seed):
+        seen.append(copy.deepcopy(config))
+        return build_environment(config=config, seed=seed)
+
+    monkeypatch.setattr(experiment, 'build_environment', record_environment)
+    monkeypatch.setattr(experiment, 'CONDITIONS', (('competition', 'path', 'static'),))
+    output = tmp_path / 'evaluation.json'
+    assert main(['evaluate', '--checkpoint', str(model), '--output', str(output),
+                 '--suite', suite, '--horizon', '3', '--eval-seeds', '1000']) == 0
+    report = json.loads(output.read_text())
+    assert model.read_bytes() == saved
+    assert len(report['episodes']) == 3 and len(seen) == 3
+    assert set(report['aggregate']) == {'trained', 'untrained', 'best_response'}
+    assert len({row['cost'] for row in report['episodes']}) == 1
+    assert all(row['transitions'] == 3 for row in report['episodes'])
+    if suite == 'base':
+        assert set(report['by_scenario']) == {'base'}
+        for config in seen:
+            assert config.network == base.network and config.market == base.market
+            assert config.coalitions == base.coalitions and config.arbiter == base.arbiter
+            assert config.agents.default == base.agents.default
+            assert {i: spec for i, spec in config.agents.overrides.items() if i != 0} == {
+                i: spec for i, spec in base.agents.overrides.items() if i != 0}
+    else:
+        assert set(report['by_scenario']) == {'competition'}
+        assert all(config.network.topology == 'path' for config in seen)
+    assert '| Scenario |' in output.with_suffix('.md').read_text()
+    with pytest.raises(ValueError, match='overlap'):
+        main(['evaluate', '--checkpoint', str(model), '--output', str(tmp_path / 'overlap.json'),
+              '--eval-seeds', '42'])
+    assert not (tmp_path / 'overlap.json').exists()
+    with pytest.raises(ValueError, match='distinct from checkpoint'):
+        main(['evaluate', '--checkpoint', str(model), '--output', str(model)])
+    assert model.read_bytes() == saved
 
 
 @pytest.mark.parametrize('options,match', [

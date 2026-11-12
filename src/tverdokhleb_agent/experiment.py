@@ -29,12 +29,12 @@ def scenario_config(base: ExperimentConfig, condition: tuple[str, str, str], age
     if not 0 <= agent_id < base.agents.count:
         raise ValueError('agent_id is outside the market')
     scenario, topology, mode = condition
-    if condition not in CONDITIONS:
+    if condition not in CONDITIONS and condition != ('base', base.network.topology, base.network.mode):
         raise ValueError(f'Unknown condition: {condition}')
     config = config_from_dict(config_to_dict(base))
     config.strict = True
     config.network.topology, config.network.mode = topology, mode
-    if scenario != 'mixed':
+    if scenario not in ('mixed', 'base'):
         config.agents.overrides.clear()
         peer = 'BestResponseAgent' if scenario == 'competition' else 'CartelAgent'
         config.agents.default = ComponentSpec(f'social_market_env.baselines.agents:{peer}')
@@ -84,6 +84,30 @@ def aggregate(rows: list[dict]) -> dict:
             **{key: mean(row[key] for row in rows) for key in (
                 'return', 'discounted_return', 'survived', 'transitions', 'fines', 'coalition_steps', 'mean_welfare')},
             'known_fraction': sum(row['known_decisions'] for row in rows) / decisions if decisions else None}
+
+
+def comparison_summary(rows: list[dict]) -> tuple[dict, dict]:
+    policies = list(dict.fromkeys(row['policy'] for row in rows))
+    summary = {name: aggregate([row for row in rows if row['policy'] == name]) for name in policies}
+    by_scenario = {
+        scenario: {name: aggregate([row for row in rows
+                                   if row['policy'] == name and row['condition'][0] == scenario])
+                   for name in policies}
+        for scenario in dict.fromkeys(row['condition'][0] for row in rows)
+    }
+    return summary, by_scenario
+
+
+def comparison_tables(summary: dict, by_scenario: dict) -> list[str]:
+    lines = ['| Policy | Mean return | Survival | Known states |', '|---|---:|---:|---:|']
+    for name, values in summary.items():
+        known = f"{values['known_fraction']:.1%}" if values['known_fraction'] is not None else '—'
+        lines.append(f"| {name} | {values['return']:.2f} | {values['survived']:.1%} | {known} |")
+    lines.extend(['', '| Scenario | ' + ' | '.join(summary) + ' |', '|---|' + '---:|' * len(summary)])
+    for scenario, policies in by_scenario.items():
+        values = ' | '.join(f"{policies[name]['return']:.2f}" for name in summary)
+        lines.append(f'| {scenario} | {values} |')
+    return lines
 
 
 def train_model(base: ExperimentConfig, *, state_mode: str, seed: int, episodes: int,
@@ -147,7 +171,7 @@ def validate_eval_seeds(agents: list[TverdokhlebAgent], seeds: list[int]) -> Non
 
 
 def evaluate(base: ExperimentConfig, *, models: dict[str, TverdokhlebAgent], seeds: list[int],
-             agent_id: int, conditions=CONDITIONS) -> list[dict]:
+             agent_id: int, conditions=None) -> list[dict]:
     validate_eval_seeds(list(models.values()), seeds)
     if not models or set(models) & set(BASELINES):
         raise ValueError('Supply models with names distinct from the comparison baselines')
@@ -157,7 +181,7 @@ def evaluate(base: ExperimentConfig, *, models: dict[str, TverdokhlebAgent], see
             raise ValueError('Checkpoint market differs from the evaluation market')
     frozen = {name: copy.deepcopy((agent.q, agent.updates, agent.metadata)) for name, agent in models.items()}
     rows = []
-    for condition, seed in product(conditions, seeds):
+    for condition, seed in product(CONDITIONS if conditions is None else conditions, seeds):
         config = scenario_config(base, condition, agent_id)
         for name in (*models, *BASELINES):
             # New instances for the other roles; identical initial costs and reset seeds.
@@ -176,6 +200,27 @@ def evaluate(base: ExperimentConfig, *, models: dict[str, TverdokhlebAgent], see
         if (agent.q, agent.updates, agent.metadata) != frozen[name]:
             raise AssertionError('Evaluation changed a trained model')
     return rows
+
+
+def evaluate_checkpoint(args, base):
+    """Compare a saved model with baselines, preserving the input YAML by default."""
+    outputs = {args.output.resolve(), args.output.with_suffix('.md').resolve()}
+    if args.output.suffix != '.json' or outputs & {args.checkpoint.resolve(), args.config.resolve()}:
+        raise ValueError('Evaluation output must be a separate .json file, distinct from checkpoint and config')
+    agent = TverdokhlebAgent.load(args.checkpoint)
+    conditions = [('base', base.network.topology, base.network.mode)] if args.suite == 'base' else None
+    rows = evaluate(base, models={'trained': agent}, seeds=args.eval_seeds,
+                    agent_id=args.agent_id, conditions=conditions)
+    summary, by_scenario = comparison_summary(rows)
+    write_json(args.output, {'config': config_to_dict(base), 'checkpoint': str(args.checkpoint),
+                            'agent_id': args.agent_id, 'eval_seeds': args.eval_seeds, 'suite': args.suite,
+                            'aggregate': summary, 'by_scenario': by_scenario, 'episodes': rows})
+    lines = ['# TverdokhlebAgent: evaluation', '',
+             f'Checkpoint: {args.checkpoint}. Suite: {args.suite}. Evaluation seeds: {args.eval_seeds}.',
+             'Paired costs and reset seeds; the trained model is frozen.', '',
+             *comparison_tables(summary, by_scenario), '']
+    args.output.with_suffix('.md').write_text('\n'.join(lines), encoding='utf-8')
+    print('\n'.join(lines), flush=True)
 
 
 def train(args, base):
@@ -209,8 +254,7 @@ def benchmark(args, base):
         evaluated = evaluate(base, models=models, seeds=args.eval_seeds, agent_id=args.agent_id)
         records.extend({'repeat': repeat, **row} for row in evaluated)
         print(f'Completed evaluation repeat {repeat + 1}/{len(args.train_seeds)}', flush=True)
-    policies = (*args.variants, *BASELINES)
-    summary = {policy: aggregate([row for row in records if row['policy'] == policy]) for policy in policies}
+    summary, by_scenario = comparison_summary(records)
     paired = []
     if {'context', 'history'} <= set(args.variants):
         for repeat in range(len(args.train_seeds)):
@@ -219,17 +263,15 @@ def benchmark(args, base):
                          for name in ('context', 'history')}
             paired.append(mean(by_policy['history'][key] - value for key, value in by_policy['context'].items()))
     report = {'config': config_to_dict(base), 'train_seeds': args.train_seeds, 'eval_seeds': args.eval_seeds,
-              'variants': args.variants, 'aggregate': summary, 'training': training, 'episodes': records,
+              'variants': args.variants, 'aggregate': summary, 'by_scenario': by_scenario,
+              'training': training, 'episodes': records,
               'history_minus_context_by_training_repeat': paired,
               'note': 'Evaluation seeds/conditions are paired; repeats share evaluation cases. No independence or significance claim across all episodes.'}
     write_json(args.output / 'comparison.json', report)
     lines = ['# TverdokhlebAgent: comparison', '',
              f'Training seed starts: {args.train_seeds}; evaluation seeds: {args.eval_seeds}.',
              'One learner per variant/repeat; new costs each training episode. Evaluation is frozen.', '',
-             '| Policy | Mean return | Survival | Known states |', '|---|---:|---:|---:|']
-    for name, values in summary.items():
-        known = f"{values['known_fraction']:.1%}" if values['known_fraction'] is not None else '—'
-        lines.append(f"| {name} | {values['return']:.2f} | {values['survived']:.1%} | {known} |")
+             *comparison_tables(summary, by_scenario)]
     lines.extend(['', f'Paired history − context mean returns by training repeat: {paired}.',
                   'Known states means a Q row exists, not that every action is well estimated.',
                   'These are individual-agent experiments, not the team mutual-adaptation cycles.', ''])
@@ -247,22 +289,28 @@ def positive(value):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
-    for name in ('train', 'benchmark'):
+    for name in ('train', 'benchmark', 'evaluate'):
         sub = commands.add_parser(name)
         sub.add_argument('--config', type=Path, default=Path('experiments/tverdokhleb_agent.yaml'))
         sub.add_argument('--agent-id', type=int, default=0)
-        sub.add_argument('--episodes', type=positive, default=300)
         sub.add_argument('--horizon', type=positive)
-        sub.add_argument('--min-updates', type=positive, default=10000)
         sub.add_argument('--eval-seeds', nargs='+', type=int, default=[100000, 100001, 100002])
+        if name != 'evaluate':
+            sub.add_argument('--episodes', type=positive, default=300)
+            sub.add_argument('--min-updates', type=positive, default=10000)
         if name == 'train':
             sub.add_argument('--seed', type=int, default=42)
             sub.add_argument('--state-mode', choices=('basic', 'context', 'history'), default='history')
             sub.add_argument('--output', type=Path, default=Path('runs/tverdokhleb_agent/policy.json'))
-        else:
+        elif name == 'benchmark':
             sub.add_argument('--train-seeds', nargs='+', type=int, default=[42, 1042, 2042])
             sub.add_argument('--variants', nargs='+', choices=('basic', 'context', 'history'), default=['context', 'history'])
             sub.add_argument('--output', type=Path, default=Path('runs/tverdokhleb_agent/benchmark'))
+        else:
+            sub.add_argument('--checkpoint', type=Path, default=Path('runs/tverdokhleb_agent/policy.json'))
+            sub.add_argument('--suite', choices=('base', 'matrix'), default='base',
+                             help='base preserves the YAML; matrix evaluates all 32 controlled conditions')
+            sub.add_argument('--output', type=Path, default=Path('runs/tverdokhleb_agent/evaluation.json'))
     args = parser.parse_args(argv)
     base = load_config(args.config)
     if args.horizon is not None:
@@ -271,7 +319,7 @@ def main(argv=None):
     # Fail before training or writing a checkpoint if requested evaluation overlaps it.
     if args.command == 'train' and set(args.eval_seeds) & set(range(args.seed, args.seed + args.episodes)):
         raise ValueError('Training/evaluation seed overlap')
-    (train if args.command == 'train' else benchmark)(args, base)
+    {'train': train, 'benchmark': benchmark, 'evaluate': evaluate_checkpoint}[args.command](args, base)
     return 0
 
 
