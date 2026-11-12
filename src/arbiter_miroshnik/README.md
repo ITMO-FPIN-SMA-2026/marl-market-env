@@ -27,6 +27,21 @@ Actor решает, наблюдать дальше или оштрафоват�
 
 ## Подключение
 
+Из корня репозитория после checkout этой ветки:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[learning]'
+python -m social_market_env.run src/arbiter_miroshnik/arbiter_miroshnik.yaml
+```
+
+В Windows активируйте окружение командой `.venv\Scripts\Activate.ps1`.
+Зависимость `learning` устанавливает PyTorch >= 2.6. Начальный checkpoint
+[`checkpoints/initial_model_0.pt`](checkpoints/initial_model_0.pt) включён в Git
+и Python-пакет, поэтому для этого запуска архивы и прежние `runs/` не нужны.
+Его происхождение и SHA-256 описаны в [checkpoints/README.md](checkpoints/README.md).
+
 ```yaml
 arbiter:
   min_fine: 1.0
@@ -34,19 +49,20 @@ arbiter:
   policy:
     impl: "arbiter_miroshnik:PPOGRUArbiter"
     kwargs:
-      checkpoint_path: "runs/transferred_ppo/initial_model_0.pt"
+      checkpoint_path: "src/arbiter_miroshnik/checkpoints/initial_model_0.pt"
       device: cpu
       evaluation: greedy
 ```
 
-Восстановление состояний описано в [инструкции переноса](docs/next_computer.md). Для CUDA и AMD
+Восстановление исследовательских состояний описано в
+[инструкции переноса](docs/next_computer.md). Для CUDA и AMD
 ROCm используется `device: cuda`. Если GPU явно указан, но недоступен, запуск
 завершается ошибкой. Настройки модели сохраняются внутри checkpoint; их список
 и ограничения — в [`settings.py`](settings.py).
 
 Готовый конфиг: [`arbiter_miroshnik.yaml`](arbiter_miroshnik.yaml). Это короткая
 проверка подключения на четырёх `BestResponseAgent` без коалиций, а не исследование
-на командных продавцах. После восстановления архивов:
+на командных продавцах. Запускайте из корня checkout:
 
 ```bash
 python -m social_market_env.run src/arbiter_miroshnik/arbiter_miroshnik.yaml
@@ -99,6 +115,7 @@ python -m arbiter_miroshnik evaluate \
 | [`ppo.py`](ppo.py), [`model.py`](model.py) | Исходные PPO/GAE и actor/critic с GRU |
 | [`features.py`](features.py), [`reference.py`](reference.py) | Публичные признаки, память и калибровка |
 | [`settings.py`](settings.py), [`contracts.py`](contracts.py) | Параметры и внутренний контракт |
+| [`checkpoints/`](checkpoints/README.md) | Начальный checkpoint для запуска из чистого checkout |
 | [`research/`](research) | Launcher, закрепление командных исходников, перенос весов и продавцов |
 | [`docs/`](docs/README.md) | Архитектура, результаты, журнал переноса и AMD |
 | [`research/tests/test_arbiter_miroshnik.py`](research/tests/test_arbiter_miroshnik.py) | Подключение, обучение и возобновление |

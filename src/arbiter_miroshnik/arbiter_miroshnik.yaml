@@ -1,5 +1,5 @@
 # Арбитр Miroshnik: проверка подключения PPO + GRU.
-# После python -m arbiter_miroshnik.research.restore_handoff:
+# Из корня репозитория после pip install -e '.[learning]':
 # python -m social_market_env.run src/arbiter_miroshnik/arbiter_miroshnik.yaml
 # Для командных экспериментов используйте research/cli.py и закреплённые состояния.
 name: arbiter_miroshnik
@@ -22,6 +22,6 @@ arbiter:
   policy:
     impl: "arbiter_miroshnik:PPOGRUArbiter"
     kwargs:
-      checkpoint_path: "runs/transferred_ppo/initial_model_0.pt"
+      checkpoint_path: "src/arbiter_miroshnik/checkpoints/initial_model_0.pt"
       device: cpu
       evaluation: greedy

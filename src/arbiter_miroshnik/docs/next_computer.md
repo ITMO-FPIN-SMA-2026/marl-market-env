@@ -80,6 +80,6 @@ python -m arbiter_miroshnik --help
 python -m social_market_env.run src/arbiter_miroshnik/arbiter_miroshnik.yaml
 ```
 
-Последняя команда требует восстановленного `initial_model_0.pt`; это короткая
-проверка подключения без коалиций. Тест обучения и полного возобновления
+Последняя команда использует checkpoint из пакета и работает без архивов;
+это короткая проверка подключения без коалиций. Тест обучения и полного возобновления
 checkpoint находится в [`research/tests/`](../research/tests).

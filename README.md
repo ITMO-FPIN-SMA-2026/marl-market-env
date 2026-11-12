@@ -123,7 +123,9 @@ class JumpArbiter(ArbiterAPI):
 Пакет [`src/arbiter_miroshnik`](src/arbiter_miroshnik/README.md) содержит исходный
 PPO с отдельными actor и critic и памятью GRU. Внутри — именной YAML,
 `research/` с launcher командных экспериментов и `docs/` с архитектурой,
-результатами и инструкциями AMD ROCm. Веса переносятся отдельно:
+результатами и инструкциями AMD ROCm. Начальный checkpoint включён в пакет;
+для запуска примера установите `pip install -e '.[learning]'`.
+Полные исследовательские состояния переносятся отдельно:
 [инструкции переноса](src/arbiter_miroshnik/docs/next_computer.md). Полная квалификация арбитра пока не подтверждена.
 
 ## Конфиг
@@ -182,5 +184,4 @@ for episode in range(100):
 ```bash
 .venv/bin/pytest -q
 ```
-
 
