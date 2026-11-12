@@ -5,16 +5,16 @@ from pathlib import Path
 
 import pytest
 
-from tverdokhleb_agent import TverdokhlebAgent, TverdokhlebConfig
+from agent_tverdokhleb import TverdokhlebAgent, TverdokhlebConfig
 from social_market_env.config import MarketConfig, config_from_dict, load_config
 from social_market_env.contracts import AgentAction, AgentObservation, CoalitionOffer, MarketInfo
 from social_market_env.core.sanitize import sanitize_agent_action
 from social_market_env.runner.experiment import build_environment, run_experiment
-from tverdokhleb_agent.experiment import (
+from agent_tverdokhleb.experiment import (
     evaluate, evaluation_config, main, scenario_config, train_model, validate_eval_seeds,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
+PACKAGE = Path(__file__).resolve().parents[1]
 
 
 def observation(**overrides):
@@ -243,7 +243,7 @@ def test_invalid_hyperparameters(changes):
 
 
 def test_standalone_yaml_loads_public_agent_without_checkpoint():
-    config = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    config = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     config.horizon = 4
     env = build_environment(config=config, seed=0)
     agent = env.agents[0]
@@ -265,7 +265,7 @@ def test_public_plugin_trains_and_evaluates_across_environment_modes(topology, m
         'market': {'share_model': share_model, 'p_min': 10.0, 'p_max': 80.0},
         'finance': {'initial_balance': 100000.0},
         'agents': {'count': 4, 'default': {'impl': 'social_market_env.baselines.agents:CartelAgent'},
-                   'overrides': {0: {'impl': 'tverdokhleb_agent:TverdokhlebAgent',
+                   'overrides': {0: {'impl': 'agent_tverdokhleb:TverdokhlebAgent',
                                      'kwargs': {'config': {'state_mode': state_mode}}}}},
         'network': {'topology': topology, 'mode': mode},
         'coalitions': {'policy': {'impl': 'social_market_env.baselines.coalitions:ConnectedComponentsCoalitions'}},
@@ -301,7 +301,7 @@ def test_environment_delivers_next_observation_with_the_next_offer():
             self.transitions.append(transition)
             super().observe_transition(**transition)
 
-    config = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    config = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     config.horizon = 5
     config.finance.initial_balance = 100000.0
     env = build_environment(config=config, seed=0)
@@ -385,7 +385,7 @@ def test_context_ablation_changes_only_the_two_history_features():
 
 
 def test_fresh_training_rotates_costs_and_retains_the_learner(tmp_path):
-    base = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    base = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     base.horizon = 5
     original = copy.deepcopy(base)
     first, report = train_model(base, state_mode='history', seed=42, episodes=4,
@@ -426,7 +426,7 @@ def test_checkpoint_evaluation_rejects_training_seeds_and_market_changes(tmp_pat
     agent.metadata['training_root_seeds'] = [42, 43]
     path = tmp_path / 'agent.json'
     agent.save(path)
-    base = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    base = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     with pytest.raises(ValueError, match='overlap'):
         evaluation_config(base, checkpoint=path, seeds=[43], agent_id=0)
     with pytest.raises(ValueError, match='distinct'):
@@ -437,7 +437,7 @@ def test_checkpoint_evaluation_rejects_training_seeds_and_market_changes(tmp_pat
 
 
 def test_benchmark_has_independent_training_repeats_and_paired_memory_comparison(tmp_path, monkeypatch):
-    import tverdokhleb_agent.experiment as experiment
+    import agent_tverdokhleb.experiment as experiment
 
     monkeypatch.setattr(experiment, 'CONDITIONS', (('competition', 'path', 'static'),
                                                   ('mixed', 'star', 'evolving')))
@@ -462,9 +462,9 @@ def test_benchmark_has_independent_training_repeats_and_paired_memory_comparison
 
 @pytest.mark.parametrize('suite', ['base', 'matrix'])
 def test_evaluate_checkpoint_cli_preserves_market_and_model(tmp_path, monkeypatch, suite):
-    import tverdokhleb_agent.experiment as experiment
+    import agent_tverdokhleb.experiment as experiment
 
-    base = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    base = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     base.horizon = 3
     model = tmp_path / 'policy.json'
     train_model(base, state_mode='history', seed=42, episodes=2,
@@ -522,7 +522,7 @@ def test_invalid_benchmark_plan_fails_before_writing(tmp_path, options, match):
 
 
 def test_unreachable_training_budget_is_rejected(tmp_path):
-    base = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    base = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     base.horizon = 2
     with pytest.raises(ValueError, match='reachable'):
         train_model(base, state_mode='history', seed=42, episodes=2, min_updates=5,
@@ -531,10 +531,10 @@ def test_unreachable_training_budget_is_rejected(tmp_path):
 
 
 def test_actual_budget_failure_is_reported_after_early_elimination(tmp_path, monkeypatch):
-    import tverdokhleb_agent.experiment as experiment
+    import agent_tverdokhleb.experiment as experiment
 
     monkeypatch.setattr(experiment, 'CONDITIONS', (('mixed', 'complete', 'static'),))
-    base = load_config(ROOT / 'experiments/tverdokhleb_agent.yaml')
+    base = load_config(PACKAGE / 'experiments/agent_tverdokhleb.yaml')
     base.horizon = 5
     base.finance.max_negative_steps = 0
     base.arbiter.max_fine = 100000

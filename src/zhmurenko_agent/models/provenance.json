@@ -1,0 +1,71 @@
+{
+  "selected": {
+    "policy": "regime_1",
+    "worst_ratio": 0.9734530084367923,
+    "mean_ratio": 1.2840301737275903,
+    "survival": 1,
+    "validation_reward": 10491.98179238889,
+    "episodes": 2500
+  },
+  "ranking": [
+    {
+      "policy": "regime_1",
+      "worst_ratio": 0.9734530084367923,
+      "mean_ratio": 1.2840301737275903,
+      "survival": 1,
+      "validation_reward": 10491.98179238889,
+      "episodes": 2500
+    },
+    {
+      "policy": "flat_0",
+      "worst_ratio": 0.9255736188955409,
+      "mean_ratio": 1.2298488921039634,
+      "survival": 1,
+      "validation_reward": 10198.096694638889,
+      "episodes": 2500
+    },
+    {
+      "policy": "flat_1",
+      "worst_ratio": 0.8225996604352064,
+      "mean_ratio": 0.9874024548113813,
+      "survival": 1,
+      "validation_reward": 7606.574800972222,
+      "episodes": 2500
+    },
+    {
+      "policy": "flat_2",
+      "worst_ratio": 0.7722339541504196,
+      "mean_ratio": 0.9031996044711815,
+      "survival": 1,
+      "validation_reward": 6178.051404444444,
+      "episodes": 2500
+    },
+    {
+      "policy": "regime_0",
+      "worst_ratio": 0.60305683650055,
+      "mean_ratio": 1.1887013992153854,
+      "survival": 1,
+      "validation_reward": 9792.676864638888,
+      "episodes": 2500
+    },
+    {
+      "policy": "regime_2",
+      "worst_ratio": 0.4956952776616385,
+      "mean_ratio": 1.132882515254781,
+      "survival": 1,
+      "validation_reward": 9647.083873305555,
+      "episodes": 2500
+    }
+  ],
+  "selection": "validation_only_maximin_relative_reward_then_mean",
+  "model_sha256": "930d1b9efbbcc0bf13ecb1d5a824ae7188ea8ebfa6e83f879cf86f9615e75e1a",
+  "validation_seeds": [
+    5000,
+    5001,
+    5002,
+    5003,
+    5004,
+    5005
+  ],
+  "final_seeds_not_used": true
+}

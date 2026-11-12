@@ -11,12 +11,12 @@ from statistics import mean
 
 import yaml
 
-from tverdokhleb_agent import TverdokhlebAgent
+from agent_tverdokhleb import TverdokhlebAgent
 from social_market_env.baselines.agents import BestResponseAgent
 from social_market_env.config import ComponentSpec, ExperimentConfig, config_from_dict, config_to_dict, load_config
 from social_market_env.runner.experiment import build_environment, episode_seed
 
-IMPL = 'tverdokhleb_agent:TverdokhlebAgent'
+IMPL = 'agent_tverdokhleb:TverdokhlebAgent'
 SCENARIOS = ('competition', 'cooperation', 'sanctions', 'mixed')
 TOPOLOGIES = ('complete', 'star', 'path', 'inner_coalitions')
 MODES = ('static', 'evolving')
@@ -118,7 +118,7 @@ def train_model(base: ExperimentConfig, *, state_mode: str, seed: int, episodes:
     if not 0 <= agent_id < base.agents.count:
         raise ValueError('agent_id is outside the market')
     spec = base.agents.overrides.get(agent_id, base.agents.default)
-    if spec.impl not in (IMPL, 'tverdokhleb_agent.agent:TverdokhlebAgent'):
+    if spec.impl not in (IMPL, 'agent_tverdokhleb.agent:TverdokhlebAgent'):
         raise ValueError('The selected seller must be TverdokhlebAgent in the YAML')
     if set(spec.kwargs) - {'config'}:
         raise ValueError('Training starts fresh; use only kwargs.config in the base YAML')
@@ -291,7 +291,7 @@ def main(argv=None):
     commands = parser.add_subparsers(dest='command', required=True)
     for name in ('train', 'benchmark', 'evaluate'):
         sub = commands.add_parser(name)
-        sub.add_argument('--config', type=Path, default=Path('experiments/tverdokhleb_agent.yaml'))
+        sub.add_argument('--config', type=Path, default=Path(__file__).parent / 'experiments' / 'agent_tverdokhleb.yaml')
         sub.add_argument('--agent-id', type=int, default=0)
         sub.add_argument('--horizon', type=positive)
         sub.add_argument('--eval-seeds', nargs='+', type=int, default=[100000, 100001, 100002])

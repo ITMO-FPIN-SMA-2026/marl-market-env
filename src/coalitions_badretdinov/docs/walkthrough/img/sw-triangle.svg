@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" width="760" height="520" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Излишек покупателей при конкуренции и при картеле</title>
+  <rect width="760" height="520" fill="#fcfcfb"/>
+
+  <!-- Сетка: бледная, не спорит с данными -->
+  <g stroke="#e4e3df" stroke-width="1">
+    <line x1="80" y1="394" x2="536" y2="394"/>
+    <line x1="80" y1="328" x2="536" y2="328"/>
+    <line x1="80" y1="262" x2="536" y2="262"/>
+    <line x1="80" y1="196" x2="536" y2="196"/>
+    <line x1="80" y1="130" x2="536" y2="130"/>
+    <line x1="80" y1="64" x2="536" y2="64"/>
+  </g>
+
+  <!-- Потеря покупателей из-за сговора: часть большого треугольника под маленьким -->
+  <polygon points="80,231.5 272.9,231.5 445,381 80,381" fill="#2a78d6" fill-opacity="0.28"/>
+  <!-- Излишек при картеле: маленький треугольник -->
+  <polygon points="80,64 80,231.5 272.9,231.5" fill="#eb6834" fill-opacity="0.55"/>
+
+  <!-- Кривая спроса -->
+  <line x1="80" y1="64" x2="536" y2="460" stroke="#0b0b0b" stroke-width="2"/>
+
+  <!-- Линии цен и объёмов -->
+  <g stroke-width="2" stroke-dasharray="5 4" fill="none">
+    <line x1="80" y1="381" x2="445" y2="381" stroke="#2a78d6"/>
+    <line x1="445" y1="381" x2="445" y2="460" stroke="#2a78d6"/>
+    <line x1="80" y1="231.5" x2="272.9" y2="231.5" stroke="#eb6834"/>
+    <line x1="272.9" y1="231.5" x2="272.9" y2="460" stroke="#eb6834"/>
+  </g>
+  <circle cx="445" cy="381" r="5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+  <circle cx="272.9" cy="231.5" r="5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+
+  <!-- Оси -->
+  <g stroke="#52514e" stroke-width="1.5">
+    <line x1="80" y1="460" x2="560" y2="460"/>
+    <line x1="80" y1="460" x2="80" y2="44"/>
+  </g>
+
+  <!-- Деления оси цены -->
+  <g fill="#52514e" font-size="13" text-anchor="end">
+    <text x="72" y="464">0</text>
+    <text x="72" y="398">20</text>
+    <text x="72" y="332">40</text>
+    <text x="72" y="266">60</text>
+    <text x="72" y="200">80</text>
+    <text x="72" y="134">100</text>
+    <text x="72" y="68">120</text>
+  </g>
+  <!-- Деления оси объёма -->
+  <g fill="#52514e" font-size="13" text-anchor="middle">
+    <text x="80" y="480">0</text>
+    <text x="156" y="480">20</text>
+    <text x="232" y="480">40</text>
+    <text x="308" y="480">60</text>
+    <text x="384" y="480">80</text>
+    <text x="460" y="480">100</text>
+    <text x="536" y="480">120</text>
+  </g>
+
+  <!-- Подписи осей -->
+  <text x="320" y="508" fill="#0b0b0b" font-size="14" text-anchor="middle">Сколько купили всего, Q</text>
+  <text x="24" y="252" fill="#0b0b0b" font-size="14" text-anchor="middle" transform="rotate(-90 24 252)">Средняя цена, p̄</text>
+
+  <!-- Подписи на графике -->
+  <text x="300" y="150" fill="#0b0b0b" font-size="14">Кривая спроса Q = 120 − p̄</text>
+  <text x="300" y="168" fill="#52514e" font-size="13">при такой цене купят столько</text>
+
+  <text x="106" y="196" fill="#0b0b0b" font-size="14" font-weight="600">SW = 1288</text>
+  <text x="106" y="214" fill="#0b0b0b" font-size="13">при картеле</text>
+
+  <text x="100" y="340" fill="#0b0b0b" font-size="14" font-weight="600">SW = 4615</text>
+  <text x="100" y="358" fill="#0b0b0b" font-size="13">при конкуренции: оба цвета вместе</text>
+
+  <text x="453" y="374" fill="#0b0b0b" font-size="13">Нэш: p̄ = 23.9, Q = 96.1</text>
+  <text x="281" y="225" fill="#0b0b0b" font-size="13">Картель: p̄ = 69.3, Q = 50.8</text>
+
+  <!-- Легенда -->
+  <g font-size="13" fill="#0b0b0b">
+    <rect x="580" y="64" width="14" height="14" rx="3" fill="#eb6834" fill-opacity="0.55"/>
+    <text x="602" y="76">Остаётся покупателям</text>
+    <text x="602" y="93">при картеле</text>
+    <rect x="580" y="112" width="14" height="14" rx="3" fill="#2a78d6" fill-opacity="0.28"/>
+    <text x="602" y="124">Теряют покупатели</text>
+    <text x="602" y="141">из-за сговора</text>
+    <text x="580" y="180" fill="#52514e">Площадь треугольника:</text>
+    <text x="580" y="198" fill="#52514e">½ · основание · высота</text>
+    <text x="580" y="216" fill="#52514e">= ½ · Q · Q = Q² / 2</text>
+  </g>
+</svg>

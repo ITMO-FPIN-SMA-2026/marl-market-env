@@ -1,0 +1,25 @@
+# Политика коалиций Бадретдинова Антона: пример подключения.
+#
+#   python -m social_market_env.run src/coalitions_badretdinov/coalitions_badretdinov.yaml
+#
+# В общий конфиг переносится только секция coalitions. Важно: horizon и network_mode в kwargs
+# должны совпадать с horizon и network.mode конфига. В наблюдении коалиции их нет, а от длины
+# эпизода зависит, насколько высокую цену агенты удержат к концу.
+name: coalitions_badretdinov
+horizon: 100
+seeds: [0, 1, 2]
+mode: eval
+strict: true
+market: {demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit}
+agents:
+  count: 12
+  default: {impl: "social_market_env.baselines.agents:CartelAgent"}
+  cost_low: 15
+  cost_high: 22
+coalitions:
+  policy:
+    impl: "coalitions_badretdinov:AdaptiveCoalitionPolicy"
+    kwargs: {horizon: 100, network_mode: evolving}
+arbiter:
+  policy: {impl: "social_market_env.baselines.arbiters:AlwaysObserve"}
+network: {topology: random, mode: evolving, initial_density: 0.3}

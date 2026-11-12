@@ -1,0 +1,21 @@
+# Only seller 0 is ours; the remaining roles come from the original project.
+name: askarov_agent
+horizon: 80
+seeds: [0, 1, 2]
+mode: eval
+strict: true
+market: {demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit}
+agents:
+  count: 12
+  default: {impl: "social_market_env.baselines.agents:CartelAgent"}
+  cost_low: 15
+  cost_high: 22
+  overrides:
+    0: {impl: "agent_askarov:AskarovAgent"}
+    3: {impl: "social_market_env.baselines.agents:BestResponseAgent"}
+    7: {impl: "social_market_env.baselines.agents:RandomAgent", kwargs: {low: 20, high: 60}}
+coalitions:
+  policy: {impl: "social_market_env.baselines.coalitions:ConnectedComponentsCoalitions", kwargs: {payout: equal}}
+arbiter:
+  policy: {impl: "social_market_env.baselines.arbiters:ThresholdArbiter", kwargs: {jump_threshold: 4, fine: 50}}
+network: {topology: random, mode: evolving, initial_density: 0.3}

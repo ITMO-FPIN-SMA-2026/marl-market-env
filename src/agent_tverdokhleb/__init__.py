@@ -1,4 +1,4 @@
-"""Independent Q-learning market agent, loadable as tverdokhleb_agent:TverdokhlebAgent."""
+"""Independent Q-learning market agent, loadable as agent_tverdokhleb:TverdokhlebAgent."""
 
 from .agent import TverdokhlebAgent, TverdokhlebConfig
 
