@@ -118,7 +118,7 @@ class JumpArbiter(ArbiterAPI):
 стоимости засчитывается только при `network.mode: evolving`. Штраф меньше `arbiter.min_fine` считается
 наблюдением, изменения стоимости связи обрезаются до `±arbiter.max_link_cost_delta`.
 
-## Арбитр Miroshnik — PPO + GRU
+## Арбитр Мирошник Виктория Юрьевна — PPO + GRU
 
 Пакет [`src/arbiter_miroshnik`](src/arbiter_miroshnik/README.md) содержит исходный
 PPO с отдельными actor и critic и памятью GRU. Внутри — именной YAML,
