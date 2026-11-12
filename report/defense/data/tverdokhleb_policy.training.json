@@ -1,0 +1,5820 @@
+{
+  "config": {
+    "name": "agent_tverdokhleb",
+    "horizon": 100,
+    "seeds": [
+      100000,
+      100001,
+      100002
+    ],
+    "episodes_per_seed": 1,
+    "mode": "eval",
+    "strict": true,
+    "act_seconds_limit": 1.0,
+    "market": {
+      "demand_a": 120,
+      "demand_b": 1,
+      "tau": 5,
+      "p_min": 1,
+      "p_max": 100,
+      "share_model": "logit"
+    },
+    "finance": {
+      "initial_balance": 1000.0,
+      "max_negative_steps": 3
+    },
+    "network": {
+      "topology": "random",
+      "mode": "evolving",
+      "initial_density": 0.3,
+      "inner_groups": 3,
+      "a_keep": 2.0,
+      "a_form": -4.0,
+      "w_affinity": 1.0,
+      "w_history": 2.0,
+      "w_utility": 0.5,
+      "w_coop": 1.0,
+      "w_link_cost": 1.0,
+      "agent_link_bonus": 1.5,
+      "memory_rate": 0.2,
+      "link_cost_decay": 0.0,
+      "utility_scale": 100.0
+    },
+    "coalitions": {
+      "policy": {
+        "impl": "social_market_env.baselines.coalitions:ConnectedComponentsCoalitions",
+        "kwargs": {
+          "payout": "equal"
+        }
+      },
+      "compliance_tolerance": 0.5
+    },
+    "arbiter": {
+      "policy": {
+        "impl": "social_market_env.baselines.arbiters:ThresholdArbiter",
+        "kwargs": {
+          "jump_threshold": 4,
+          "fine": 50
+        }
+      },
+      "max_fine": 100.0,
+      "min_fine": 1.0,
+      "max_link_cost_delta": 5.0
+    },
+    "scoring": {
+      "alpha": 1.0,
+      "beta": 0.1,
+      "lambda_fp": 0.5,
+      "lambda_fn": 0.5,
+      "harm_margin": 0.05
+    },
+    "agents": {
+      "count": 5,
+      "default": {
+        "impl": "social_market_env.baselines.agents:CartelAgent",
+        "kwargs": {}
+      },
+      "cost_low": 12,
+      "cost_high": 45,
+      "overrides": {
+        "0": {
+          "impl": "agent_tverdokhleb:TverdokhlebAgent",
+          "kwargs": {}
+        },
+        "1": {
+          "impl": "social_market_env.baselines.agents:BestResponseAgent",
+          "kwargs": {}
+        },
+        "3": {
+          "impl": "social_market_env.baselines.agents:RandomAgent",
+          "kwargs": {
+            "low": 20,
+            "high": 60
+          }
+        }
+      }
+    }
+  },
+  "state_mode": "history",
+  "agent_id": 0,
+  "training_root_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    148,
+    149,
+    150,
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    174,
+    175,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219,
+    220,
+    221,
+    222,
+    223,
+    224,
+    225,
+    226,
+    227,
+    228,
+    229,
+    230,
+    231,
+    232,
+    233,
+    234,
+    235,
+    236,
+    237,
+    238,
+    239,
+    240,
+    241,
+    242,
+    243,
+    244,
+    245,
+    246,
+    247,
+    248,
+    249,
+    250,
+    251,
+    252,
+    253,
+    254,
+    255,
+    256,
+    257,
+    258,
+    259,
+    260,
+    261,
+    262,
+    263,
+    264,
+    265,
+    266,
+    267,
+    268,
+    269,
+    270,
+    271,
+    272,
+    273,
+    274,
+    275,
+    276,
+    277,
+    278,
+    279,
+    280,
+    281,
+    282,
+    283,
+    284,
+    285,
+    286,
+    287,
+    288,
+    289,
+    290,
+    291,
+    292,
+    293,
+    294,
+    295,
+    296,
+    297,
+    298,
+    299,
+    300,
+    301,
+    302,
+    303,
+    304,
+    305,
+    306,
+    307,
+    308,
+    309,
+    310,
+    311,
+    312,
+    313,
+    314,
+    315,
+    316,
+    317,
+    318,
+    319,
+    320,
+    321,
+    322,
+    323,
+    324,
+    325,
+    326,
+    327,
+    328,
+    329,
+    330,
+    331,
+    332,
+    333,
+    334,
+    335,
+    336,
+    337,
+    338,
+    339,
+    340,
+    341
+  ],
+  "updates": 29941,
+  "states": 226,
+  "final_epsilon": 0.05,
+  "min_updates": 10000,
+  "budget_met": true,
+  "aggregate": {
+    "episodes": 300,
+    "return": 47336.09952349667,
+    "discounted_return": 8238.56229973776,
+    "survived": 0.9966666666666667,
+    "transitions": 99.80333333333333,
+    "fines": 273.5,
+    "coalition_steps": 4.223333333333334,
+    "mean_welfare": 2269.0331380528332,
+    "known_fraction": 0.9924518219164357
+  },
+  "episodes": [
+    {
+      "seed": 42,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 43.3,
+      "return": 105.83499699999999,
+      "discounted_return": 18.55917139619527,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3126.7500917299994,
+      "known_decisions": 96,
+      "decisions": 100
+    },
+    {
+      "seed": 43,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 36.77,
+      "return": 160.407407,
+      "discounted_return": 26.43376736854339,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3326.3897456099994,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 44,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 18.05,
+      "return": 4401.362362000001,
+      "discounted_return": 1062.2477932354423,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3309.6772253600006,
+      "known_decisions": 93,
+      "decisions": 100
+    },
+    {
+      "seed": 45,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 42.9,
+      "return": 136.01167899999993,
+      "discounted_return": 21.443444620213775,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2973.94611925,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 46,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 30.54,
+      "return": 625.692416,
+      "discounted_return": 124.8071713790543,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3118.583424839999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 47,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 40.58,
+      "return": 456.4516280000003,
+      "discounted_return": 74.51148733873639,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2793.898939779998,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 48,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 43.8,
+      "return": 937.3704889999999,
+      "discounted_return": 187.90623724841322,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2506.1126675200003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 49,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 38.42,
+      "return": 3854.854381999999,
+      "discounted_return": 827.6571056270211,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2278.95305248,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 50,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 18.02,
+      "return": 105870.07979199997,
+      "discounted_return": 18019.771865301365,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 4,
+      "mean_welfare": 1106.1037684900002,
+      "known_decisions": 94,
+      "decisions": 100
+    },
+    {
+      "seed": 51,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 12.75,
+      "return": 78140.20758199999,
+      "discounted_return": 15833.821917778338,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1622.15393438,
+      "known_decisions": 86,
+      "decisions": 100
+    },
+    {
+      "seed": 52,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 23.61,
+      "return": 72196.37378399991,
+      "discounted_return": 17066.763901351384,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1226.8399941100004,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 53,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 17.42,
+      "return": 71662.12839800003,
+      "discounted_return": 11311.77847816675,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1870.7588022800007,
+      "known_decisions": 88,
+      "decisions": 100
+    },
+    {
+      "seed": 54,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 30.86,
+      "return": 64104.18302999996,
+      "discounted_return": 11731.257565427268,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 4,
+      "mean_welfare": 1102.7942511399997,
+      "known_decisions": 95,
+      "decisions": 100
+    },
+    {
+      "seed": 55,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 34.33,
+      "return": 32290.741114999964,
+      "discounted_return": 4277.256851827424,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1555.19487142,
+      "known_decisions": 85,
+      "decisions": 100
+    },
+    {
+      "seed": 56,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 34.22,
+      "return": 497.21088899999995,
+      "discounted_return": 52.88302827575064,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 3,
+      "mean_welfare": 3343.9108317700016,
+      "known_decisions": 96,
+      "decisions": 100
+    },
+    {
+      "seed": 57,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 30.44,
+      "return": 62606.94585399994,
+      "discounted_return": 8543.426586488637,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1446.2279466400007,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 58,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 28.15,
+      "return": 79704.21287199997,
+      "discounted_return": 13704.727821682825,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1600.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1302.4701896599986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 59,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 12.3,
+      "return": 108319.12212399994,
+      "discounted_return": 24725.243445199318,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1200.0,
+      "coalition_steps": 3,
+      "mean_welfare": 1467.3164568700004,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 60,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 32.45,
+      "return": 72674.86266299993,
+      "discounted_return": 16120.692000351977,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1600.0,
+      "coalition_steps": 4,
+      "mean_welfare": 1276.8195059000009,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 61,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 27.95,
+      "return": 76513.07735799994,
+      "discounted_return": 9181.603779890602,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1300.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1306.5962152200016,
+      "known_decisions": 90,
+      "decisions": 100
+    },
+    {
+      "seed": 62,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 20.11,
+      "return": 128785.92268600018,
+      "discounted_return": 23615.14265124452,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1155.2594651500008,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 63,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 26.5,
+      "return": 101254.79338300013,
+      "discounted_return": 19222.90190274978,
+      "survived": true,
+      "transitions": 100,
+      "fines": 700.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1137.6102760800009,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 64,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 31.89,
+      "return": -1111.664719,
+      "discounted_return": -387.60454148701547,
+      "survived": false,
+      "transitions": 41,
+      "fines": 1300.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3739.7414659500046,
+      "known_decisions": 29,
+      "decisions": 41
+    },
+    {
+      "seed": 65,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 14.89,
+      "return": 129875.76208200012,
+      "discounted_return": 16094.040734261007,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1100.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1368.3573786299987,
+      "known_decisions": 93,
+      "decisions": 100
+    },
+    {
+      "seed": 66,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 32.86,
+      "return": 1316.5741709999998,
+      "discounted_return": 100.83598430126328,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1150.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1687.1714251300007,
+      "known_decisions": 92,
+      "decisions": 100
+    },
+    {
+      "seed": 67,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 22.86,
+      "return": 26709.291776000005,
+      "discounted_return": 3821.7478261666424,
+      "survived": true,
+      "transitions": 100,
+      "fines": 450.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1853.4498584000003,
+      "known_decisions": 94,
+      "decisions": 100
+    },
+    {
+      "seed": 68,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 34.04,
+      "return": 15534.536422999998,
+      "discounted_return": 1687.2748320586072,
+      "survived": true,
+      "transitions": 100,
+      "fines": 450.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1621.7259140599997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 69,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 12.68,
+      "return": 23525.247170999995,
+      "discounted_return": 4592.860121777114,
+      "survived": true,
+      "transitions": 100,
+      "fines": 750.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2354.47995045,
+      "known_decisions": 95,
+      "decisions": 100
+    },
+    {
+      "seed": 70,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 14.2,
+      "return": 19184.787742,
+      "discounted_return": 2768.703862665082,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 8,
+      "mean_welfare": 2052.9762826500005,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 71,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 12.95,
+      "return": 11107.467686999997,
+      "discounted_return": 2349.8713064363374,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1100.0,
+      "coalition_steps": 4,
+      "mean_welfare": 2456.1676273499993,
+      "known_decisions": 89,
+      "decisions": 100
+    },
+    {
+      "seed": 72,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 24.69,
+      "return": 22217.40232699999,
+      "discounted_return": 3460.206168613413,
+      "survived": true,
+      "transitions": 100,
+      "fines": 450.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2960.2309737400005,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 73,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 16.67,
+      "return": 34159.13822500001,
+      "discounted_return": 6835.047008015774,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1050.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2491.3545735199996,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 74,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 40.35,
+      "return": 765.8257760000001,
+      "discounted_return": 129.0882744987361,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3178.049946710001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 75,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 42.53,
+      "return": 197.6464549999999,
+      "discounted_return": 41.88493020122881,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3254.0397082500003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 76,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 32.11,
+      "return": 7137.797796999999,
+      "discounted_return": 1349.202553091433,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2845.874331879999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 77,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 41.15,
+      "return": 334.3931490000001,
+      "discounted_return": 62.0988278492086,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3433.2412595299993,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 78,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 29.54,
+      "return": 643.9908979999999,
+      "discounted_return": 112.48046290130861,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3552.527931900002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 79,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 27.13,
+      "return": 3595.168774999999,
+      "discounted_return": 634.4246932042646,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3313.954964339999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 80,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 13.8,
+      "return": 23305.980365000003,
+      "discounted_return": 2915.105135337328,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3010.0951984200005,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 81,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 28.38,
+      "return": 4944.404017000001,
+      "discounted_return": 942.8798396968645,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3240.1589324199995,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 82,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 22.39,
+      "return": 118246.45221200015,
+      "discounted_return": 23658.52803077844,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1284.9275128599982,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 83,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 39.97,
+      "return": 45598.520277000054,
+      "discounted_return": 6509.810418745778,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1319.4990411200022,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 84,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 15.59,
+      "return": 150691.80767400007,
+      "discounted_return": 30232.26986777854,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1412.4305770100002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 85,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 15.88,
+      "return": 139810.41221000013,
+      "discounted_return": 26579.405918866694,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1260.6784226600028,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 86,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 12.99,
+      "return": 160754.2476819998,
+      "discounted_return": 30575.5589274249,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1255.7062012599984,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 87,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 28.72,
+      "return": 98804.30903500019,
+      "discounted_return": 15449.408606231236,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1344.4024441699987,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 88,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 24.84,
+      "return": 8203.757565999993,
+      "discounted_return": 1333.5968889952505,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 22,
+      "mean_welfare": 3010.93853574,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 89,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 14.37,
+      "return": 149196.49845499985,
+      "discounted_return": 20977.267702582372,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1422.4436199499992,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 90,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 17.52,
+      "return": 127030.4606550002,
+      "discounted_return": 26872.659246446616,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1249.2383377100027,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 91,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 21.84,
+      "return": 100994.29964699989,
+      "discounted_return": 15325.195082577739,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1661.3198094399984,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 92,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 34.84,
+      "return": 80509.51027200007,
+      "discounted_return": 15696.26436342257,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1370.3244139100018,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 93,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 28.89,
+      "return": 43518.16976799999,
+      "discounted_return": 3544.388390499244,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1500.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1863.6608108899986,
+      "known_decisions": 92,
+      "decisions": 100
+    },
+    {
+      "seed": 94,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 41.14,
+      "return": 50870.35819500002,
+      "discounted_return": 8166.226316537927,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1356.8458318699998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 95,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 36.99,
+      "return": 37946.09619000003,
+      "discounted_return": 7336.498835897825,
+      "survived": true,
+      "transitions": 100,
+      "fines": 700.0,
+      "coalition_steps": 21,
+      "mean_welfare": 1118.5621846799993,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 96,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 13.68,
+      "return": 19884.167625000002,
+      "discounted_return": 3418.5916125958615,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 73,
+      "mean_welfare": 4208.6832236300015,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 97,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 16.09,
+      "return": 80750.3324259999,
+      "discounted_return": 6525.135942124711,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1200.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2106.7737359199996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 98,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 30.04,
+      "return": 394.3495820000001,
+      "discounted_return": 21.588355465139234,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1816.1977483699995,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 99,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 35.76,
+      "return": 2051.831037,
+      "discounted_return": 388.0594587421526,
+      "survived": true,
+      "transitions": 100,
+      "fines": 850.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2347.8743530600004,
+      "known_decisions": 92,
+      "decisions": 100
+    },
+    {
+      "seed": 100,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 17.9,
+      "return": 52317.539807,
+      "discounted_return": 6852.987860890989,
+      "survived": true,
+      "transitions": 100,
+      "fines": 150.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1758.6227806299992,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 101,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 38.07,
+      "return": 256.126639,
+      "discounted_return": 39.0020823637386,
+      "survived": true,
+      "transitions": 100,
+      "fines": 850.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2380.32910904,
+      "known_decisions": 94,
+      "decisions": 100
+    },
+    {
+      "seed": 102,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 18.32,
+      "return": 18350.539084000004,
+      "discounted_return": 2587.1954925098,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2763.5507378400007,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 103,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 33.86,
+      "return": 3750.9612230000007,
+      "discounted_return": 696.9646492937734,
+      "survived": true,
+      "transitions": 100,
+      "fines": 550.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2751.3399022500003,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 104,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 34.23,
+      "return": 4431.394333000002,
+      "discounted_return": 746.4184124539458,
+      "survived": true,
+      "transitions": 100,
+      "fines": 50.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3291.951453370002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 105,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 25.83,
+      "return": 41612.348407,
+      "discounted_return": 6052.595890502214,
+      "survived": true,
+      "transitions": 100,
+      "fines": 150.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1713.5285500499992,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 106,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 44.45,
+      "return": 121.204677,
+      "discounted_return": 21.50935083486774,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3601.5601889500003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 107,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 20.73,
+      "return": 5470.242107999998,
+      "discounted_return": 1162.6418887675552,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3407.1150980499997,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 108,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 33.84,
+      "return": 5948.0925940000025,
+      "discounted_return": 1141.7818914331858,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3022.03182913,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 109,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 41.24,
+      "return": 916.8769709999999,
+      "discounted_return": 182.28419548499403,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3059.509179449998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 110,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 26.83,
+      "return": 4621.353613999995,
+      "discounted_return": 845.6153971384865,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3312.3639497899962,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 111,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 25.72,
+      "return": 1329.0420569999999,
+      "discounted_return": 576.1104918669608,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3109.78940237,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 112,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 20.92,
+      "return": 9669.753610000003,
+      "discounted_return": 1631.301218067086,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3344.4022665800007,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 113,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 41.25,
+      "return": 39.62078699999998,
+      "discounted_return": 10.203899300387167,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3520.8970794300003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 114,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 34.71,
+      "return": 64668.19809799998,
+      "discounted_return": 13123.933066232277,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1291.2560559100014,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 115,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 38.45,
+      "return": 26036.25494500003,
+      "discounted_return": 5170.718989824819,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1591.5464665199997,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 116,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 25.35,
+      "return": 107389.84054100017,
+      "discounted_return": 21647.830219594896,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1315.1569249499971,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 117,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 41.16,
+      "return": 38666.64921099999,
+      "discounted_return": 7518.659595523578,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 16,
+      "mean_welfare": 1397.7147335899986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 118,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 42.34,
+      "return": 41293.03863999996,
+      "discounted_return": 9592.385213037374,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1440.125962699999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 119,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 26.14,
+      "return": 119148.93550999978,
+      "discounted_return": 20399.87300264727,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1211.6657444399996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 120,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 12.63,
+      "return": 14694.706833000017,
+      "discounted_return": 2616.3313260075597,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 40,
+      "mean_welfare": 3246.8309402999985,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 121,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 14.46,
+      "return": 157793.264373,
+      "discounted_return": 21976.583096622166,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1345.7387162799976,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 122,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 25.17,
+      "return": 129971.09265300032,
+      "discounted_return": 25520.21776951796,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1119.2833552299983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 123,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 22.7,
+      "return": 109694.90403200015,
+      "discounted_return": 21737.6562293009,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1327.028155960002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 124,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 26.03,
+      "return": 126088.99396500013,
+      "discounted_return": 25267.880339028005,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1255.4559312099973,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 125,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 17.77,
+      "return": 101848.66379999998,
+      "discounted_return": 10288.313018244547,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 4,
+      "mean_welfare": 1983.7102788800066,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 126,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 35.65,
+      "return": 75893.79598600001,
+      "discounted_return": 15323.238795229998,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1431.9177857899974,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 127,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 30.3,
+      "return": 73405.66196099996,
+      "discounted_return": 9727.228752837253,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1594.32605435,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 128,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 24.83,
+      "return": 1897.4333850000003,
+      "discounted_return": 242.24886789534457,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3733.4395328600017,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 129,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 44.15,
+      "return": 30263.277691999974,
+      "discounted_return": 2743.986021139471,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1200.0,
+      "coalition_steps": 6,
+      "mean_welfare": 1618.3575198999981,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 130,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 40.86,
+      "return": 3565.670235000001,
+      "discounted_return": 211.0816585165212,
+      "survived": true,
+      "transitions": 100,
+      "fines": 2000.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1485.93810122,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 131,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 28.46,
+      "return": 4895.490807000001,
+      "discounted_return": 1122.4446365504796,
+      "survived": true,
+      "transitions": 100,
+      "fines": 650.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2226.977429980001,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 132,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 12.5,
+      "return": 42249.448508999965,
+      "discounted_return": 7727.353452720414,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1800.7287703300028,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 133,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 20.52,
+      "return": 13614.301666999996,
+      "discounted_return": 2973.2113676695403,
+      "survived": true,
+      "transitions": 100,
+      "fines": 150.0,
+      "coalition_steps": 5,
+      "mean_welfare": 2735.9417439900003,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 134,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 23.52,
+      "return": 4794.472247999999,
+      "discounted_return": 691.7985041335166,
+      "survived": true,
+      "transitions": 100,
+      "fines": 150.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2176.1734577199986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 135,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 29.95,
+      "return": 2923.1720389999996,
+      "discounted_return": 274.0853718067211,
+      "survived": true,
+      "transitions": 100,
+      "fines": 650.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2619.8873557399997,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 136,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 41.66,
+      "return": 146.04041999999995,
+      "discounted_return": 10.500881921923138,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2345.5954789100006,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 137,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 44.48,
+      "return": 5939.686483999999,
+      "discounted_return": 575.8173125765852,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1884.4139643100002,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 138,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 35.85,
+      "return": 4873.931066999998,
+      "discounted_return": 783.6810964644075,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3018.920939030001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 139,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 17.29,
+      "return": 28486.73098200001,
+      "discounted_return": 5768.11215800707,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3259.81556092,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 140,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 12.43,
+      "return": 30917.90039500001,
+      "discounted_return": 5950.0332384071635,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3224.051575550001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 141,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 13.78,
+      "return": 28116.816252000004,
+      "discounted_return": 5498.801157022801,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3415.08941592,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 142,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 26.42,
+      "return": 1838.2694239999983,
+      "discounted_return": 339.0950871131634,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3616.4096018800005,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 143,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 34.22,
+      "return": 1323.6357300000004,
+      "discounted_return": 219.8918173487079,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3388.1034178299997,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 144,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 39.94,
+      "return": 999.743476,
+      "discounted_return": 185.6462979619824,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3218.5546651199998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 145,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 15.85,
+      "return": 8905.310212,
+      "discounted_return": 1803.8472459764077,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3928.367870779999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 146,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 42.44,
+      "return": 36215.141150000025,
+      "discounted_return": 3954.733619932063,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1269.30554009,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 147,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 23.79,
+      "return": 123800.2041109998,
+      "discounted_return": 24925.212109686567,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1370.541982719997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 148,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 30.16,
+      "return": 50652.78596900007,
+      "discounted_return": 9261.662772938149,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1140.9245085699988,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 149,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 19.71,
+      "return": 145249.38507999998,
+      "discounted_return": 26043.78451437145,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1359.8281035599985,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 150,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 28.62,
+      "return": 107148.6229150001,
+      "discounted_return": 21766.911838908283,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1096.1227695099994,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 151,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 13.93,
+      "return": 122437.22794299989,
+      "discounted_return": 11425.955937887988,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1794.323291200001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 152,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 41.31,
+      "return": 141.1609149999998,
+      "discounted_return": 26.793790701013876,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3243.3569554400033,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 153,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 29.98,
+      "return": 34166.278399,
+      "discounted_return": 3498.5249543491395,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2337.3409497699986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 154,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 20.5,
+      "return": 138635.68194599976,
+      "discounted_return": 26469.064514744678,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1135.460738679999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 155,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 30.27,
+      "return": 70652.01319900011,
+      "discounted_return": 14288.83711475187,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1254.5075944099976,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 156,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 17.51,
+      "return": 160096.155773,
+      "discounted_return": 32076.12003255505,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1391.3682548900001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 157,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 36.38,
+      "return": 49170.98189299992,
+      "discounted_return": 5792.385286488478,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1502.2203972600043,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 158,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 26.41,
+      "return": 114812.20632199988,
+      "discounted_return": 23333.718614590478,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1458.3721768999985,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 159,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 30.08,
+      "return": 101217.5987789999,
+      "discounted_return": 21020.009079958363,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1338.372023210002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 160,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 12.62,
+      "return": 13572.663916000005,
+      "discounted_return": 2820.6586146369336,
+      "survived": true,
+      "transitions": 100,
+      "fines": 3600.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3474.322633280001,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 161,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 23.69,
+      "return": 92010.98157400003,
+      "discounted_return": 8739.590547889893,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1861.0068072299962,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 162,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 43.3,
+      "return": 321.5984930000001,
+      "discounted_return": -12.304429438392553,
+      "survived": true,
+      "transitions": 100,
+      "fines": 950.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1809.3739967700008,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 163,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 41.72,
+      "return": -338.6817649999998,
+      "discounted_return": -49.137616014157466,
+      "survived": true,
+      "transitions": 100,
+      "fines": 800.0,
+      "coalition_steps": 10,
+      "mean_welfare": 2332.0001745699997,
+      "known_decisions": 96,
+      "decisions": 100
+    },
+    {
+      "seed": 164,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 24.41,
+      "return": 60870.76701599999,
+      "discounted_return": 9489.500691988376,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1716.3704692699998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 165,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 44.69,
+      "return": 162.25803800000003,
+      "discounted_return": -10.506539765649585,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2876.599709450001,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 166,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 18.68,
+      "return": 7187.052465999997,
+      "discounted_return": 865.555152597298,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 39,
+      "mean_welfare": 3414.805674530001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 167,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 19.92,
+      "return": 11375.545170999996,
+      "discounted_return": 2164.3964602280716,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 7,
+      "mean_welfare": 2701.5164285899996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 168,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 42.35,
+      "return": 555.330747,
+      "discounted_return": 55.79548385226793,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2549.0531192399994,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 169,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 37.22,
+      "return": -41.23027500000002,
+      "discounted_return": -3.148612501901628,
+      "survived": true,
+      "transitions": 100,
+      "fines": 550.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2652.4041632799995,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 170,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 17.37,
+      "return": 26372.045408999995,
+      "discounted_return": 4765.998477916422,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3127.7213605199986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 171,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 41.03,
+      "return": 1911.2923689999998,
+      "discounted_return": 372.7342470109264,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3009.28596801,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 172,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 16.63,
+      "return": 29108.435937,
+      "discounted_return": 4664.9038349146385,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2702.9116952599993,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 173,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 31.49,
+      "return": 3330.7448769999996,
+      "discounted_return": 629.0031715873298,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3215.3746978199993,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 174,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 12.76,
+      "return": 25255.690761999984,
+      "discounted_return": 4906.6711498093855,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2782.0372970499993,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 175,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 27.08,
+      "return": 2001.497703,
+      "discounted_return": 349.6501217440552,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3300.6501053,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 176,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 42.82,
+      "return": 206.031034,
+      "discounted_return": 49.46864003582289,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3480.3434901400005,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 177,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 22.73,
+      "return": 5419.195137,
+      "discounted_return": 1054.2690194263898,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3436.6794245500005,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 178,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 20.65,
+      "return": 136902.76373499987,
+      "discounted_return": 26698.24673494779,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1243.785585380001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 179,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 40.16,
+      "return": 48994.45888200006,
+      "discounted_return": 9612.695787127128,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1512.6695891500017,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 180,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 21.04,
+      "return": 133185.21347600018,
+      "discounted_return": 26032.247317487396,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1333.1367783999997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 181,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 28.67,
+      "return": 50110.245809,
+      "discounted_return": 2840.9832237150017,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2314.4850561000044,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 182,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 22.42,
+      "return": 127759.6656970001,
+      "discounted_return": 25121.038724785918,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1438.2886750500038,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 183,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 43.18,
+      "return": 45401.054137999985,
+      "discounted_return": 8248.54308767019,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1318.6668225999988,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 184,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 23.41,
+      "return": 25793.194421000004,
+      "discounted_return": 5123.814505683573,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3274.4110896599987,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 185,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 15.3,
+      "return": 109607.9085850001,
+      "discounted_return": 7008.151580900968,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1987.843324340005,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 186,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 25.73,
+      "return": 118064.67180799993,
+      "discounted_return": 23653.91279155017,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1288.907316290002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 187,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 37.46,
+      "return": 64728.73532800008,
+      "discounted_return": 13284.276023532764,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1490.7065406599975,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 188,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 39.8,
+      "return": 53367.884701999945,
+      "discounted_return": 8112.270220970726,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1214.6799051699973,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 189,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 14.33,
+      "return": 137890.2767989999,
+      "discounted_return": 17517.807670134946,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1657.399373109999,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 190,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 20.37,
+      "return": 144243.56342400002,
+      "discounted_return": 28368.114509579562,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1342.47869241,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 191,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 32.06,
+      "return": 67922.86298000008,
+      "discounted_return": 13564.305957293715,
+      "survived": true,
+      "transitions": 100,
+      "fines": 800.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1418.1829133499998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 192,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 14.62,
+      "return": 15078.807281000001,
+      "discounted_return": 2059.418316986628,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 61,
+      "mean_welfare": 3703.3818104799993,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 193,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 27.86,
+      "return": 63494.74707499995,
+      "discounted_return": 4852.534197054743,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1000.0,
+      "coalition_steps": 3,
+      "mean_welfare": 1911.1864915999986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 194,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 16.64,
+      "return": 11691.922486999998,
+      "discounted_return": 1955.137460771435,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2129.625378569999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 195,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 19.41,
+      "return": 14021.040084,
+      "discounted_return": 3169.8072471073115,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2608.9261673299998,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 196,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 12.91,
+      "return": 31750.50783700001,
+      "discounted_return": 5528.907366920501,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1500.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1634.7482107500005,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 197,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 41.59,
+      "return": -427.90062,
+      "discounted_return": -148.88765433336047,
+      "survived": true,
+      "transitions": 100,
+      "fines": 850.0,
+      "coalition_steps": 7,
+      "mean_welfare": 2302.9613138499994,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 198,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 39.54,
+      "return": -174.4153179999999,
+      "discounted_return": -63.26443436431589,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1250.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1828.4160357800004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 199,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 20.69,
+      "return": 14098.153956,
+      "discounted_return": 2311.690462307808,
+      "survived": true,
+      "transitions": 100,
+      "fines": 150.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2895.57348089,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 200,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 16.56,
+      "return": 8750.682370000006,
+      "discounted_return": 1627.630031611942,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 4718.541438190001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 201,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 31.53,
+      "return": 2180.025851,
+      "discounted_return": 890.1308612929731,
+      "survived": true,
+      "transitions": 100,
+      "fines": 950.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2308.0454911599995,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 202,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 17.7,
+      "return": 24725.888326000008,
+      "discounted_return": 4773.4217098442405,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3217.709874319998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 203,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 42.0,
+      "return": 312.38425900000004,
+      "discounted_return": 45.509006462866196,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3226.67308699,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 204,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 30.72,
+      "return": 2716.235114000001,
+      "discounted_return": 482.1465618596648,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3347.4716647000005,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 205,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 16.52,
+      "return": 16849.78145799999,
+      "discounted_return": 3146.869513486434,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3685.441731110001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 206,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 19.4,
+      "return": 7481.633942000004,
+      "discounted_return": 1590.5282397835967,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3609.7200686900032,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 207,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 40.79,
+      "return": 61.264091999999955,
+      "discounted_return": 11.627811528651405,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3736.6524710599974,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 208,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 35.95,
+      "return": 1521.218367,
+      "discounted_return": 269.8393959428245,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3315.4731727400003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 209,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 40.76,
+      "return": 1210.067219,
+      "discounted_return": 226.29343327571218,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2947.2500775099998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 210,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 35.54,
+      "return": 82679.04314099993,
+      "discounted_return": 16709.518921868046,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1273.7287350600025,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 211,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 13.38,
+      "return": 87952.45033799982,
+      "discounted_return": 16389.76030293312,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1294.6078358300024,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 212,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 15.76,
+      "return": 148592.65628199984,
+      "discounted_return": 22329.111239352842,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1276.9452132699982,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 213,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 19.67,
+      "return": 116663.06349399987,
+      "discounted_return": 17394.378525921067,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1610.5831160799999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 214,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 14.11,
+      "return": 158799.05340300017,
+      "discounted_return": 31566.013745974953,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1327.8622932000021,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 215,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 29.46,
+      "return": 66243.68821400002,
+      "discounted_return": 12746.247191370267,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2049.516086910004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 216,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 29.1,
+      "return": 949.8177179999998,
+      "discounted_return": 116.9225590524383,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3700.5050503999983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 217,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 22.86,
+      "return": 102797.28195099984,
+      "discounted_return": 8092.26055619278,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1845.6851096700025,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 218,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 27.48,
+      "return": 119942.79928200027,
+      "discounted_return": 24068.949530965216,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1181.8593345300017,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 219,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 15.4,
+      "return": 173253.87836200005,
+      "discounted_return": 35158.47915691056,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1234.7219580600013,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 220,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 17.72,
+      "return": 160385.66665399997,
+      "discounted_return": 30852.17486252485,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1212.3973935899992,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 221,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 34.03,
+      "return": 77076.64308599998,
+      "discounted_return": 16576.94888539681,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1479.06528961,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 222,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 38.13,
+      "return": 67898.75023799992,
+      "discounted_return": 12942.64680434331,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1250.085680560003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 223,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 40.34,
+      "return": 55991.46694299996,
+      "discounted_return": 9927.195915009008,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1329.0617126999982,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 224,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 12.08,
+      "return": 41176.497155000034,
+      "discounted_return": 8558.472822345333,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2858.0972444500017,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 225,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 19.1,
+      "return": 119789.39669400018,
+      "discounted_return": 11571.45172093872,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1717.5649752600034,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 226,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 17.37,
+      "return": 53718.807355000004,
+      "discounted_return": 7834.033619632033,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1600.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1411.2668978099996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 227,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 13.12,
+      "return": 24595.209619,
+      "discounted_return": 3345.7179700269685,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2662.1225647799997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 228,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 40.35,
+      "return": 4754.015983999999,
+      "discounted_return": 66.57864654567952,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1788.8255331299995,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 229,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 42.72,
+      "return": 109.70633500000008,
+      "discounted_return": 3.6551353905477053,
+      "survived": true,
+      "transitions": 100,
+      "fines": 450.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2690.620649200001,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 230,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 36.33,
+      "return": 746.5349730000007,
+      "discounted_return": 283.7231124350321,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2148.378174430001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 231,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 40.33,
+      "return": 6986.6263899999985,
+      "discounted_return": 478.5566282387099,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 17,
+      "mean_welfare": 2099.108730809999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 232,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 16.05,
+      "return": 18499.441887000008,
+      "discounted_return": 3337.013924450632,
+      "survived": true,
+      "transitions": 100,
+      "fines": 550.0,
+      "coalition_steps": 23,
+      "mean_welfare": 3390.6107916599985,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 233,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 32.15,
+      "return": 10584.508543999998,
+      "discounted_return": 1782.1752292517422,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 5,
+      "mean_welfare": 2360.587664630001,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 234,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 14.27,
+      "return": 32401.51988299998,
+      "discounted_return": 6161.3203016842435,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3454.831717140002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 235,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 28.43,
+      "return": 4088.6562179999964,
+      "discounted_return": 664.9444338998874,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2637.3048420200007,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 236,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 28.65,
+      "return": 424.6355440000004,
+      "discounted_return": 79.05735416855131,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3271.510348180004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 237,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 36.64,
+      "return": 1948.200331999999,
+      "discounted_return": 263.94376270038134,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2863.6912539700006,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 238,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 41.97,
+      "return": 926.0202629999992,
+      "discounted_return": 136.31126776960605,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2984.145875010001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 239,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 44.72,
+      "return": 153.40172699999994,
+      "discounted_return": 22.974725574130016,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3036.534544899999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 240,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 33.31,
+      "return": 1673.2981280000008,
+      "discounted_return": 282.2814153101064,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3204.5858137600003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 241,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 41.84,
+      "return": 336.80846499999996,
+      "discounted_return": 67.36405902258775,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3159.31323867,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 242,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 18.35,
+      "return": 167460.79455099988,
+      "discounted_return": 33151.18349439844,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1182.7745359799983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 243,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 39.08,
+      "return": 62078.74613399995,
+      "discounted_return": 11349.464472794725,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1126.735401010001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 244,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 39.89,
+      "return": 47641.04181800007,
+      "discounted_return": 11758.608191868187,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1350.9255141800015,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 245,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 25.83,
+      "return": 97103.45281999992,
+      "discounted_return": 14816.713780319173,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 2,
+      "mean_welfare": 1329.0765123799983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 246,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 40.65,
+      "return": 62700.48743199998,
+      "discounted_return": 12492.170975965335,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1229.2240146100025,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 247,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 41.16,
+      "return": 58938.84228100009,
+      "discounted_return": 11855.678462308142,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1256.6531821800013,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 248,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 23.82,
+      "return": 17790.89204799997,
+      "discounted_return": 2495.2385923227876,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 4,
+      "mean_welfare": 3043.90974037,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 249,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 39.26,
+      "return": 55338.379041000124,
+      "discounted_return": 8066.72814987468,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 5,
+      "mean_welfare": 1477.9303685600019,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 250,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 33.59,
+      "return": 81487.85272900006,
+      "discounted_return": 16525.237527641693,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1491.1175343000023,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 251,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 29.0,
+      "return": 110233.50696099993,
+      "discounted_return": 21557.076005532093,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1352.7147931799984,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 252,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 15.84,
+      "return": 172797.32326299988,
+      "discounted_return": 34789.53531245229,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1248.2355607200018,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 253,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 29.7,
+      "return": 83139.7501769999,
+      "discounted_return": 19110.094721193742,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1638.3777963499988,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 254,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 14.16,
+      "return": 178711.41378599967,
+      "discounted_return": 35291.54378528739,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1274.1063221500012,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 255,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 13.28,
+      "return": 148280.1957660001,
+      "discounted_return": 15867.858551942512,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1587.4247856100014,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 256,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 40.8,
+      "return": 8617.435889999997,
+      "discounted_return": 1514.7991954518764,
+      "survived": true,
+      "transitions": 100,
+      "fines": 200.0,
+      "coalition_steps": 90,
+      "mean_welfare": 3211.324079070001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 257,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 19.67,
+      "return": 134322.58253199983,
+      "discounted_return": 19976.760626348107,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1485.6406499100008,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 258,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 24.04,
+      "return": 26894.526214000005,
+      "discounted_return": 4595.267276955242,
+      "survived": true,
+      "transitions": 100,
+      "fines": 2200.0,
+      "coalition_steps": 7,
+      "mean_welfare": 1510.2003770499996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 259,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 37.4,
+      "return": 3912.0408490000013,
+      "discounted_return": 430.61110530596636,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1000.0,
+      "coalition_steps": 23,
+      "mean_welfare": 2818.52639547,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 260,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 34.88,
+      "return": 1180.9208520000002,
+      "discounted_return": -8.341412675631185,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2189.73437854,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 261,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 24.71,
+      "return": 4764.3583180000005,
+      "discounted_return": 896.199175691984,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 5,
+      "mean_welfare": 2254.97081554,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 262,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 44.69,
+      "return": 1846.7003840000011,
+      "discounted_return": 348.3955443657381,
+      "survived": true,
+      "transitions": 100,
+      "fines": 650.0,
+      "coalition_steps": 12,
+      "mean_welfare": 3432.788310619998,
+      "known_decisions": 97,
+      "decisions": 100
+    },
+    {
+      "seed": 263,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 29.64,
+      "return": 8506.023381,
+      "discounted_return": 1451.1303987988217,
+      "survived": true,
+      "transitions": 100,
+      "fines": 550.0,
+      "coalition_steps": 12,
+      "mean_welfare": 2496.60175987,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 264,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 33.82,
+      "return": 4062.263373999999,
+      "discounted_return": 800.9041934572349,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 89,
+      "mean_welfare": 3372.819492520001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 265,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 16.44,
+      "return": 10366.727387999994,
+      "discounted_return": 2401.334502345354,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1200.0,
+      "coalition_steps": 10,
+      "mean_welfare": 3229.9206788699985,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 266,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 23.9,
+      "return": 137.2376350000002,
+      "discounted_return": 15.05797171982753,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3716.413517709998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 267,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 30.88,
+      "return": 12272.760190999994,
+      "discounted_return": 2055.1091544775727,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2713.877522609999,
+      "known_decisions": 98,
+      "decisions": 100
+    },
+    {
+      "seed": 268,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 14.18,
+      "return": 39911.22074399999,
+      "discounted_return": 7538.896266163338,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3115.8331438999994,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 269,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 22.2,
+      "return": 13152.336939,
+      "discounted_return": 2669.5308315181746,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2762.773144230001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 270,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 28.25,
+      "return": 332.2080140000005,
+      "discounted_return": 61.59966335947799,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3468.195421669996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 271,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 26.85,
+      "return": 634.74841,
+      "discounted_return": 48.35818894298242,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3406.429264190001,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 272,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 23.89,
+      "return": 1973.5515310000005,
+      "discounted_return": 360.8651209716502,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3911.2610051399993,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 273,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 37.41,
+      "return": 737.5531360000007,
+      "discounted_return": 238.05624173381977,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2772.675676959997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 274,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 36.45,
+      "return": 80646.15559399992,
+      "discounted_return": 16133.265624170617,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1272.431402450002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 275,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 38.67,
+      "return": 64060.43364799991,
+      "discounted_return": 12679.830181664665,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1347.4595673199985,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 276,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 25.22,
+      "return": 127419.0491880001,
+      "discounted_return": 25296.19645704772,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1217.8459886400021,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 277,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 15.14,
+      "return": 65573.16716100003,
+      "discounted_return": 9204.072492971494,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2381.0312340199957,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 278,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 19.97,
+      "return": 121540.00127600001,
+      "discounted_return": 22806.53826831068,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 8,
+      "mean_welfare": 1388.7321356599994,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 279,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 13.58,
+      "return": 167089.61551300038,
+      "discounted_return": 32147.460869435472,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1348.8636941799998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 280,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 36.6,
+      "return": 7923.439739000009,
+      "discounted_return": 1493.3092686902178,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 95,
+      "mean_welfare": 3421.208772049998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 281,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 30.18,
+      "return": 60754.51127300006,
+      "discounted_return": 5256.4008127016505,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1812.9225584899991,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 282,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 24.32,
+      "return": 128810.81122100026,
+      "discounted_return": 24698.520715127303,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1277.3586236700028,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 283,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 37.09,
+      "return": 56754.31810599995,
+      "discounted_return": 8876.520688979603,
+      "survived": true,
+      "transitions": 100,
+      "fines": 900.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1198.750083960001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 284,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 26.67,
+      "return": 120646.51317900015,
+      "discounted_return": 24108.818602180916,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1132.3524562899986,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 285,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 29.81,
+      "return": 66590.26709199994,
+      "discounted_return": 6760.311863079822,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1530.0726838000019,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 286,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 14.51,
+      "return": 179356.04342800012,
+      "discounted_return": 35787.38207434132,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1218.560995220003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 287,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 37.75,
+      "return": 33206.04121399999,
+      "discounted_return": 4061.4553838926563,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1000.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1900.8337580399987,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 288,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 33.3,
+      "return": 6759.913412000007,
+      "discounted_return": 956.18969030939,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1500.0,
+      "coalition_steps": 71,
+      "mean_welfare": 2954.64680235,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 289,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 41.46,
+      "return": 30963.725532000044,
+      "discounted_return": 3646.3091227620735,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1400.0,
+      "coalition_steps": 9,
+      "mean_welfare": 1617.6046514000002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 290,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 38.62,
+      "return": 1465.8864190000002,
+      "discounted_return": 173.96084314275507,
+      "survived": true,
+      "transitions": 100,
+      "fines": 250.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2107.4922827200003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 291,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 21.47,
+      "return": 11112.946389000008,
+      "discounted_return": 2408.3033340201678,
+      "survived": true,
+      "transitions": 100,
+      "fines": 550.0,
+      "coalition_steps": 8,
+      "mean_welfare": 2512.9049745700004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 292,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 16.35,
+      "return": 40741.765740000024,
+      "discounted_return": 10462.4949679368,
+      "survived": true,
+      "transitions": 100,
+      "fines": 50.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1979.21405527,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 293,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 25.46,
+      "return": 16422.539705999992,
+      "discounted_return": 1108.169346904663,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 7,
+      "mean_welfare": 2447.4614420300004,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 294,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 17.93,
+      "return": 42159.34471600002,
+      "discounted_return": 7822.293973687824,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 1,
+      "mean_welfare": 3181.3333330800006,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 295,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 23.02,
+      "return": 14918.41114,
+      "discounted_return": 1559.7770538670775,
+      "survived": true,
+      "transitions": 100,
+      "fines": 650.0,
+      "coalition_steps": 24,
+      "mean_welfare": 2517.8605002099994,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 296,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 37.25,
+      "return": 795.2129910000003,
+      "discounted_return": 146.15239194551876,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 83,
+      "mean_welfare": 3591.74790322,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 297,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 38.08,
+      "return": 912.4678049999998,
+      "discounted_return": 11.480104668041822,
+      "survived": true,
+      "transitions": 100,
+      "fines": 550.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2970.0895903299993,
+      "known_decisions": 99,
+      "decisions": 100
+    },
+    {
+      "seed": 298,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 27.73,
+      "return": 52.189548,
+      "discounted_return": 7.632799761414216,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3379.8936980399985,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 299,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 32.17,
+      "return": 108.51370300000002,
+      "discounted_return": 20.26854414965247,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3901.0007178299957,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 300,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 15.39,
+      "return": 30186.64797400001,
+      "discounted_return": 5714.820303168113,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3148.1208492500004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 301,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 38.98,
+      "return": 84.73784600000005,
+      "discounted_return": 17.351557906570825,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3550.01931337,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 302,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 14.6,
+      "return": 22422.286379000012,
+      "discounted_return": 4382.203756812946,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3719.1087719299994,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 303,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 16.13,
+      "return": 11385.708769,
+      "discounted_return": 2060.971965474752,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3371.7698484899993,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 304,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 27.81,
+      "return": 47.59954399999997,
+      "discounted_return": 9.499467909192878,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3122.4044345300003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 305,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 41.39,
+      "return": 250.5353,
+      "discounted_return": 31.23135094770167,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3179.0921067100003,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 306,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 25.93,
+      "return": 106102.28478100004,
+      "discounted_return": 19308.345976757344,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1385.4427798299992,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 307,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 33.59,
+      "return": 78376.35009299996,
+      "discounted_return": 15490.985320943599,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1402.8803787399984,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 308,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 40.71,
+      "return": 44523.516898999944,
+      "discounted_return": 8600.636423089652,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1369.7124359600025,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 309,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 26.35,
+      "return": 109142.2904949998,
+      "discounted_return": 19532.508626030165,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1451.8249388600007,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 310,
+      "condition": [
+        "cooperation",
+        "path",
+        "static"
+      ],
+      "cost": 23.81,
+      "return": 120134.16010500022,
+      "discounted_return": 20577.094302156936,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1211.5852253700016,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 311,
+      "condition": [
+        "cooperation",
+        "path",
+        "evolving"
+      ],
+      "cost": 13.87,
+      "return": 145548.1567540002,
+      "discounted_return": 29290.67199921762,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 7,
+      "mean_welfare": 1352.2494911499991,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 312,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 20.06,
+      "return": 926.875638000001,
+      "discounted_return": 479.97815741031553,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 2,
+      "mean_welfare": 2619.1744884199966,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 313,
+      "condition": [
+        "cooperation",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 40.71,
+      "return": 22225.427268999996,
+      "discounted_return": 2595.942807847167,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 16,
+      "mean_welfare": 1622.396126390002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 314,
+      "condition": [
+        "sanctions",
+        "complete",
+        "static"
+      ],
+      "cost": 21.61,
+      "return": 142297.0950700002,
+      "discounted_return": 28650.56268305402,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1151.0355856999997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 315,
+      "condition": [
+        "sanctions",
+        "complete",
+        "evolving"
+      ],
+      "cost": 21.34,
+      "return": 122179.0218210002,
+      "discounted_return": 23899.623833589292,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1294.8751592199983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 316,
+      "condition": [
+        "sanctions",
+        "star",
+        "static"
+      ],
+      "cost": 31.4,
+      "return": 70910.4177850001,
+      "discounted_return": 9793.27942608171,
+      "survived": true,
+      "transitions": 100,
+      "fines": 400.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1290.3166710800017,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 317,
+      "condition": [
+        "sanctions",
+        "star",
+        "evolving"
+      ],
+      "cost": 15.73,
+      "return": 110465.89172199987,
+      "discounted_return": 11543.264298792514,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1722.7648183700026,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 318,
+      "condition": [
+        "sanctions",
+        "path",
+        "static"
+      ],
+      "cost": 16.63,
+      "return": 131075.95631399975,
+      "discounted_return": 26477.722096881676,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1395.7744067199983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 319,
+      "condition": [
+        "sanctions",
+        "path",
+        "evolving"
+      ],
+      "cost": 29.77,
+      "return": 70747.49903000006,
+      "discounted_return": 6629.488112146679,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 1,
+      "mean_welfare": 1859.0002660000018,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 320,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 17.12,
+      "return": 15375.567251000011,
+      "discounted_return": 2918.3798896958842,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 1,
+      "mean_welfare": 3423.7899371599938,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 321,
+      "condition": [
+        "sanctions",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 31.17,
+      "return": 68576.71155900008,
+      "discounted_return": 7171.775023440689,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 11,
+      "mean_welfare": 1744.575918180004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 322,
+      "condition": [
+        "mixed",
+        "complete",
+        "static"
+      ],
+      "cost": 24.8,
+      "return": 12499.29886,
+      "discounted_return": 2441.7325381579576,
+      "survived": true,
+      "transitions": 100,
+      "fines": 350.0,
+      "coalition_steps": 44,
+      "mean_welfare": 1956.4290524300004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 323,
+      "condition": [
+        "mixed",
+        "complete",
+        "evolving"
+      ],
+      "cost": 34.22,
+      "return": 3269.897301,
+      "discounted_return": 903.750795033251,
+      "survived": true,
+      "transitions": 100,
+      "fines": 800.0,
+      "coalition_steps": 1,
+      "mean_welfare": 2623.7535022399998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 324,
+      "condition": [
+        "mixed",
+        "star",
+        "static"
+      ],
+      "cost": 43.73,
+      "return": 2047.8843539999996,
+      "discounted_return": 420.2689431959586,
+      "survived": true,
+      "transitions": 100,
+      "fines": 600.0,
+      "coalition_steps": 0,
+      "mean_welfare": 2119.71860122,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 325,
+      "condition": [
+        "mixed",
+        "star",
+        "evolving"
+      ],
+      "cost": 13.74,
+      "return": 17016.301994999998,
+      "discounted_return": 3390.4095898848395,
+      "survived": true,
+      "transitions": 100,
+      "fines": 650.0,
+      "coalition_steps": 13,
+      "mean_welfare": 2525.4624868299998,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 326,
+      "condition": [
+        "mixed",
+        "path",
+        "static"
+      ],
+      "cost": 39.95,
+      "return": 8033.159288999998,
+      "discounted_return": 954.9242891636211,
+      "survived": true,
+      "transitions": 100,
+      "fines": 100.0,
+      "coalition_steps": 44,
+      "mean_welfare": 2809.867222750002,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 327,
+      "condition": [
+        "mixed",
+        "path",
+        "evolving"
+      ],
+      "cost": 14.47,
+      "return": 43107.26857400001,
+      "discounted_return": 8055.777862846638,
+      "survived": true,
+      "transitions": 100,
+      "fines": 300.0,
+      "coalition_steps": 13,
+      "mean_welfare": 1702.8190322699988,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 328,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 33.46,
+      "return": 7901.69683,
+      "discounted_return": 1899.1378583368169,
+      "survived": true,
+      "transitions": 100,
+      "fines": 1300.0,
+      "coalition_steps": 46,
+      "mean_welfare": 2656.2598094799996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 329,
+      "condition": [
+        "mixed",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 13.43,
+      "return": 18103.893104999996,
+      "discounted_return": 2988.673495701683,
+      "survived": true,
+      "transitions": 100,
+      "fines": 500.0,
+      "coalition_steps": 5,
+      "mean_welfare": 2988.8954243999997,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 330,
+      "condition": [
+        "competition",
+        "complete",
+        "static"
+      ],
+      "cost": 20.98,
+      "return": 18059.207776999996,
+      "discounted_return": 2751.1016346934375,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3178.346055900001,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 331,
+      "condition": [
+        "competition",
+        "complete",
+        "evolving"
+      ],
+      "cost": 39.61,
+      "return": 405.87424300000026,
+      "discounted_return": 48.516107264573805,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3268.2312277899996,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 332,
+      "condition": [
+        "competition",
+        "star",
+        "static"
+      ],
+      "cost": 21.88,
+      "return": 7475.984803999999,
+      "discounted_return": 1555.6207094977754,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3448.9948592800006,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 333,
+      "condition": [
+        "competition",
+        "star",
+        "evolving"
+      ],
+      "cost": 20.89,
+      "return": 6150.860512999999,
+      "discounted_return": 1088.6231332024304,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3555.5701726700017,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 334,
+      "condition": [
+        "competition",
+        "path",
+        "static"
+      ],
+      "cost": 23.93,
+      "return": 3223.73966,
+      "discounted_return": 623.0536487481146,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3630.8810326700004,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 335,
+      "condition": [
+        "competition",
+        "path",
+        "evolving"
+      ],
+      "cost": 43.31,
+      "return": 293.43810399999995,
+      "discounted_return": 50.37404495404682,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3076.6234135299983,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 336,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "static"
+      ],
+      "cost": 29.63,
+      "return": 172.10153700000015,
+      "discounted_return": 43.76735522485709,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3704.976640479999,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 337,
+      "condition": [
+        "competition",
+        "inner_coalitions",
+        "evolving"
+      ],
+      "cost": 23.25,
+      "return": 14282.377310999995,
+      "discounted_return": 2673.0759515368895,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 3114.9528299399994,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 338,
+      "condition": [
+        "cooperation",
+        "complete",
+        "static"
+      ],
+      "cost": 15.49,
+      "return": 124157.60567800012,
+      "discounted_return": 16488.73607075434,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 6,
+      "mean_welfare": 1206.4050827099989,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 339,
+      "condition": [
+        "cooperation",
+        "complete",
+        "evolving"
+      ],
+      "cost": 16.42,
+      "return": 79237.89564399993,
+      "discounted_return": 15161.959056554922,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 31,
+      "mean_welfare": 1689.3867062100014,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 340,
+      "condition": [
+        "cooperation",
+        "star",
+        "static"
+      ],
+      "cost": 13.53,
+      "return": 170303.66892599972,
+      "discounted_return": 33071.32652814301,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 3,
+      "mean_welfare": 1228.5537016700027,
+      "known_decisions": 100,
+      "decisions": 100
+    },
+    {
+      "seed": 341,
+      "condition": [
+        "cooperation",
+        "star",
+        "evolving"
+      ],
+      "cost": 36.81,
+      "return": 67683.4486570001,
+      "discounted_return": 11713.458529554877,
+      "survived": true,
+      "transitions": 100,
+      "fines": 0.0,
+      "coalition_steps": 0,
+      "mean_welfare": 1399.3798736300005,
+      "known_decisions": 100,
+      "decisions": 100
+    }
+  ]
+}

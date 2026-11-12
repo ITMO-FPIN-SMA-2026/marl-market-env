@@ -1,6 +1,8 @@
 name: config
-horizon: 50
-seeds: [ 0, 1, 2 ]
+horizon: 100
+seeds: [2000000, 2000001, 2000002, 2000003, 2000004, 2000005, 2000006, 2000007, 2000008, 2000009, 2000010, 2000011, 2000012, 2000013, 2000014, 2000015, 2000016, 2000017, 2000018, 2000019]
+mode: eval
+strict: true
 market: { demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit }
 agents:
   count: 15
@@ -10,17 +12,17 @@ agents:
   overrides:
     0: { impl: "agent_aseev:GeorgiiAgent" }
     1: { impl: "agent_askarov:AskarovAgent" }
-    2: { impl: "agent_tverdokhleb:TverdokhlebAgent" }
+    2: { impl: "agent_tverdokhleb:TverdokhlebAgent", kwargs: {model_path: "report/defense/data/tverdokhleb_policy.json"} }
     3: { impl: "agent_zhmurenko:ZhmurenkoVladimirAgent" }
     4: { impl: "agent_rodina:RodinaAgent" }
     5: { impl: "agent_aseev:GeorgiiAgent" }
     6: { impl: "agent_askarov:AskarovAgent" }
-    7: { impl: "agent_tverdokhleb:TverdokhlebAgent" }
+    7: { impl: "agent_tverdokhleb:TverdokhlebAgent", kwargs: {model_path: "report/defense/data/tverdokhleb_policy.json"} }
     8: { impl: "agent_zhmurenko:ZhmurenkoVladimirAgent" }
     9: { impl: "agent_rodina:RodinaAgent" }
     10: { impl: "agent_aseev:GeorgiiAgent" }
     11: { impl: "agent_askarov:AskarovAgent" }
-    12: { impl: "agent_tverdokhleb:TverdokhlebAgent" }
+    12: { impl: "agent_tverdokhleb:TverdokhlebAgent", kwargs: {model_path: "report/defense/data/tverdokhleb_policy.json"} }
     13: { impl: "agent_zhmurenko:ZhmurenkoVladimirAgent" }
     14: { impl: "agent_rodina:RodinaAgent" }
 coalitions:
