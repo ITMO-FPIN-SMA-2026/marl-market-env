@@ -1,0 +1,42 @@
+name: config
+horizon: 100
+seeds: [2000000, 2000001, 2000002, 2000003, 2000004, 2000005, 2000006, 2000007, 2000008, 2000009, 2000010, 2000011, 2000012, 2000013, 2000014, 2000015, 2000016, 2000017, 2000018, 2000019]
+mode: eval
+strict: true
+market: { demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit }
+agents:
+  count: 15
+  default: { impl: "social_market_env.baselines.agents:CartelAgent" }
+  cost_low: 15
+  cost_high: 22
+  overrides:
+    0: { impl: "agent_aseev:GeorgiiAgent" }
+    1: { impl: "agent_askarov:AskarovAgent" }
+    2: { impl: "agent_tverdokhleb:TverdokhlebAgent", kwargs: {model_path: "report/defense/data/tverdokhleb_policy.json"} }
+    3: { impl: "agent_zhmurenko:ZhmurenkoVladimirAgent" }
+    4: { impl: "agent_rodina:RodinaAgent" }
+    5: { impl: "agent_aseev:GeorgiiAgent" }
+    6: { impl: "agent_askarov:AskarovAgent" }
+    7: { impl: "agent_tverdokhleb:TverdokhlebAgent", kwargs: {model_path: "report/defense/data/tverdokhleb_policy.json"} }
+    8: { impl: "agent_zhmurenko:ZhmurenkoVladimirAgent" }
+    9: { impl: "agent_rodina:RodinaAgent" }
+    10: { impl: "agent_aseev:GeorgiiAgent" }
+    11: { impl: "agent_askarov:AskarovAgent" }
+    12: { impl: "agent_tverdokhleb:TverdokhlebAgent", kwargs: {model_path: "report/defense/data/tverdokhleb_policy.json"} }
+    13: { impl: "agent_zhmurenko:ZhmurenkoVladimirAgent" }
+    14: { impl: "agent_rodina:RodinaAgent" }
+coalitions:
+  policy:
+    impl: "coalitions_badretdinov:AdaptiveCoalitionPolicy"
+    kwargs: { horizon: 100, network_mode: evolving }
+arbiter:
+  min_fine: 1.0
+  max_fine: 100.0
+  policy:
+    impl: "arbiter_miroshnik:PPOGRUArbiter"
+    kwargs:
+      checkpoint_path: "src/arbiter_miroshnik/checkpoints/initial_model_0.pt"
+      device: cpu
+      evaluation: greedy
+network: { topology: random, mode: evolving, initial_density: 0.3 }
+scoring: { alpha: 1.0, beta: 0.1, lambda_fp: 0.5, lambda_fn: 0.5, harm_margin: 0.05 }

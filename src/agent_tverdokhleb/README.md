@@ -48,7 +48,7 @@ python -m pip install -e '.[dev]'
 python -m social_market_env.run src/agent_tverdokhleb/experiments/agent_tverdokhleb.yaml
 ```
 
-Готовый [конфиг](experiments/agent_tverdokhleb.yaml) ставит нашего агента на место 0
+Готовый [конфиг](agent_tverdokhleb.yaml) ставит нашего агента на место 0
 среди пяти продавцов. **Без чекпойнта это резервная стратегия, а не обученная модель.**
 В собственном YAML достаточно указать:
 

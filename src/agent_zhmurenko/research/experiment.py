@@ -1,6 +1,6 @@
 """Train real Q-tables, compare paired policies, and emit native-runner YAML.
 
-Only our files and the dedicated experiments/zhmurenko_agent.yaml are source
+Only our files and the dedicated experiments/agent_zhmurenko.yaml are source
 outputs. Every training/evaluation record is written outside the repository.
 """
 
@@ -26,10 +26,10 @@ from social_market_env.runner.loader import instantiate
 from ..agent import ACTIONS, JOIN, PACKAGE, ZhmurenkoVladimirAgent, output_path
 from .references import activate, prepare
 
-IMPL = 'zhmurenko_agent:ZhmurenkoVladimirAgent'
-LOCAL = 'zhmurenko_agent.research.'
+IMPL = 'agent_zhmurenko:ZhmurenkoVladimirAgent'
+LOCAL = 'agent_zhmurenko.research.'
 REPOSITORY = next(p for p in PACKAGE.parents if (p / '.git').exists())
-BASE_CONFIG = REPOSITORY / 'experiments' / 'zhmurenko_agent.yaml'
+BASE_CONFIG = REPOSITORY / 'experiments' / 'agent_zhmurenko.yaml'
 TRAIN_SCENARIOS = ('mixed', 'competition', 'random', 'pairs', 'wave', 'wave2')
 TOPOLOGIES = ('complete', 'star', 'path', 'inner_coalitions')
 VALIDATION_SEEDS = tuple(range(5000, 5006))

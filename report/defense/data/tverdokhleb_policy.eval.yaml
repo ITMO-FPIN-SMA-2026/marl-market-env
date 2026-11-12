@@ -1,0 +1,77 @@
+name: agent_tverdokhleb
+horizon: 100
+seeds:
+- 2000100
+- 2000101
+- 2000102
+episodes_per_seed: 1
+mode: eval
+strict: true
+act_seconds_limit: 1.0
+market:
+  demand_a: 120
+  demand_b: 1
+  tau: 5
+  p_min: 1
+  p_max: 100
+  share_model: logit
+finance:
+  initial_balance: 1000.0
+  max_negative_steps: 3
+network:
+  topology: random
+  mode: evolving
+  initial_density: 0.3
+  inner_groups: 3
+  a_keep: 2.0
+  a_form: -4.0
+  w_affinity: 1.0
+  w_history: 2.0
+  w_utility: 0.5
+  w_coop: 1.0
+  w_link_cost: 1.0
+  agent_link_bonus: 1.5
+  memory_rate: 0.2
+  link_cost_decay: 0.0
+  utility_scale: 100.0
+coalitions:
+  policy:
+    impl: social_market_env.baselines.coalitions:ConnectedComponentsCoalitions
+    kwargs:
+      payout: equal
+  compliance_tolerance: 0.5
+arbiter:
+  policy:
+    impl: social_market_env.baselines.arbiters:ThresholdArbiter
+    kwargs:
+      jump_threshold: 4
+      fine: 50
+  max_fine: 100.0
+  min_fine: 1.0
+  max_link_cost_delta: 5.0
+scoring:
+  alpha: 1.0
+  beta: 0.1
+  lambda_fp: 0.5
+  lambda_fn: 0.5
+  harm_margin: 0.05
+agents:
+  count: 5
+  default:
+    impl: social_market_env.baselines.agents:CartelAgent
+    kwargs: {}
+  cost_low: 12
+  cost_high: 45
+  overrides:
+    0:
+      impl: agent_tverdokhleb:TverdokhlebAgent
+      kwargs:
+        model_path: report/defense/data/tverdokhleb_policy.json
+    1:
+      impl: social_market_env.baselines.agents:BestResponseAgent
+      kwargs: {}
+    3:
+      impl: social_market_env.baselines.agents:RandomAgent
+      kwargs:
+        low: 20
+        high: 60

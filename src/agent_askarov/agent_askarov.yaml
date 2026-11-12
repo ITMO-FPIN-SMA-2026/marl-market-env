@@ -1,5 +1,5 @@
 # Only seller 0 is ours; the remaining roles come from the original project.
-name: askarov_agent
+name: agent_askarov
 horizon: 80
 seeds: [0, 1, 2]
 mode: eval

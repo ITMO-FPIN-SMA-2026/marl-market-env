@@ -112,7 +112,7 @@ def scope(root):
     status=subprocess.check_output(['git','status','--short','--untracked-files=all'],cwd=REPOSITORY,text=True)
     for line in status.splitlines():
         path=line[3:].replace('\\','/')
-        if not path.startswith(('src/zhmurenko_agent/', 'src/social_market_env/implementations/zhmurenko_vladimir/')) and path!='experiments/zhmurenko_agent.yaml':
+        if not path.startswith(('src/agent_zhmurenko/', 'src/social_market_env/implementations/zhmurenko_vladimir/')) and path!='experiments/agent_zhmurenko.yaml':
             violations.append(path)
     old=load(root/'v4-preservation.json')
     old_violations=[p for p,v in old.items() if digest(p)!=v]
@@ -222,7 +222,7 @@ def report(root):
 Её средняя итоговая награда **{delivered['reward']:.2f}**, у простой стратегии в тех же
 условиях **{simple['reward']:.2f}**. Это результат одной поставляемой таблицы,
 а ниже также приведены средние всех трёх обучений.
-SHA таблицы: `{provenance['model_sha256']}`. Обычный запуск: `python -m social_market_env.run experiments/zhmurenko_agent.yaml --runs-dir <внешний каталог> --strict`.
+SHA таблицы: `{provenance['model_sha256']}`. Обычный запуск: `python -m social_market_env.run experiments/agent_zhmurenko.yaml --runs-dir <внешний каталог> --strict`.
 
 ## Что улучшалось по требованию Word
 
@@ -295,7 +295,7 @@ PairOffers — контролируемые допустимые предлож�
 
 ## Передача и воспроизведение
 
-Корневой YAML: experiments/zhmurenko_agent.yaml. Класс автоматически загружает
+Корневой YAML: experiments/agent_zhmurenko.yaml. Класс автоматически загружает
 models/q_agent.json внутри своего пакета. Отсутствующий/пустой checkpoint вызывает ошибку;
 fresh=True — только явно необученный контроль. Модель переносима как обычный JSON.
 Полные конфигурации и сжатые пошаговые журналы сохранены рядом с результатами.
