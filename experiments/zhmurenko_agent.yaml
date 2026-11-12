@@ -13,7 +13,7 @@ agents:
   cost_low: 15
   cost_high: 22
   overrides:
-    0: {impl: 'social_market_env.implementations.zhmurenko_vladimir:ZhmurenkoVladimirAgent'}
+    0: {impl: 'zhmurenko_agent:ZhmurenkoVladimirAgent'}
     3: {impl: 'social_market_env.baselines.agents:BestResponseAgent'}
     7: {impl: 'social_market_env.baselines.agents:RandomAgent', kwargs: {low: 20, high: 60}}
 coalitions:

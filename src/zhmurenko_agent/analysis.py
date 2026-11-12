@@ -110,7 +110,7 @@ def scope(root):
     status=subprocess.check_output(['git','status','--short','--untracked-files=all'],cwd=REPOSITORY,text=True)
     for line in status.splitlines():
         path=line[3:].replace('\\','/')
-        if not path.startswith('src/social_market_env/implementations/zhmurenko_vladimir/') and path!='experiments/zhmurenko_agent.yaml':
+        if not path.startswith(('src/zhmurenko_agent/', 'src/social_market_env/implementations/zhmurenko_vladimir/')) and path!='experiments/zhmurenko_agent.yaml':
             violations.append(path)
     old=load(root/'v4-preservation.json')
     old_violations=[p for p,v in old.items() if digest(p)!=v]

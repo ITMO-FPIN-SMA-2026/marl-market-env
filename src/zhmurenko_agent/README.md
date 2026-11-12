@@ -1,6 +1,6 @@
 # Рыночный агент Жмуренко: компактный Q-Learning
 
-Публичный класс: `social_market_env.implementations.zhmurenko_vladimir:ZhmurenkoVladimirAgent`.
+Публичный класс: `zhmurenko_agent:ZhmurenkoVladimirAgent`.
 Основная конфигурация — **`experiments/zhmurenko_agent.yaml` в корне репозитория**.
 Среда, контракты и зависимости проекта не изменяются.
 
@@ -78,7 +78,7 @@ Q обновляется по настоящей награде среды: `Q �
 ## Обучение и сокращённая проверка
 
 ```powershell
-$module = 'social_market_env.implementations.zhmurenko_vladimir'
+$module = 'zhmurenko_agent'
 $root = "$env:USERPROFILE/Downloads/ITMO_Q_NEW_RUN"
 python -m "$module.experiment" train --root $root --repeat 0
 # Повторы 1 и 2 выполняются с --repeat 1 и --repeat 2.
