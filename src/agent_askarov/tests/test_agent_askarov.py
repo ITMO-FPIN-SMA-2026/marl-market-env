@@ -6,8 +6,8 @@ from dataclasses import asdict, replace
 
 import pytest
 
-from askarov_agent import AskarovAgent
-from askarov_agent.experiment import main, scenario_config
+from agent_askarov import AskarovAgent
+from agent_askarov.experiment import main, scenario_config
 from social_market_env.config import config_from_dict, config_to_dict
 from social_market_env.contracts import (
     AgentEvaluation, AgentObservation, CoalitionOffer, LinkActionKind, MarketInfo,
@@ -215,7 +215,7 @@ def test_runs_through_environment_without_fallbacks(topology, mode, share_model)
     config = config_from_dict({
         'horizon': 6, 'strict': True,
         'agents': {'count': 4, 'default': {'impl': 'social_market_env.baselines.agents:CartelAgent'},
-                   'overrides': {0: {'impl': 'askarov_agent:AskarovAgent'}}},
+                   'overrides': {0: {'impl': 'agent_askarov:AskarovAgent'}}},
         'market': {'share_model': share_model},
         'network': {'topology': topology, 'mode': mode},
         'coalitions': {'policy': {'impl': 'social_market_env.baselines.coalitions:ConnectedComponentsCoalitions'}},
@@ -242,7 +242,7 @@ def test_training_and_paired_evaluation_cli(tmp_path) -> None:
 
     config = config_from_dict({
         'horizon': 3, 'seeds': [0], 'agents': {
-            'count': 3, 'overrides': {0: {'impl': 'askarov_agent:AskarovAgent'}},
+            'count': 3, 'overrides': {0: {'impl': 'agent_askarov:AskarovAgent'}},
         },
     })
     before = config_to_dict(config)

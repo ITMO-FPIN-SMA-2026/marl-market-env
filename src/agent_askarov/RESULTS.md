@@ -1,7 +1,7 @@
 # Результаты проверки рыночного агента
 
 Основная готовая к использованию версия — `AskarovAgent` без загруженной
-Q-таблицы, конфигурация `experiments/askarov_agent.yaml`. Она использует
+Q-таблицы, конфигурация `src/agent_askarov/experiments/agent_askarov.yaml`. Она использует
 экономическую оценку, реакцию на предыдущий штраф и правила управления связями.
 На проверенном наборе её средняя индивидуальная награда немного выше
 `BestResponseAgent`. Обученная в этом эксперименте Q-таблица результат ухудшила;
@@ -13,7 +13,7 @@ Q-таблицы, конфигурация `experiments/askarov_agent.yaml`. О�
 - Python 3.13.5, NumPy 2.5.4, NetworkX 3.7, PyYAML 6.0.3.
 - 12 продавцов; сравнивается индивидуальный результат продавца № 0.
 - Себестоимости от 15 до 22; модель долей спроса `logit`; параметры из
-  `experiments/askarov_agent.yaml`.
+  `src/agent_askarov/experiments/agent_askarov.yaml`.
 - Обучение: 72 эпизода по 60 шагов, seeds `0, 1, 2`, 4 320 обновлений Q,
   13 посещённых категорий состояния, эволюционирующая сеть.
 - Оценка: seeds `100, 101, 102`, которые не использовались для обучения.
@@ -92,6 +92,9 @@ Q-таблицы, конфигурация `experiments/askarov_agent.yaml`. О�
 
 ## Проверки корректности
 
+Ниже перечислены проверки на дату исходного эксперимента, 29 октября 2026 года.
+Пути и команды в этом отчёте обновлены после переноса в `src/agent_askarov/`.
+
 - Все 108 тестов проекта проходят, из них 27 новых проверок нашего агента.
 - Проверки PyCharm не обнаружили замечаний в новых Python-файлах.
 - Обученная модель дополнительно запущена штатной командой
@@ -108,8 +111,8 @@ Q-таблицы, конфигурация `experiments/askarov_agent.yaml`. О�
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -e '.[dev]'
 .\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\python.exe -m askarov_agent.experiment train --episodes 72 --horizon 60
-.\.venv\Scripts\python.exe -m askarov_agent.experiment benchmark --horizon 60
+.\.venv\Scripts\python.exe -m agent_askarov.experiment train --episodes 72 --horizon 60
+.\.venv\Scripts\python.exe -m agent_askarov.experiment benchmark --horizon 60
 ```
 
 Исходные результаты находятся в `runs/askarov_agent/policy.training.json`,

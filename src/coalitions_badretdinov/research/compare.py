@@ -4,7 +4,7 @@
 
     python -m coalitions_badretdinov.research.compare --seeds 5 --arbiters observe --populations cartel patient90
 
-Арбитр preventive и популяции askarov требуют, чтобы пакеты preventive_arbiter и askarov_agent
+Арбитр preventive и популяции askarov требуют, чтобы пакеты preventive_arbiter и agent_askarov
 лежали в PYTHONPATH: это пакеты других команд. --warmup N обучает агентов N эпизодов перед оценкой.
 """
 
@@ -66,7 +66,7 @@ POPULATIONS: dict[str, dict[str, Any]] = {
     'myopic': {'default': {'impl': LAB + 'PatientAgent', 'kwargs': {'patience': 0.0, 'refuse': True}}},
     'flaky3': {'default': {'impl': LAB + 'PatientAgent', 'kwargs': {'patience': 0.9}},
                'overrides': {1: FLAKY, 5: FLAKY, 9: FLAKY}},
-    'askarov': {'default': {'impl': 'askarov_agent:AskarovAgent'}},
+    'askarov': {'default': {'impl': 'agent_askarov:AskarovAgent'}},
 }
 TOPOLOGIES: tuple[str, ...] = ('random', 'complete', 'star', 'path', 'inner_coalitions')
 

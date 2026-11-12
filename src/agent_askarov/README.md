@@ -1,13 +1,62 @@
 # Рыночный агент Аскарова
 
+**Автор: Аскаров Тимур Русланович.**
+
+**Модуль: `src/agent_askarov/`, роль: Market Agent (`MarketAgentAPI`).**
+
+## Результаты работы для слайда
+
+Реализован агент `AskarovAgent`: экономический выбор цены, оценка собственной
+выгоды коалиционного предложения, реакция на прошлый штраф и управление связями.
+Добавлены независимый табличный Q-learning, сохранение политики, обучение,
+парное сравнение с базовыми агентами и проверки поведения через настоящую среду.
+
+В проверке от 29 октября 2026 года сравнивался продавец № 0 среди 12 продавцов:
+72 условия на политику (3 режима соперников × 4 топологии × 2 режима сети ×
+3 новых seed), 288 оценочных эпизодов по 60 шагов.
+
+| Политика | Средняя суммарная чистая награда | Выживание |
+| --- | ---: | ---: |
+| `BestResponseAgent` | 27 928.86 | 100% |
+| `CartelAgent` | 5 149.77 | 100% |
+| `AskarovAgent` без Q-таблицы | 28 105.81 | 100% |
+| `AskarovAgent` с обученной Q-таблицей | 22 240.41 | 100% |
+
+Экономическая версия дала **+0.63%** к средней награде `BestResponseAgent`.
+Обучение в данном эксперименте ухудшило результат на **20.87%** относительно
+экономической версии, поэтому основной конфиг запускает агента без Q-таблицы.
+Эти результаты относятся к указанному набору условий и не доказывают
+универсального или статистически значимого преимущества. Подробности и команды
+воспроизведения — в [RESULTS.md](RESULTS.md).
+
+## Структура модуля
+
+```text
+src/agent_askarov/
+├── README.md                         # автор, результаты и инструкция
+├── RESULTS.md                        # подробный отчёт эксперимента
+├── __init__.py                       # экспорт AskarovAgent
+├── agent.py                          # реализация MarketAgentAPI
+├── experiment.py                     # обучение и сравнение
+├── experiments/agent_askarov.yaml     # конфигурация запуска
+└── tests/test_agent_askarov.py        # проверки агента и интеграции
+```
+
+Модуль устанавливается вместе со средой через корневой `pyproject.toml`;
+он использует её публичный контракт `MarketAgentAPI`.
+Все команды ниже выполняются из корня репозитория. Логи и чекпойнты по-прежнему
+создаются в игнорируемой Git папке `runs/askarov_agent/`.
+
+## О реализации
+
 Здесь описана индивидуальная версия рыночного агента для лабораторной работы.
 Она подключается к существующей среде через `MarketAgentAPI`. Исходники среды,
 контракты, базовые агенты, коалиционная политика и арбитр не изменены.
 
-**С чего начать:** запусти `experiments/askarov_agent.yaml`. По выполненному
+**С чего начать:** запусти `src/agent_askarov/experiments/agent_askarov.yaml`. По выполненному
 сравнению экономическая версия без Q-таблицы оказалась лучше экспериментальной
 обученной. Числа и условия проверки приведены в
-[отчёте](AGENT_ASKAROV_RESULTS.md). Q-learning оставлен доступным для дальнейших
+[отчёте](RESULTS.md). Q-learning оставлен доступным для дальнейших
 экспериментов; его наличие само по себе не считается улучшением.
 
 ## Что происходит в этой лабораторной
@@ -32,13 +81,12 @@ Evaluation. Эта реализация относится к **Market Agents**.
 
 | Файл | Назначение |
 | --- | --- |
-| `src/askarov_agent/agent.py` | Класс `AskarovAgent`, принятие решений, обучение, сохранение |
-| `src/askarov_agent/experiment.py` | Команды обучения и сравнения |
-| `experiments/askarov_agent.yaml` | Агент № 0 против 11 готовых соперников |
-| `tests/test_askarov_agent.py` | Проверки поведения и подключения к среде |
+| `src/agent_askarov/agent.py` | Класс `AskarovAgent`, принятие решений, обучение, сохранение |
+| `src/agent_askarov/experiment.py` | Команды обучения и сравнения |
+| `src/agent_askarov/experiments/agent_askarov.yaml` | Агент № 0 против 11 готовых соперников |
+| `src/agent_askarov/tests/test_agent_askarov.py` | Проверки поведения и подключения к среде |
 
-Пакет называется `askarov_agent`, поэтому его легко перенести в отдельный
-репозиторий участников. В текущем проекте он устанавливается существующим
+Пакет называется `agent_askarov`. В текущем проекте он устанавливается через
 `pyproject.toml`: тот автоматически находит пакеты внутри `src`.
 
 ## Как агент выбирает действие
@@ -144,7 +192,7 @@ python -m venv .venv
 ### Посмотреть работу без обучения
 
 ```powershell
-.\.venv\Scripts\python.exe -m social_market_env.run experiments/askarov_agent.yaml
+.\.venv\Scripts\python.exe -m social_market_env.run src/agent_askarov/experiments/agent_askarov.yaml
 ```
 
 Здесь твой продавец имеет номер **0**. Остальные — `CartelAgent`, кроме
@@ -166,7 +214,7 @@ python -m venv .venv
 ### Обучить
 
 ```powershell
-.\.venv\Scripts\python.exe -m askarov_agent.experiment train --episodes 72 --horizon 60
+.\.venv\Scripts\python.exe -m agent_askarov.experiment train --episodes 72 --horizon 60
 ```
 
 По умолчанию используются обучающие seeds `0, 1, 2` из YAML и четыре топологии:
@@ -209,7 +257,7 @@ seeds `100, 101, 102`; если меняешь обучающие seeds, убе�
 ### Сравнить четыре версии
 
 ```powershell
-.\.venv\Scripts\python.exe -m askarov_agent.experiment benchmark --horizon 60
+.\.venv\Scripts\python.exe -m agent_askarov.experiment benchmark --horizon 60
 ```
 
 Сравниваются `BestResponseAgent`, `CartelAgent`, наш агент без обучения (`hybrid`)
@@ -231,7 +279,7 @@ seeds `100, 101, 102`; если меняешь обучающие seeds, убе�
 Для короткой проверки:
 
 ```powershell
-.\.venv\Scripts\python.exe -m askarov_agent.experiment benchmark --horizon 10 --seeds 100 --topologies path --network-modes static --scenarios competition mixed --output runs/askarov_agent/quick.json
+.\.venv\Scripts\python.exe -m agent_askarov.experiment benchmark --horizon 10 --seeds 100 --topologies path --network-modes static --scenarios competition mixed --output runs/askarov_agent/quick.json
 ```
 
 Чтобы исследовать строгий арбитраж, добавь `sanctions` в `--scenarios`. Для
@@ -258,7 +306,7 @@ seeds `100, 101, 102`; если меняешь обучающие seeds, убе�
 agents:
   overrides:
     0:
-      impl: "askarov_agent:AskarovAgent"
+      impl: "agent_askarov:AskarovAgent"
       kwargs:
         checkpoint_path: "runs/askarov_agent/policy.json"
 ```

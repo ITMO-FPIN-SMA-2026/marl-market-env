@@ -10,7 +10,7 @@ from typing import Any
 
 import yaml
 
-from askarov_agent import AskarovAgent
+from agent_askarov import AskarovAgent
 from social_market_env.baselines.agents import BestResponseAgent, CartelAgent
 from social_market_env.config import (
     ComponentSpec, ExperimentConfig, config_from_dict, config_to_dict, load_config,
@@ -46,7 +46,7 @@ def scenario_config(base: ExperimentConfig, *, scenario: str, agent_id: int) -> 
                 'social_market_env.baselines.arbiters:ThresholdArbiter',
                 {'jump_threshold': 0.0, 'fine': config.arbiter.max_fine},
             )
-    config.agents.overrides[agent_id] = ComponentSpec('askarov_agent:AskarovAgent')
+    config.agents.overrides[agent_id] = ComponentSpec('agent_askarov:AskarovAgent')
     return config
 
 
@@ -129,7 +129,7 @@ def train(args: argparse.Namespace) -> int:
     evaluation.update(mode='eval', strict=True, seeds=[100, 101, 102], episodes_per_seed=1)
     payload = json.loads(args.output.read_text(encoding='utf-8'))
     evaluation['agents']['overrides'][args.agent_id] = {
-        'impl': 'askarov_agent:AskarovAgent',
+        'impl': 'agent_askarov:AskarovAgent',
         'kwargs': {**payload['settings'], 'checkpoint_path': str(args.output.resolve())},
     }
     eval_path = args.output.with_suffix('.eval.yaml')
@@ -230,7 +230,8 @@ def main(argv: list[str] | None = None) -> int:
     commands = parser.add_subparsers(dest='command', required=True)
     for command in ('train', 'benchmark'):
         sub = commands.add_parser(command)
-        sub.add_argument('--config', type=Path, default=Path('experiments/askarov_agent.yaml'))
+        sub.add_argument('--config', type=Path,
+                         default=Path(__file__).with_name('experiments') / 'agent_askarov.yaml')
         sub.add_argument('--agent-id', type=int, default=0)
         sub.add_argument('--horizon', type=positive_int)
         sub.add_argument('--scenarios', nargs='+', choices=SCENARIOS, default=list(SCENARIOS[:3]))
