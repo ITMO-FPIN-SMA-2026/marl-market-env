@@ -1,0 +1,22 @@
+# Smoke evaluation without a checkpoint; also the base configuration for experiment.py.
+# Training and benchmark commands are documented in src/agent_tverdokhleb/README.md.
+name: agent_tverdokhleb
+horizon: 100
+seeds: [100000, 100001, 100002]
+mode: eval
+strict: true
+market: {demand_a: 120, demand_b: 1, tau: 5, p_min: 1, p_max: 100, share_model: logit}
+agents:
+  count: 5
+  default: {impl: "social_market_env.baselines.agents:CartelAgent"}
+  cost_low: 12
+  cost_high: 45
+  overrides:
+    0: {impl: "agent_tverdokhleb:TverdokhlebAgent"}
+    1: {impl: "social_market_env.baselines.agents:BestResponseAgent"}
+    3: {impl: "social_market_env.baselines.agents:RandomAgent", kwargs: {low: 20, high: 60}}
+coalitions:
+  policy: {impl: "social_market_env.baselines.coalitions:ConnectedComponentsCoalitions", kwargs: {payout: equal}}
+arbiter:
+  policy: {impl: "social_market_env.baselines.arbiters:ThresholdArbiter", kwargs: {jump_threshold: 4, fine: 50}}
+network: {topology: random, mode: evolving, initial_density: 0.3}
