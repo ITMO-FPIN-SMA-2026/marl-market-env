@@ -6,12 +6,6 @@ __pycache__/
 .vscode/
 .DS_Store
 runs/
-*.pt
-*.pth
-*.ckpt
 *.egg-info/
 .pytest_cache/
 .pytest_tmp*/
-
-.handoff-restore-*/
-artifacts/*.tar.gz
