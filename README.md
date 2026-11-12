@@ -118,6 +118,17 @@ class JumpArbiter(ArbiterAPI):
 стоимости засчитывается только при `network.mode: evolving`. Штраф меньше `arbiter.min_fine` считается
 наблюдением, изменения стоимости связи обрезаются до `±arbiter.max_link_cost_delta`.
 
+## Арбитр Мирошник Виктория Юрьевна — PPO + GRU
+
+Пакет [`src/arbiter_miroshnik`](src/arbiter_miroshnik/README.md) содержит исходный
+PPO с отдельными actor и critic и памятью GRU. Внутри — именной YAML,
+`research/` с launcher командных экспериментов и `docs/` с архитектурой,
+результатами и инструкциями AMD ROCm. Начальный checkpoint включён в пакет;
+для запуска примера установите `pip install -e '.[learning]'`.
+Результаты и ограничения описаны в
+[документации экспериментов](src/arbiter_miroshnik/docs/experiments.md).
+Полная квалификация арбитра пока не подтверждена.
+
 ## Конфиг
 
 Все ключи и значения по умолчанию описаны в `src/social_market_env/config.py` (докстринги у каждого поля);
@@ -174,5 +185,3 @@ for episode in range(100):
 ```bash
 .venv/bin/pytest -q
 ```
-
-
