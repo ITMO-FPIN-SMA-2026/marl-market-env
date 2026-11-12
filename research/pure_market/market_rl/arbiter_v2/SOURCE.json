@@ -1,0 +1,12 @@
+{
+  "source": "/Users/viktoriamirosnik/projects/sma_itmo/arbiter_v2/src/ppo_gru_arbiter_v2",
+  "sha256_before_adaptation": {
+    "policy.py": "cf4edae8a48d9747158f34c9516b5f9c5486f1c5eb65e5b32cd6c5b801c7012f",
+    "model.py": "6f5725ad1bbe85bf71b2b48564087f911a3fafa76b24f698eb2b4c5a3a310c95",
+    "features.py": "05f42780cd062b908f1e8d291f606a8b89d7d96c2ec6b2c227d67bad145abe3f",
+    "settings.py": "aab7f42801f94a463f62b32fbb083927f9a24a204b897f02e31257a4cab8908b",
+    "reference.py": "e9b287c00ff0857020dd167d8bf38efb400960fe84a3a158aa73ed21a484a7eb",
+    "calibrate.py": "7de846fe9c13bc0e37dfce35c9d825b5852689770725dfd48bcbe57863cc98d6"
+  },
+  "weights_imported": false
+}

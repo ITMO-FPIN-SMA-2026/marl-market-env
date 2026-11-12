@@ -1,0 +1,11 @@
+{
+  "revisions": {
+    "main": "2a3ed8243f15eff44864c61d0c87413c236f9d42",
+    "agent-askarov": "c25fa8ef714b6f57f684df5fe68842cfc7a3d943",
+    "agent-tverdokhleb": "5bfe224c083896aed09dbb16b1b1ad176dc23185",
+    "agent-rodina": "889475f55d6fc37fa8c8256347df8a0716c38468",
+    "agent-zhmurenko": "43425a0134df222334586283a28fa9bc7a928216",
+    "coalition": "6c8a8ea12be7da3e5bdd6b491ebc03d9ba29d8b3"
+  },
+  "old_core_commit": "35e0a4d55d5a4f44761af815d86aeadec861f8fa"
+}

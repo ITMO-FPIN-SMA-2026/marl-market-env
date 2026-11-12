@@ -1,0 +1,12 @@
+{
+  "source": "/Users/viktoriamirosnik/projects/sma_itmo_pure/market_rl/arbiter_v2",
+  "sha256_before_team_adapter": {
+    "policy.py": "4400c8220045e4afd12e7485aad7453d3cb599aa13300bbc2f567870d2b98f26",
+    "model.py": "6f5725ad1bbe85bf71b2b48564087f911a3fafa76b24f698eb2b4c5a3a310c95",
+    "features.py": "71994808c1edf13639ec827dbb93a2ba7a99fa8b1e606a43cdcdc7a4b40415a2",
+    "contracts.py": "830079475f99bd04c068cf00d63e0d4c1e572d8b3d5dc04e81154febdf78112a",
+    "settings.py": "970f490e86ed1bd8e49f411c5c13db746f04954c1c607ee6571326d709cfa808",
+    "reference.py": "0e5359a0ca2700af17911e8b00be9e2d05cb20d57da1d346da28cb0f100ca217",
+    "calibrate.py": "b43818329ae82eccf993abf680ff926876f4f201f25e9ad3fb16b61f7d5abffd"
+  }
+}
