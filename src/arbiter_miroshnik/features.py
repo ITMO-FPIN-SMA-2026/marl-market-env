@@ -6,7 +6,8 @@ from statistics import fmean, pstdev
 
 import numpy as np
 
-from .contracts import ArbiterActionKind
+from social_market_env.contracts import ArbiterActionKind
+from social_market_env.core.market import consumer_surplus
 
 GLOBAL_DIM = 14
 NODE_DIM = 24
@@ -58,7 +59,7 @@ class PublicMemory:
         scale = self.market.p_max-self.market.p_min
         norm = lambda p: (p-self.market.p_min)/scale
         demand = self.market.demand_a
-        welfare_scale = self.market.welfare_scale
+        welfare_scale = consumer_surplus(total_quantity=self.market.demand_a, market=self.market)
         previous = self.history[-1] if self.history else {}
         # A gap in participation resets that seller's contiguous observation history.
         sequences = {}

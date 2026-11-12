@@ -54,42 +54,19 @@ arbiter:
       evaluation: greedy
 ```
 
-Восстановление исследовательских состояний описано в
-[инструкции переноса](docs/next_computer.md). Для CUDA и AMD
-ROCm используется `device: cuda`. Если GPU явно указан, но недоступен, запуск
+Для CUDA и AMD ROCm используется `device: cuda`. Если GPU явно указан, но недоступен, запуск
 завершается ошибкой. Настройки модели сохраняются внутри checkpoint; их список
 и ограничения — в [`settings.py`](settings.py).
 
 Готовый конфиг: [`arbiter_miroshnik.yaml`](arbiter_miroshnik.yaml). Это короткая
 проверка подключения на четырёх `BestResponseAgent` без коалиций, а не исследование
-на командных продавцах. Запускайте из корня checkout:
-
-```bash
-python -m social_market_env.run src/arbiter_miroshnik/arbiter_miroshnik.yaml
-```
+на командных продавцах.
 
 ## Командные эксперименты
 
 Подготовка, обучение и оценивание на закреплённых версиях четырёх настоящих
-командных агентов находятся в [`research/`](research). Запуск из корня репозитория:
-
-```bash
-.deps/rocm-venv/bin/python -m arbiter_miroshnik evaluate \
-  --out runs/transferred_ppo_amd --episodes 20 --device cuda
-.deps/rocm-venv/bin/python -m arbiter_miroshnik train \
-  --out runs/transferred_ppo_amd --games 128 --device cuda
-```
-
-Для CPU:
-
-```bash
-python -m arbiter_miroshnik evaluate \
-  --out runs/transferred_ppo_amd --episodes 20 --device cpu
-```
-
-`--games` — целевое общее число игр каждой модели. В одном каталоге одновременно
-может работать только один процесс обучения. В конфигурациях используется
-`arbiter_miroshnik:PPOGRUArbiter`; checkpoint схемы 4 сохраняют совместимость.
+командных агентов описаны в [`research/README.md`](research/README.md).
+Команды для AMD ROCm — в [`docs/amd.md`](docs/amd.md).
 
 ## Результаты
 
@@ -114,8 +91,9 @@ python -m arbiter_miroshnik evaluate \
 | [`policy.py`](policy.py) | Фасад штатного `ArbiterAPI`, применение действий и сохранение этапов |
 | [`ppo.py`](ppo.py), [`model.py`](model.py) | Исходные PPO/GAE и actor/critic с GRU |
 | [`features.py`](features.py), [`reference.py`](reference.py) | Публичные признаки, память и калибровка |
-| [`settings.py`](settings.py), [`contracts.py`](contracts.py) | Параметры и внутренний контракт |
+| [`settings.py`](settings.py) | Параметры PPO и ограничений действий |
+| [`checkpoint.py`](checkpoint.py) | Совместимость metadata рынка с checkpoint схемы 4 |
 | [`checkpoints/`](checkpoints/README.md) | Начальный checkpoint для запуска из чистого checkout |
-| [`research/`](research) | Launcher, закрепление командных исходников, перенос весов и продавцов |
-| [`docs/`](docs/README.md) | Архитектура, результаты, журнал переноса и AMD |
+| [`research/`](research/README.md) | Обучение, закрепление командных исходников и состояния продавцов |
+| [`docs/`](docs/README.md) | Архитектура, результаты и AMD |
 | [`research/tests/test_arbiter_miroshnik.py`](research/tests/test_arbiter_miroshnik.py) | Подключение, обучение и возобновление |

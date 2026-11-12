@@ -28,5 +28,5 @@
 Полные локальные отчёты: `target_evaluation_002.json` в первых двух сериях и
 `target_evaluation_003.json` в AMD-серии. Краткая версия для Git —
 [`../research/results.json`](../research/results.json). Полные обучающие состояния
-и тяжёлые логи исключены из Git; исходные архивы сохраняются отдельно.
+и тяжёлые логи исключены из Git.
 Начальный checkpoint для примера включён в [`../checkpoints/`](../checkpoints/README.md).

@@ -1,27 +1,19 @@
 """Native ArbiterAPI bridge. No custom environment, agents or reward function."""
 
-from dataclasses import asdict
 import hashlib
 import json
 from pathlib import Path
 
-from social_market_env.contracts import ArbiterAPI, ArbiterAction, ArbiterActionKind
+from social_market_env.contracts import ArbiterAPI
 
-from .contracts import ArbiterObservation, public_market
 from .ppo import PPOGRUArbiterV2
-
-
-def to_observation(public):
-    # SW*, graph, coalitions, private costs and evaluator labels are not inputs.
-    return ArbiterObservation(public.step, tuple(public.active_agents), dict(public.prices),
-        dict(public.quantities), public.total_quantity, public.average_price,
-        public.social_welfare, public.delta_average_price, public.delta_social_welfare)
 
 
 def atomic_json(path, value):
     path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
-    temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
+    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
     temporary.replace(path)
 
 
@@ -36,9 +28,8 @@ class PPOGRUArbiter(ArbiterAPI):
             if hashlib.sha256(checkpoint_path.read_bytes()).hexdigest() != state["sha256"]:
                 raise ValueError("Saved arbiter checkpoint checksum differs")
             self.resumed = True
-        self.policy = PPOGRUArbiterV2(market=asdict(public_market(market)),
+        self.policy = PPOGRUArbiterV2(market=market,
             checkpoint_path=checkpoint_path, device=device, evaluation=evaluation)
-        self.pending = None
 
     @property
     def last_decision(self):
@@ -46,29 +37,17 @@ class PPOGRUArbiter(ArbiterAPI):
 
     def reset(self, *, seed, training):
         self.policy.reset(seed=seed, training=training)
-        self.pending = None
         if training and self.state_dir and not self.resumed:
             self.save_stage()
             self.resumed = True
 
     def act(self, public):
-        if self.pending is not None:
-            raise RuntimeError("Deliver the previous transition before act")
-        converted = to_observation(public)
-        internal = self.policy.act(converted)
-        action = (ArbiterAction(kind=ArbiterActionKind.sanction, target=internal.target, fine=internal.fine)
-                  if internal.kind == "sanction" else ArbiterAction())
-        self.pending = (converted, internal, action)
-        return action
+        return self.policy.act(public)
 
     def observe_transition(self, *, observation, action, reward, next_observation, done):
-        if self.pending is None or observation.step != self.pending[0].step or action != self.pending[2]:
-            raise ValueError("Native applied action or transition differs from the selected action")
-        previous, internal, _ = self.pending
-        self.policy.observe_transition(observation=previous, action=internal, reward=reward,
-            next_observation=to_observation(next_observation) if next_observation is not None else None,
+        self.policy.observe_transition(observation=observation, action=action, reward=reward,
+            next_observation=next_observation,
             done=done)
-        self.pending = None
         if done and self.policy.training and self.state_dir:
             self.save_stage()
 

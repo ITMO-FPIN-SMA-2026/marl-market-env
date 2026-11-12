@@ -6,7 +6,7 @@ from pathlib import Path
 
 import torch
 
-from ..contracts import public_market
+from ..checkpoint import market_payload
 from ..ppo import PPOGRUArbiterV2
 
 
@@ -25,7 +25,7 @@ def convert_checkpoint(source, destination, market, reference_path):
     payload = torch.load(source, map_location="cpu", weights_only=True)
     if payload.get("schema_version") != 3 or not payload["settings"]["use_recurrence"]:
         raise ValueError("Expected the trained custom-market PPO/GRU schema-3 checkpoint")
-    policy = PPOGRUArbiterV2(market=asdict(public_market(market)), settings=payload["settings"],
+    policy = PPOGRUArbiterV2(market=asdict(market), settings=payload["settings"],
         reference_path=reference_path, model_seed=payload["model_seed"], device="cpu")
     policy.actor.load_state_dict(payload["actor"], strict=True)
     policy.critic.load_state_dict(payload["critic"], strict=True)
@@ -45,4 +45,4 @@ def convert_checkpoint(source, destination, market, reference_path):
     return {"source": str(source), "destination": str(destination),
             "actor_sha256": state_digest(policy.actor.state_dict()),
             "critic_sha256": state_digest(policy.critic.state_dict()),
-            "target_market": asdict(policy.market), "optimizer_reset": True}
+            "target_market": market_payload(policy.market), "optimizer_reset": True}

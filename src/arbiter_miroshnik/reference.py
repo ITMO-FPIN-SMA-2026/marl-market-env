@@ -11,7 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .contracts import PublicMarketConfig as MarketConfig
+from .checkpoint import market_config, market_payload
 
 
 @dataclass(frozen=True)
@@ -28,8 +28,8 @@ class PublicReference:
     version: int = 1
 
     def __post_init__(self):
-        config = MarketConfig(**self.market)
-        if self.market != asdict(config):
+        config = market_config(self.market)
+        if self.market != market_payload(config):
             raise ValueError('Reference must store the complete market configuration')
         if self.version != 1 or not 0 < config.p_min < config.p_max:
             raise ValueError('Invalid reference schema or price bounds')

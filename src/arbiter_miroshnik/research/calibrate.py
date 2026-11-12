@@ -1,15 +1,16 @@
 """Fit immutable public screening references without running an environment."""
 
 import argparse
-from dataclasses import asdict, replace
+from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import numpy as np
 
-from ..contracts import PublicMarketConfig as MarketConfig
+from social_market_env.contracts import ArbiterObservation
+
+from ..checkpoint import market_config, market_payload
 
 from ..features import PublicMemory
 from ..reference import PublicReference
@@ -22,8 +23,9 @@ PUBLIC_FIELDS = {'step', 'active_agents', 'prices', 'quantities', 'total_quantit
 def observation_from_public(row):
     if set(row) != PUBLIC_FIELDS:
         raise ValueError(f'Expected only the public schema, missing/extra fields: {set(row) ^ PUBLIC_FIELDS}')
-    return SimpleNamespace(**dict(row, prices={int(k): v for k, v in row['prices'].items()},
-                                  quantities={int(k): v for k, v in row['quantities'].items()}))
+    return ArbiterObservation(**dict(row, prices={int(k): v for k, v in row['prices'].items()},
+                                    quantities={int(k): v for k, v in row['quantities'].items()}),
+                              target_social_welfare=0.0, last_action=None, fines_history=())
 
 
 def validate_dataset(data, role):
@@ -49,7 +51,7 @@ def fit_reference(reference_data, calibration_data, *, settings=None, risk_quant
     calibration_ids = validate_dataset(calibration_data, 'calibration_nonharmful')
     if reference_data['market'] != calibration_data['market']:
         raise ValueError('Datasets have different markets')
-    market = MarketConfig(**reference_data['market'])
+    market = market_config(reference_data['market'])
     for ep in reference_data['episodes']:
         memory = PublicMemory(market, settings, None)
         for row in ep['observations']:
@@ -57,7 +59,7 @@ def fit_reference(reference_data, calibration_data, *, settings=None, risk_quant
     prices = [p for ep in reference_data['episodes'] for row in ep['observations'] for p in row['prices'].values()]
     if not prices or not np.isfinite(prices).all():
         raise ValueError('Reference dataset has no finite prices')
-    reference = PublicReference(asdict(market), float(np.median(prices)), float(np.quantile(prices, .95)),
+    reference = PublicReference(market_payload(market), float(np.median(prices)), float(np.quantile(prices, .95)),
         .7, settings.min_history, settings.history_window, reference_ids, calibration_ids, tuple(source_hashes))
     maxima = []
     for ep in calibration_data['episodes']:

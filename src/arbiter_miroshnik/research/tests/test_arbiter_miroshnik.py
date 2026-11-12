@@ -1,17 +1,25 @@
 """Native PPO + GRU component and checkpoint continuity."""
 
-from dataclasses import asdict
+from dataclasses import asdict, replace
+import gzip
 import json
+from pathlib import Path
+
+import numpy as np
 
 import pytest
 
 torch = pytest.importorskip('torch')
 
 from arbiter_miroshnik import PPOGRUArbiter, Settings
-from arbiter_miroshnik.contracts import public_market
+from arbiter_miroshnik.checkpoint import market_payload
+from arbiter_miroshnik.features import PublicMemory
 from arbiter_miroshnik.ppo import PPOGRUArbiterV2
 from arbiter_miroshnik.reference import PublicReference
-from social_market_env.config import MarketConfig, config_from_dict
+from arbiter_miroshnik.research.cli import play
+from social_market_env.config import MarketConfig, config_from_dict, load_config
+from social_market_env.contracts import ArbiterAction, ArbiterObservation
+from social_market_env.recording.summary import summarize_episode
 from social_market_env.runner.experiment import build_environment
 
 
@@ -19,8 +27,8 @@ def test_native_component_trains_and_resumes_complete_checkpoint(tmp_path):
     torch.set_num_threads(1)
     settings = Settings(screening_mode='learned', min_history=3,
                         history_window=5, batch_episodes=2, epochs=1)
-    market = public_market(MarketConfig())
-    reference = PublicReference(asdict(market), 25., 35., .8, 3, 5,
+    market = MarketConfig()
+    reference = PublicReference(market_payload(market), 25., 35., .8, 3, 5,
                                 ('reference-world',), ('calibration-world',))
     reference_path = tmp_path / 'reference.json'
     reference.save(reference_path)
@@ -60,3 +68,41 @@ def test_native_component_trains_and_resumes_complete_checkpoint(tmp_path):
         for parameter, values in saved['state'].items():
             for key, expected in values.items():
                 assert torch.equal(loaded['state'][parameter][key], expected)
+
+
+def test_bundled_checkpoint_uses_native_runner_and_summary(tmp_path, monkeypatch):
+    package = Path(__file__).resolve().parents[2]
+    config = load_config(package / 'arbiter_miroshnik.yaml')
+    config.arbiter.policy.kwargs['checkpoint_path'] = str(package / 'checkpoints/initial_model_0.pt')
+    env = build_environment(config=config, seed=17)
+    original = env.arbiter.act
+    observations = []
+
+    def act(observation):
+        assert isinstance(observation, ArbiterObservation)
+        observations.append(observation)
+        action = original(observation)
+        assert isinstance(action, ArbiterAction)
+        return action
+
+    monkeypatch.setattr(env.arbiter, 'act', act)
+    log = tmp_path / 'episode.jsonl.gz'
+    metrics = play(env, 71, training=False, log=log)
+    with gzip.open(log, 'rt') as stream:
+        records = [json.loads(line) for line in stream]
+    summary = summarize_episode(records)
+    assert metrics['steps'] == len(observations) == config.horizon
+    assert metrics['welfare'] == summary['mean_social_welfare']
+    assert metrics['reward'] == summary['total_arbiter_reward']
+    assert metrics['false_positives'] == summary['false_positives']
+    assert type(env.arbiter.policy.market) is MarketConfig
+
+    policy = env.arbiter.policy
+    memories = [PublicMemory(policy.market, policy.settings, policy.reference) for _ in range(2)]
+    for observation in observations:
+        # Extra native fields must not become neural inputs after removing the adapter.
+        altered = replace(observation, target_social_welfare=float('nan'),
+                          last_action=ArbiterAction(), fines_history=())
+        frames = [memory.update(obs) for memory, obs in zip(memories, (observation, altered))]
+        for field in ('global_features', 'nodes', 'pairs', 'eligible', 'risks'):
+            np.testing.assert_array_equal(getattr(frames[0], field), getattr(frames[1], field))

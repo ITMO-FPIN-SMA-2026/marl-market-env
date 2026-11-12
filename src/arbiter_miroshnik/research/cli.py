@@ -1,26 +1,21 @@
 """Prepare, train and evaluate the plugin on the actual four team implementations."""
 
 import argparse
+from contextlib import nullcontext
 from dataclasses import asdict
 import gzip
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import torch
 
 from .sources import IMPLEMENTATIONS, activate_sources, prepare_sources
+from ..policy import atomic_json as write_json
 
 COALITION_IMPLEMENTATION = 'coalition_policy:AdaptiveCoalitionPolicy'
-
-
-def write_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(path.name + ".tmp")
-    temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
-    temporary.replace(path)
 
 
 def native_config(horizon, *, independent=False, checkpoint=None, state_dir=None, device="cpu", training=False):
@@ -70,42 +65,40 @@ def network_digest(policy):
 
 
 def play(env, seed, *, training, log=None):
+    from social_market_env.recording.summary import summarize_episode
+    from social_market_env.runner.experiment import run_episode
+
     before = agent_digest(env.agents)
     neural = network_digest(env.arbiter.policy) if hasattr(env.arbiter, "policy") else None
-    env.reset(seed=seed, training=training)
-    rows = []
-    stream = gzip.open(log, "wt", encoding="utf-8") if log else None
-    try:
-        while not env.done:
-            row = env.step().record
+    with gzip.open(log, "wt", encoding="utf-8") if log else nullcontext(None) as stream:
+        def write_step(row):
             if row["events"] or row["rejected_plans"]:
                 raise RuntimeError("Native team code failed or proposed an invalid plan")
-            rows.append(row)
             if stream:
                 stream.write(json.dumps(row, allow_nan=False) + "\n")
-    finally:
-        if stream:
-            stream.close()
+
+        rows = run_episode(env=env, seed=seed, training=training,
+                           writer=SimpleNamespace(write_step=write_step))
     if not training:
         if before != agent_digest(env.agents):
             raise RuntimeError("Evaluation changed fitted team-agent parameters")
         if neural is not None and neural != network_digest(env.arbiter.policy):
             raise RuntimeError("Evaluation changed the transferred actor or critic")
     fines = [row for row in rows if row["arbiter"]["kind"] == "sanction"]
-    return {"steps": len(rows), "welfare": float(np.mean([r["social_welfare"] for r in rows])),
-        "reward": float(sum(r["arbiter"]["reward"] for r in rows)), "sanctions": len(fines),
-        "false_positives": sum(r["arbiter"]["false_positive"] for r in rows),
-        "false_negatives": sum(r["arbiter"]["false_negative"] for r in rows),
+    summary = summarize_episode(rows)
+    return {"steps": summary["steps"], "welfare": summary["mean_social_welfare"],
+        "reward": summary["total_arbiter_reward"], "sanctions": len(fines),
+        "false_positives": summary["false_positives"],
+        "false_negatives": summary["false_negatives"],
         "harmful_steps": sum(any(p["harmful"] for p in r["plans"]) for r in rows),
         "fine_total": float(sum(sum(r["fines"].values()) for r in rows)),
-        "active_end": sum(rows[-1]["active"].values())}
+        "active_end": len(rows[-1]["active"]) - summary["eliminated"]}
 
 
 def prepare(args):
     from social_market_env.contracts import ArbiterAction
-    from ..policy import to_observation
-    from .calibrate import fit_reference
-    from ..contracts import public_market
+    from .calibrate import PUBLIC_FIELDS, fit_reference
+    from ..checkpoint import market_payload
     from .convert import convert_checkpoint
     from .seller_state import save_population
     from ..settings import Settings
@@ -123,7 +116,7 @@ def prepare(args):
             self.rows = []
 
         def act(self, public):
-            self.rows.append(asdict(to_observation(public)))
+            self.rows.append({key: getattr(public, key) for key in sorted(PUBLIC_FIELDS)})
             return ArbiterAction()
 
         def observe_transition(self, **kwargs):
@@ -131,7 +124,7 @@ def prepare(args):
 
     datasets = []
     for offset, role in ((0, "reference_train_nonharmful"), (100_000, "calibration_nonharmful")):
-        dataset = {"schema_version": 1, "market": asdict(public_market(config.market)),
+        dataset = {"schema_version": 1, "market": market_payload(config.market),
                    "split_role": role, "episodes": []}
         for episode in range(args.calibration_episodes):
             seed = 900_100_000 + offset + episode

@@ -1,7 +1,7 @@
 # Начальный checkpoint PPO + GRU
 
 `initial_model_0.pt` включён в Git и Python-пакет для запуска
-`arbiter_miroshnik.yaml` без исследовательских архивов.
+`arbiter_miroshnik.yaml`.
 
 - Источник: `runs/transferred_ppo/initial_model_0.pt`, побайтовая копия.
 - Размер: 118024 байта.

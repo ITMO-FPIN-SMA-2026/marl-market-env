@@ -20,7 +20,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 agent_askarov = ["experiments/*.yaml"]
-arbiter_miroshnik = ["*.yaml", "README.md", "checkpoints/*.pt", "checkpoints/README.md", "docs/*.md", "research/results.json", "research/handoff/*.json"]
+arbiter_miroshnik = ["*.yaml", "README.md", "checkpoints/*.pt", "checkpoints/README.md", "docs/*.md", "research/README.md", "research/results.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "src/agent_askarov/tests", "src/arbiter_miroshnik/research/tests"]

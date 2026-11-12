@@ -9,9 +9,9 @@ import tempfile
 import numpy as np
 import torch
 
-from .contracts import PublicMarketConfig as MarketConfig
-from .contracts import ArbiterAction, ArbiterActionKind
+from social_market_env.contracts import ArbiterAction, ArbiterActionKind
 
+from .checkpoint import market_config, market_payload
 from .features import Frame, PublicMemory
 from .model import Actor, Critic, collate, greedy_choice
 from .reference import PublicReference
@@ -81,18 +81,15 @@ class PPOGRUArbiterV2:
             raise ValueError('Settings differ from checkpoint')
         self.settings = Settings(**(payload['settings'] if payload else settings or {}))
         self.metadata = payload.get('metadata', {}) if payload else {}
-        self.market = MarketConfig(**(market if market is not None else payload['market'] if payload else {}))
-        if payload and asdict(self.market) != payload['market']:
+        self.market = market_config(market if market is not None else payload['market'] if payload else {})
+        if payload and market_payload(self.market) != payload['market']:
             raise ValueError('Market differs from checkpoint')
         if not all(type(v) in (int, float) and math.isfinite(v) for k, v in asdict(self.market).items()
-                   if k not in ('share_model', 'welfare_model', 'market_family')):
+                   if k != 'share_model'):
             raise ValueError('Market settings must be finite')
         if not 0 < self.market.p_min < self.market.p_max or min(self.market.demand_a, self.market.demand_b) <= 0:
             raise ValueError('Invalid market scales')
-        if (self.market.share_model not in ('logit', 'tz_linear')
-                or self.market.welfare_model != 'consumer_surplus'
-                or self.market.market_family != 'team_linear_total'
-                or min(self.market.welfare_scale, self.market.tau) <= 0):
+        if self.market.share_model not in ('logit', 'tz_linear') or self.market.tau <= 0:
             raise ValueError('Checkpoint uses an incompatible market model')
         self.reference = PublicReference.load(reference_path) if reference_path else (
             PublicReference.restore(payload['reference']) if payload and payload['reference'] else None)
@@ -102,7 +99,7 @@ class PPOGRUArbiterV2:
             if self.reference != saved:
                 raise ValueError('Reference differs from checkpoint; masks cannot change mid-PPO')
         if self.reference:
-            if self.reference.market != asdict(self.market):
+            if self.reference.market != market_payload(self.market):
                 raise ValueError('Reference market differs')
             if (self.reference.min_history, self.reference.history_window) != (self.settings.min_history, self.settings.history_window):
                 raise ValueError('Reference history contract differs')
@@ -274,7 +271,7 @@ class PPOGRUArbiterV2:
             raise RuntimeError('Save checkpoints at episode boundaries')
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        payload = dict(schema_version=SCHEMA_VERSION, market=asdict(self.market), settings=asdict(self.settings),
+        payload = dict(schema_version=SCHEMA_VERSION, market=market_payload(self.market), settings=asdict(self.settings),
             metadata=self.metadata,
             reference=self.reference.payload() if self.reference else None, model_seed=self.model_seed,
             actor=cpu_tree(self.actor.state_dict()), critic=cpu_tree(self.critic.state_dict()),
