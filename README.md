@@ -63,10 +63,6 @@ class MyAgent(MarketAgentAPI):
 [`src/agent_askarov/README.md`](src/agent_askarov/README.md) — реализация,
 запуск, обучение и результаты сравнения.
 
-Индивидуальный модуль рыночного агента Романа Твердохлеба:
-[`src/agent_tverdokhleb/README.md`](src/agent_tverdokhleb/README.md) — реализация,
-конфигурация подключения и результаты для слайда.
-
 Пример политики коалиций — предлагает картель первой паре связанных агентов:
 
 ```python

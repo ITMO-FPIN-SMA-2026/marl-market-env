@@ -1,4 +1,4 @@
-# Рыночный агент Твердохлеба
+# Рыночный агент Твердохлеб
 
 **Автор: Роман Твердохлеб.**
 
@@ -118,7 +118,7 @@ python -m agent_tverdokhleb.experiment train --episodes 4 --horizon 5 --min-upda
 
 Все файлы реализации собраны внутри этого модуля: `agent.py`, `experiment.py`,
 `experiments/agent_tverdokhleb.yaml` и `tests/test_agent_tverdokhleb.py`.
-Конфиг и README входят в устанавливаемый пакет. Исходники среды не изменены.
+Исходники среды не изменены.
 
 ```bash
 python -m pytest -q src/agent_tverdokhleb/tests
