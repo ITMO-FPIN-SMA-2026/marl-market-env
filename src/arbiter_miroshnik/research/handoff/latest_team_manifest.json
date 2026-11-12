@@ -1,0 +1,1902 @@
+{
+  "archive": "artifacts/latest_team.tar.gz",
+  "sha256": "03f67e5e746329ee59ba58a54b85329ac00efa1610c787e63d71b5224713795c",
+  "bytes": 9985531,
+  "files": [
+    {
+      "path": "runs/transferred_ppo_latest/calibration_public.json",
+      "sha256": "a073d0bc47af06536327840432ef16aaae3449fbb201ce001b60fd94c654cb29",
+      "bytes": 182894
+    },
+    {
+      "path": "runs/transferred_ppo_latest/calibration_report.json",
+      "sha256": "8ba3233af9b260bbf11eb972fa28a3e33f8e91b08b158884dca054dc4fba3446",
+      "bytes": 331
+    },
+    {
+      "path": "runs/transferred_ppo_latest/initial_evaluation.json",
+      "sha256": "059f8972b2a151c7ffb8957f269cad99dddfc59f7f4444c2d3fcf99fd16101b3",
+      "bytes": 29019
+    },
+    {
+      "path": "runs/transferred_ppo_latest/initial_model_0.pt",
+      "sha256": "7433e0eb1275959394b0943f3c80c842870e6c3774573eba0ec2c60f835079a0",
+      "bytes": 117768
+    },
+    {
+      "path": "runs/transferred_ppo_latest/initial_model_1.pt",
+      "sha256": "7d246552a4b67e3480f493ea45749f3169804cc43c582724dca20a425308f99e",
+      "bytes": 117768
+    },
+    {
+      "path": "runs/transferred_ppo_latest/initial_model_2.pt",
+      "sha256": "5b22d4917636f110640d215d35b7c6e366e0d6bd123d5c05a2528834b657d026",
+      "bytes": 117768
+    },
+    {
+      "path": "runs/transferred_ppo_latest/prepared.json",
+      "sha256": "3c517a48a67f4e77c5c20dc6d6c9898fd03ce30cc3bde7b873069d66db1facc1",
+      "bytes": 8644
+    },
+    {
+      "path": "runs/transferred_ppo_latest/reference.json",
+      "sha256": "681c3f7fdb736e375df4e2beed085e7a55c6f28fa7b4bac2fb350821408c142f",
+      "bytes": 643
+    },
+    {
+      "path": "runs/transferred_ppo_latest/reference_public.json",
+      "sha256": "ac9b96b6058f5d34ecb464ac8ab0a553e048d158e6c45b2be2c9b7d4eb295008",
+      "bytes": 184258
+    },
+    {
+      "path": "runs/transferred_ppo_latest/sellers_initial/agent_0.json",
+      "sha256": "1555873c9bc4d40568ba9b70519dcd443cad4fc5632ddf071ba862d643e37a41",
+      "bytes": 5161
+    },
+    {
+      "path": "runs/transferred_ppo_latest/sellers_initial/agent_1.json",
+      "sha256": "da5d7a8f0521bfc53b3e87ac13850a31ebb47f1b816d02368926f814954f6349",
+      "bytes": 29496
+    },
+    {
+      "path": "runs/transferred_ppo_latest/sellers_initial/agent_2.json",
+      "sha256": "c6d2c04a30500beeb30bee0fb0124234b1474bb55941c98f03fa25e993ce46d5",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/sellers_initial/agent_3.json",
+      "sha256": "12cf09534a7a2f983343b83ea73fbfcf010b8cd590093fa350da94f5a136b24a",
+      "bytes": 94362
+    },
+    {
+      "path": "runs/transferred_ppo_latest/target_evaluation.json",
+      "sha256": "be4e08449bb5d79f0347ba6f1015caacaf04549084554860f14cc0290791f934",
+      "bytes": 55268
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/sources.json",
+      "sha256": "0e6b5d42cc8a05ec01f3d99a541a3dbb2233c9927e6c389444e0f63eff07482b",
+      "bytes": 8466
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/agent_tverdokhleb/README.md",
+      "sha256": "9b3b66ba257929f007a876fb7d8ef779ad7175c9c547e52257ff2f554a1cd4f8",
+      "bytes": 9282
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/agent_tverdokhleb/__init__.py",
+      "sha256": "23879766f4babbfff9b191abc4de30d20f1c77d280dcdf2b1b81032a30c01fad",
+      "bytes": 200
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/agent_tverdokhleb/agent.py",
+      "sha256": "6a60b429b80fa873d99f40c35bc0adc5218d2b184781871a8b09d12b44f0e70f",
+      "bytes": 14795
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/agent_tverdokhleb/experiment.py",
+      "sha256": "08e808e710ff25def83059f338edaf9baa5f12b14565ef143ae44e5974bb734c",
+      "bytes": 20066
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/agent_tverdokhleb/experiments/agent_tverdokhleb.yaml",
+      "sha256": "db37c280969fa3d60b6cea5da0378dc48f08537e3627292459339f65a763b172",
+      "bytes": 1013
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/agent_tverdokhleb/tests/test_agent_tverdokhleb.py",
+      "sha256": "b6e039f2d3e8b6db2318d34eda73f9809a0231bb9979ebf2a04a2863ec51da68",
+      "bytes": 25961
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/askarov_agent/__init__.py",
+      "sha256": "a184cca5f7ab917c20be12a19ec9235b4a9e64c5c1c9304b20e375b7d06cf56c",
+      "bytes": 147
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/askarov_agent/agent.py",
+      "sha256": "e584e871f603a8111dd1b66e8227bb0e62fd8aa11c28c8cadb02cefb745dff00",
+      "bytes": 14227
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/askarov_agent/experiment.py",
+      "sha256": "22c4c085a133c91670821b17767a50cf9ae2b1e8e4b3ac2489eb425aa024af0e",
+      "bytes": 13226
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/README.md",
+      "sha256": "c067ea08d1ffd1e8c95beb654ec8e3e178765f95473a8c99773c54ca197f62a9",
+      "bytes": 6701
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/__init__.py",
+      "sha256": "b876767f139e769e43ec42fbaec110ddb02a905f70aeda2bbbee8d0f8f0550ee",
+      "bytes": 444
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/beliefs.py",
+      "sha256": "ddbc470f259f0109803c17a2ab5e8e151f3009f2c54b6134ffaa0bbf94ea0aed",
+      "bytes": 8418
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/candidates.py",
+      "sha256": "fc5a6fbcaf96d9f850c6df01c156c8401b29a7c581efc51b093fa6df934cf427",
+      "bytes": 5078
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/coalitions_badretdinov.yaml",
+      "sha256": "5990393b846a9e7fb180153f7a2da1642ab2b15496825c042b8ab5839f0f5de0",
+      "bytes": 1179
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/README.md",
+      "sha256": "b7d3e3d61f259d6b57f9a6ee641327bc2aafc384fd401c85e648e8d056dbccc5",
+      "bytes": 8251
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/experiments.md",
+      "sha256": "613b2e2c5dc075965a1b180733cd079368a4ccdd3caa3dcc31c5031e1176ac32",
+      "bytes": 19677
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/glossary.md",
+      "sha256": "e671932f57c032c46f694bfaecefa029b90d2832025891d12f8db065d509265f",
+      "bytes": 16878
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/journal.md",
+      "sha256": "ae9f30787d022986e1b0d6585aef652d0e33b7eea2ad307a81e6ea0e1265b1fa",
+      "bytes": 28480
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/overview.md",
+      "sha256": "1d000208eb7f0f8dc18b2edd8e0ef5f8e81b55f1ba4a754a97c1d5880d9d7af0",
+      "bytes": 14051
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/plan.md",
+      "sha256": "43860623532190937e3f575530fd04897c8f15b1b26c7beb6a30ea41171ae7ab",
+      "bytes": 53889
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/01-market-and-game-theory.md",
+      "sha256": "8955897b0436be7df7a502b3381ed7c90525c5f922473c29f85a77ce08ab8d05",
+      "bytes": 27839
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/02-environment-contract.md",
+      "sha256": "c16c62102a6c8e1dc282cd45fe1a89acada3de688ae16d86acaf33363042ea95",
+      "bytes": 13403
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/03-settings.md",
+      "sha256": "cd555e7db4c1aba106926c90be25401782e5f24cbaf618d1ea174713c17db89d",
+      "bytes": 8637
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/04-value-oracle.md",
+      "sha256": "8ca30fab1e7f6b8f53baf3dde0d5b24b4b984508a9b13871bdd2f68badf6ca2f",
+      "bytes": 7313
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/05-candidates.md",
+      "sha256": "70860908d17c20d80846f4d0fcad4603185ae02dc8da7c7b6a8bb067c09a16a7",
+      "bytes": 8574
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/06-partition.md",
+      "sha256": "e98bb7a196be20d314290c92945a7a387ab341ff3b27309655277b8ae2cc9024",
+      "bytes": 8192
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/07-pricing.md",
+      "sha256": "d58a4eab3adfc468605a126ad062c4bed9a67d5a61e460aecc8d7ed3d6d11901",
+      "bytes": 11792
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/08-payouts.md",
+      "sha256": "6b940a9a0ead6d26d1c0adadd51b2960abf8cd65fe68c54619c8fc9298504cc3",
+      "bytes": 17842
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/09-outcome-restoring.md",
+      "sha256": "b36e984d1395104c5c75ed8957464de9d0bc73477a4fd34e94151fe6c54baa3a",
+      "bytes": 8891
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/10-beliefs.md",
+      "sha256": "ba3a82a374c1ddef2bf2b9867152c293e5d0b698de208f8f53498a1cea5e8b00",
+      "bytes": 11597
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/11-learning.md",
+      "sha256": "b15f4d9a691ff88291ff242c3afd57af31fa3dda80d6f11793c963e00abc6f22",
+      "bytes": 12212
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/12-policy-assembly.md",
+      "sha256": "c76af588f61f4dac51ea8a79b69a0a8c2efb83b0753b5171c0486b9c7438cceb",
+      "bytes": 15025
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/13-test-agents.md",
+      "sha256": "551d876eaeefaf0ffd2c78723b432415b780d9035294f59f9d1a4951c5c9809f",
+      "bytes": 7609
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/14-scripts-and-tests.md",
+      "sha256": "6486cb88834f675aec21e308ce7792ff3b763ca34491fa11780a52dd391d4c11",
+      "bytes": 12076
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/README.md",
+      "sha256": "584abd9cec7d9d209cb11e17ce277ddeb746dbdffc0323461d8ca56831f5bf34",
+      "bytes": 7331
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/img/cartel-profit.svg",
+      "sha256": "916a144ed5cc62b9ade2af49042d1743b8ab5b3d3f265cf79b44d3b93de99863",
+      "bytes": 3490
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/docs/walkthrough/img/sw-triangle.svg",
+      "sha256": "6cb269e7ecd79b8b640c2bf2aa864ac7b1a832aa6f457899a2390954274bb2e9",
+      "bytes": 4573
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/learner.py",
+      "sha256": "42a4abf0507dee35d0a09e2c3b442b53fab63f101f21f96b6a236e73c99b4626",
+      "bytes": 4640
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/payouts.py",
+      "sha256": "3bdc0a4ca395bc7e9e45986cac88182323574eb8ed60fbaeace6a7179e47fb29",
+      "bytes": 10649
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/policy.py",
+      "sha256": "0e1cfba0ecce3c11d8cbbce6a206ef8a7760ccc01649c7eefbc9e14ac478fc3a",
+      "bytes": 18660
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/pricing.py",
+      "sha256": "990ace0ca0b8959eacd4b084675990d6f9efd5ffda2766b2cab0eb960ff98640",
+      "bytes": 9007
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/research/__init__.py",
+      "sha256": "6765ee89dfbb32cba0ba8e38ab25cb0dc241c7938abf46d798f32f56551aa7b2",
+      "bytes": 339
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/research/agents.py",
+      "sha256": "b23be1be76ce1e48712ae4c09c2acca4572374be73438137ae1cd8b9f47dd773",
+      "bytes": 5354
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/research/bandit.json",
+      "sha256": "d81fd0e45f9e6b296c192d0a029b7373609526621365ae6c824817c6c1e355f3",
+      "bytes": 7218
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/research/compare.py",
+      "sha256": "3b0c75b186590d3fda27daabe29e8aa02ad009f8087e94c6b93f9bc1061295a4",
+      "bytes": 8363
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/research/train_bandit.py",
+      "sha256": "e35ee64083ccfc47a4bee1ab038a8059d58687cca0ef1871240f16412646b405",
+      "bytes": 2769
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/research/tz_experiments.py",
+      "sha256": "f0fa0ee1ece4ad2b0c698f7f3afe43eeb1e9feafe41855cfcfec34ca75ec4c68",
+      "bytes": 12036
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/rewards.py",
+      "sha256": "31bc444c2ef455df1f4170d8ce08e1e85b81b0399c28f17699c921cd2032362b",
+      "bytes": 7458
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/settings.py",
+      "sha256": "36659159c6a28f1bdd3541cd2fd581057b484e9d88c51a40790c54f955876f58",
+      "bytes": 9677
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/structure.py",
+      "sha256": "6231d6257771ea93747129b1c11200275475fa93883f1c15f5eb2fa112a9a8be",
+      "bytes": 3452
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/coalitions_badretdinov/value.py",
+      "sha256": "b904fc252b930e5a766841eb3f6d7a1842f77706703381fd3b88ef39c74b9863",
+      "bytes": 4083
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/rodina_agent/__init__.py",
+      "sha256": "908f4b8ef0d70adf55f28bea27704e72dba5e0c615cc651b2f48f45111e01e4e",
+      "bytes": 144
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/rodina_agent/agent.py",
+      "sha256": "d455d2730c18e7297c933a98600d79d6eaa31f462925902cbdeac44d532667b0",
+      "bytes": 6277
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/README.md",
+      "sha256": "846121f89e9e037715508760fa7fdaba034de31fe18b2e48df2ec8c796eb589c",
+      "bytes": 8831
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/__init__.py",
+      "sha256": "c407117743a8103008059afb319bae5712d4f9651cb1350f3fee71bcfa9bda5f",
+      "bytes": 129
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/agent.py",
+      "sha256": "3feb239fb7fabac06ee4a923a83c9fb74d4760149e3b3e266f5ffe8540916c29",
+      "bytes": 17807
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/models/provenance.json",
+      "sha256": "c11e94bbeb3bfc045257fd161b7cdad15da770e8398df17f89a033eafa893080",
+      "bytes": 1768
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/models/q_agent.json",
+      "sha256": "07908928e623e5315483a11940dce8de25f6912b41d777e6444725f841c58f43",
+      "bytes": 85045
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/research/__init__.py",
+      "sha256": "09f23adab8c53e2c836c2d747584f6c8afef44a9a1b99a131d9dbbe2b16549f3",
+      "bytes": 58
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/research/analysis.py",
+      "sha256": "27eb708c13e47d2b7516faffce53b33098b6858571a23be2a7f32b229dc6dca1",
+      "bytes": 24140
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/research/components.py",
+      "sha256": "4c71d068ab31f8da8f59272d4391b2de09208d9f5285996216ec64bed46b7212",
+      "bytes": 3120
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/research/experiment.py",
+      "sha256": "d78e90d691f7ba6786f8930f92faf601ce74d541b34249155949150bf8f53fe6",
+      "bytes": 21628
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/research/references.py",
+      "sha256": "c946925ce988d24defa7da08249af2800275871281932a95e67fd16cd833679f",
+      "bytes": 3698
+    },
+    {
+      "path": "runs/transferred_ppo_latest/team_sources/src/zhmurenko_agent/tests/test_q_agent.py",
+      "sha256": "0a7877b39dc9637589fd707990ef4a0d804c5f38f9fe5f27844a3312fa562bf3",
+      "bytes": 11488
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/index.json",
+      "sha256": "df9e3c0c9a4fd27ac65619ee0f81f27b8e5a25fdab40ebf5b44810fe70ab1edb",
+      "bytes": 1722
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/progress.json",
+      "sha256": "2ba67c1568fe3e2ed6ea969367b29de63dc5e1bcd1b6205275889d271936b55a",
+      "bytes": 178
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000000_update_0000.pt",
+      "sha256": "562dd040380e60a7293b9463b9d5cb79048ecd8a563750425fef6b61f6f89e02",
+      "bytes": 118153
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000001_update_0000.pt",
+      "sha256": "37053778a1bfd49fd693446dc210477fa09578b06cb46347d9115bb9c83d7369",
+      "bytes": 271810
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000002_update_0000.pt",
+      "sha256": "8193377e8f74e4c6803bc39d4d7812d530f8db7996efed21385e82b3a4c025ef",
+      "bytes": 426370
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000003_update_0000.pt",
+      "sha256": "e216dd4e1842a871babe895c4ef0e0e1b320568cdcdaaee32ce8b4a56b252b4c",
+      "bytes": 580482
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000004_update_0000.pt",
+      "sha256": "854913701b68517ae4a24d9853a8f19999b764c79cb87f7a27e898e884918e69",
+      "bytes": 735735
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000005_update_0000.pt",
+      "sha256": "87c0abe1d0d4a5273c1911b41f16c937851f95590491077aa67467a53f3d2901",
+      "bytes": 890999
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000006_update_0000.pt",
+      "sha256": "ff9106f3f28d8f1efde85128cb69a50c3df2a45233bb2551b16974a03b56386b",
+      "bytes": 1046775
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000007_update_0000.pt",
+      "sha256": "295a42cfc97199c71d9ae4984efd86d357593065fba3526d929c4ddae4d779ad",
+      "bytes": 1202295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/arbiter/weights/episode_000008_update_0001.pt",
+      "sha256": "0249fc96ad9ca92e79607cfe419d34dd96282d0c880e4ac1ee43948d1153b802",
+      "bytes": 342598
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/baseline.jsonl.gz",
+      "sha256": "0a50b2e36978602b7660cf4697fb161a17a8ebde5c9b10a3746f765c20b8a43c",
+      "bytes": 27782
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/baseline_sellers/agent_0.json",
+      "sha256": "8323765fa61c5ab28cdec6937a32d854691c519b3ccbed63839ee0b001d0706f",
+      "bytes": 5649
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/baseline_sellers/agent_1.json",
+      "sha256": "c032769244f13f05adfac02b1d2d233c49d4546f1ffe03c9e062fd5df37e83cf",
+      "bytes": 34962
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/baseline_sellers/agent_2.json",
+      "sha256": "5aa10dad26aec8ff046cc3d504be85bc4f001fdb1941da1d9d140588ca96648f",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/baseline_sellers/agent_3.json",
+      "sha256": "e1aa62c672338c98d9edf883a72fc59094c58057cacebc402ccf134ae7d7ea01",
+      "bytes": 94932
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/metrics.json",
+      "sha256": "6926c01dd12075594ece3339143fb0a3d291d7cc7e3e836c595fa4ff4849451c",
+      "bytes": 488
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/regulated.jsonl.gz",
+      "sha256": "0e78d2653d8111851b833d311ebd70113d5050e86f0d8da862854ead49bee2cc",
+      "bytes": 29196
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/regulated_sellers/agent_0.json",
+      "sha256": "1fd48da9acde155079c03761d151931931f5414665dc427479bc2fd49499f57b",
+      "bytes": 5838
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/regulated_sellers/agent_1.json",
+      "sha256": "87c0c2b6ffd52b7e2534df7b7a2da0d2f7516dc057302162506f06a956d2aeeb",
+      "bytes": 35635
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/regulated_sellers/agent_2.json",
+      "sha256": "da80263cb2632b2348d694699a1482fe210d6fea44c9275e15b938380fedd955",
+      "bytes": 280
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00001/regulated_sellers/agent_3.json",
+      "sha256": "412dfbfa14d040da457720a9ca193adb8585c17e7d6fc91c301c65a3b7ad433c",
+      "bytes": 94822
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/baseline.jsonl.gz",
+      "sha256": "6a725829d0856a8443ed202faece6b7013a3e124b5ae217ed20b81c95e7f4bea",
+      "bytes": 28948
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/baseline_sellers/agent_0.json",
+      "sha256": "02bee922e34a83beec058177b984480b543a9f928a7f3414ab70306dcde2a81c",
+      "bytes": 5850
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/baseline_sellers/agent_1.json",
+      "sha256": "ab7260cc31cb21f1398ef6ad5351a72dfb60673626f54cd936ea4e0f4498a95b",
+      "bytes": 35835
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/baseline_sellers/agent_2.json",
+      "sha256": "95f4851fa5d06007070f196598d1b4805e431e3bea10c191945551ecf83757f7",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/baseline_sellers/agent_3.json",
+      "sha256": "ddedeb66cf1c52eb759c7d66bce031b12215b11be0192157993315b9bd6c02ee",
+      "bytes": 95845
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/metrics.json",
+      "sha256": "4e13e38897af252b5cbd7ae74641b682de41bb5aaf88dd3e8edfd5028be003f5",
+      "bytes": 470
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/regulated.jsonl.gz",
+      "sha256": "047ed0a8ffdaaf88eb0d72cc3ca5c7d4c4304872273e0ce7af4e827c11c9ed2e",
+      "bytes": 28809
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/regulated_sellers/agent_0.json",
+      "sha256": "351b06f2296e3ee8484d82f3b4a279cea77ca955b1551a2ddffc3e75c8e4e60c",
+      "bytes": 5997
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/regulated_sellers/agent_1.json",
+      "sha256": "a550d9538a8fc290c6f640eb8e3e05af66c560363fbe5818ebb7d828191f2499",
+      "bytes": 36494
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/regulated_sellers/agent_2.json",
+      "sha256": "37fc35bf6e789cb5ca3d711ba9749306c05cad9693d859d4554e33a0fad54ed2",
+      "bytes": 280
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00002/regulated_sellers/agent_3.json",
+      "sha256": "30973898697c3dcd14fc0dd4e0992b769b4f272db981bfbd217bdd44108c33d6",
+      "bytes": 95676
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/baseline.jsonl.gz",
+      "sha256": "416920ac454cf2b3cafb5289d5b0a7fa6f64f3afc4cff9c7cfce791433ed9ba2",
+      "bytes": 28530
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/baseline_sellers/agent_0.json",
+      "sha256": "c85fa751d0165553ee5779856e071c06474d79ae44f5660f8b0bad462a7288a4",
+      "bytes": 6021
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/baseline_sellers/agent_1.json",
+      "sha256": "985ceaf37ac3824b43b6ea67fe6d3541887ea4781633dc76bcf90a7e3aba13a1",
+      "bytes": 38093
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/baseline_sellers/agent_2.json",
+      "sha256": "a9fb0f5482aed29b8d05e684b4b6971b467d47064a52eb6f7eb3438243a5ee7d",
+      "bytes": 293
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/baseline_sellers/agent_3.json",
+      "sha256": "5531285393a5c58cd91e05fbc41ea0e25606f7cdad010f7ff4eb70eea82fed4a",
+      "bytes": 95847
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/metrics.json",
+      "sha256": "d46c410b934d9996740aa9bd2853326a4c3f0d4405f1f44d31ded92fd8b8d8e8",
+      "bytes": 475
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/regulated.jsonl.gz",
+      "sha256": "ab08a34220942389e4da111e253f1ad32452656f5b2b34df7586a2675f2f83c9",
+      "bytes": 29864
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/regulated_sellers/agent_0.json",
+      "sha256": "84be31b06435e05eeef116dcba6729c6ad5c08e46fac78a8d5bf02c9805c12fc",
+      "bytes": 6209
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/regulated_sellers/agent_1.json",
+      "sha256": "6100d91e1d287196f90866fb6098570ae5203cfd9ac820fddb35e3b443fef72e",
+      "bytes": 38661
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/regulated_sellers/agent_2.json",
+      "sha256": "0d63599c27e7446b611bbc3ddb79c94af0912b45e99247c304b851b85f95b129",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00003/regulated_sellers/agent_3.json",
+      "sha256": "0cd87d72e8a34d1f29d49f9d75450e5fc87c760fb93c2f51c7014c587ca7a181",
+      "bytes": 95708
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/baseline.jsonl.gz",
+      "sha256": "8e5d5d5e0a2d4ea43ae425282e580a05ff2386f612da65cf7960f493947abfd1",
+      "bytes": 28333
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/baseline_sellers/agent_0.json",
+      "sha256": "8cfb7a167ca1dbaee986817eb901d4da37e9953b2e54ea9b771d83a3c6771c3b",
+      "bytes": 6128
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/baseline_sellers/agent_1.json",
+      "sha256": "c21f21276c76b462c8f720e133c92c63b314dc96036f102ce22735cdddab09fc",
+      "bytes": 39440
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/baseline_sellers/agent_2.json",
+      "sha256": "45a93860416be333c1bd8983b72ad1e0b2456b8bfbeff150e97bb7c264a797e5",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/baseline_sellers/agent_3.json",
+      "sha256": "e8ff7591e1bf57f44aa938e2546119bd33e3acd8e7652c9d13be7fdec8eb73c4",
+      "bytes": 95880
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/metrics.json",
+      "sha256": "75cb190a693cd81c10edcb23462579e750df7febec2f46f01ea5eb57a11ef8cb",
+      "bytes": 472
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/regulated.jsonl.gz",
+      "sha256": "7df67a4e2589da78f2522ec66d183a4f4c08979ba79add930b2fb361ff5ec5a6",
+      "bytes": 28894
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/regulated_sellers/agent_0.json",
+      "sha256": "92c8dc0ee1d0ac07984058b4cd8e6ef455b00149189daae7f7f9876a943c67c9",
+      "bytes": 6287
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/regulated_sellers/agent_1.json",
+      "sha256": "02547f2655a7b20fcc4e937da6a37d623fcdb8a3fd75bb4fafa12bed77d8bdd3",
+      "bytes": 39385
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/regulated_sellers/agent_2.json",
+      "sha256": "531e6b1c5c0bd17af3d95baa262ad6e3148e62b27461cfa8bfdf99c70754e45d",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00004/regulated_sellers/agent_3.json",
+      "sha256": "0a36d8750a9a50d7306898cf36c3a6cd2701f8a6effa1e74944f9949e3f75eb4",
+      "bytes": 95746
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/baseline.jsonl.gz",
+      "sha256": "6808870454dca728060815cc194ed5696ff4ff384cb4eeb860b21377462126d9",
+      "bytes": 28599
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/baseline_sellers/agent_0.json",
+      "sha256": "46c31b00557a3fb1ddb7d2a3fee05a64f83c6f3c0317ac3821a7d8bc0a3b0aeb",
+      "bytes": 6240
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/baseline_sellers/agent_1.json",
+      "sha256": "5c34e32d7ef8061c1d0fde31c2967b6bf1d8d4fc37f0407556e9bf5e4880ea17",
+      "bytes": 40378
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/baseline_sellers/agent_2.json",
+      "sha256": "48ffe0ee1981b3cd5f2e3ef0d60e2994112394ad51de94f8b9660a57629a292e",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/baseline_sellers/agent_3.json",
+      "sha256": "ee7e59e14632c0eac50aa4b9093bfb8de000a8866b2d7ad93b3e9e1ea324a989",
+      "bytes": 95911
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/metrics.json",
+      "sha256": "51f05b2d276908d86aac64a5cf129d16e2fac0cbab76e608308fed60086d4452",
+      "bytes": 479
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/regulated.jsonl.gz",
+      "sha256": "27b84c959b40674b2698a3da0beb479f4c11192dcd0658800b6881cd8ae6ccfa",
+      "bytes": 28424
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/regulated_sellers/agent_0.json",
+      "sha256": "3d18891d3d3625c1b865456e152be7f09894fa29a75f56088d5fa1d5c94997a2",
+      "bytes": 6499
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/regulated_sellers/agent_1.json",
+      "sha256": "cb1b2f025a4b5714ed3f1c3e989dd2d4fdc9c39e0166a51b8e10726e05f943e1",
+      "bytes": 39659
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/regulated_sellers/agent_2.json",
+      "sha256": "c118ef7282035cb2896e8bea869da340ed6bc4f27dbee882b2682c99359204a8",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00005/regulated_sellers/agent_3.json",
+      "sha256": "8c7d2192b027e55a6fa52935a0e003825e27a0d460682d8be1ca7e126b89073c",
+      "bytes": 95748
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/baseline.jsonl.gz",
+      "sha256": "afe2e942612dda10d371b1852a990aaeb0ce6a16969c02bb8b2066d8a4dbfeab",
+      "bytes": 30075
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/baseline_sellers/agent_0.json",
+      "sha256": "b4c39816684f5ac6c8787dfa2de56e10914bfdfb83564e08694b61cc6d491612",
+      "bytes": 6439
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/baseline_sellers/agent_1.json",
+      "sha256": "2868e7189ce2690ef00c5f248e7277f9515e14dc9b8851de41caaf29e4e37b2c",
+      "bytes": 40514
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/baseline_sellers/agent_2.json",
+      "sha256": "50455a918c1adec76b72298ff121a7e04526ff47918283aed962d830204bef13",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/baseline_sellers/agent_3.json",
+      "sha256": "d5ec5683c7a1405fc7058ed8f05295b89e605c681637609eb86cd4b32042cab7",
+      "bytes": 95913
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/metrics.json",
+      "sha256": "fe8d9cd2bd4c760787afd728dd52c7b4174a6d432a2ab6faabeb4271a622ebfa",
+      "bytes": 478
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/regulated.jsonl.gz",
+      "sha256": "b883639fa4c69f42d77eee33d74197c31e0c6e3aa421e2ecba8ef8239072a53d",
+      "bytes": 30433
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/regulated_sellers/agent_0.json",
+      "sha256": "1af4e67257c7304d7a25e91419f950efe3325d56c71a20681e213a43ded140ce",
+      "bytes": 6912
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/regulated_sellers/agent_1.json",
+      "sha256": "2bc5c16b63010fdaf8c21ef9f9fd9b70af37fe38a4ca3a237b90ea9169766434",
+      "bytes": 39843
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/regulated_sellers/agent_2.json",
+      "sha256": "9b12f00844b55739cd1448f10da74bbae901aa0a6d9b00df0ca357d3aee4bf1d",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00006/regulated_sellers/agent_3.json",
+      "sha256": "4b1a700391161712d44f32de4a438c393a3130c8a44c140644eb5079ff4c8a9d",
+      "bytes": 95751
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/baseline.jsonl.gz",
+      "sha256": "0d4dc32b5a774bdecc2c823e7067f0b9e89d416de4b0a2b8c65b359060666bbf",
+      "bytes": 29800
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/baseline_sellers/agent_0.json",
+      "sha256": "8280aada45924e89d47fe8627b6dc3ac112fbefc9fc47fc1a6c80f33a57c0b05",
+      "bytes": 6558
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/baseline_sellers/agent_1.json",
+      "sha256": "24e0e455e40622e1c2c630cdaa8913b0bb016afb0c8ce05ab37f3e8c68fc7c26",
+      "bytes": 41449
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/baseline_sellers/agent_2.json",
+      "sha256": "feccca98621c8bd4bb4a3f170e1a5f5d6623a3279ae2610ede89a6f943768324",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/baseline_sellers/agent_3.json",
+      "sha256": "8f6708ef9b99fd59ef8040b03d903085baab641a96bc901167994b899e26b977",
+      "bytes": 95959
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/metrics.json",
+      "sha256": "5b841e4ee24ed2af9fcd2e5c749302d7c38ef52244fe3de0bba42fe597bc7a6e",
+      "bytes": 487
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/regulated.jsonl.gz",
+      "sha256": "771a0659bb5756f2c59a03d1112eafe367c090c84b00dabdbd92948f99078bf9",
+      "bytes": 27733
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/regulated_sellers/agent_0.json",
+      "sha256": "7ae5d0891fe41af1039dbd609699d5b5af945e13ada4dc326ac5f2d738f327b9",
+      "bytes": 6951
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/regulated_sellers/agent_1.json",
+      "sha256": "c695dd018494a931eef7e3fdf39dc21ba24ddd55de0a79d004673519e35273d6",
+      "bytes": 40220
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/regulated_sellers/agent_2.json",
+      "sha256": "bd7440bdef0c76571f68b3fbb9844ba7d941437f17fab0fc02bbb159c4b967b2",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00007/regulated_sellers/agent_3.json",
+      "sha256": "a701b50ac3a274913021360ead1e0902ec053456eebffd12edb298227c8f95a9",
+      "bytes": 95781
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/baseline.jsonl.gz",
+      "sha256": "45118c2f24fe1e21fa3aea316e5cb15d99217b7a7b9bb3f39222eb8c8cd0c93b",
+      "bytes": 27852
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/baseline_sellers/agent_0.json",
+      "sha256": "c325fea163222e20cd031b201b09d55a64942bd5bcbd73e57fa5684c7b45906a",
+      "bytes": 6623
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/baseline_sellers/agent_1.json",
+      "sha256": "dfb4cc93e99c97b9216e19b41702cadc82958059412b9ac6adc81142328a094c",
+      "bytes": 41581
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/baseline_sellers/agent_2.json",
+      "sha256": "bf13b4ff2dc78bed4ead7d6d0d99f15330e8d0022a995629718dd4246bc7b468",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/baseline_sellers/agent_3.json",
+      "sha256": "520ca864a250680679f005959790bf852b218bd28f7c313742b1a6da99e9ab5f",
+      "bytes": 95956
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/metrics.json",
+      "sha256": "89305963e9aa8b151d2020d4fc6439e52988d59e2f0a54afb34ac53273b32039",
+      "bytes": 474
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/regulated.jsonl.gz",
+      "sha256": "39db402177cd7ff048622f58bf013ef122047873e0938845d1b93d35e481a041",
+      "bytes": 27736
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/regulated_sellers/agent_0.json",
+      "sha256": "4169851030493d3abf02263f9aeec816a96fdf9f82539ff1df6b9f97f4e30c56",
+      "bytes": 6993
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/regulated_sellers/agent_1.json",
+      "sha256": "4881d8c56e8aa9f5c0884895fb216974fef46bf959314b7eba7641c08078aafa",
+      "bytes": 40995
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/regulated_sellers/agent_2.json",
+      "sha256": "17ebb730dcdfbc38eadabf307a4c58c1a585771dd8d138ccf38fe5dd887905b2",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/game_00008/regulated_sellers/agent_3.json",
+      "sha256": "7eb6ab5246568b609bdfdbb61200ee63667d671682465579c8d0f0dfcb2317ea",
+      "bytes": 95782
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_0/progress.json",
+      "sha256": "90db3a2c480ae0e6192f1831077ae4521354cfea12bf32266d642d1cd9f90b9b",
+      "bytes": 206
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/index.json",
+      "sha256": "e12dfc5478ff912512b870ecd74a29dc04a2a4fa39de24c4cee48fe0bff3214d",
+      "bytes": 1722
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/progress.json",
+      "sha256": "8c3a6467a27b67ec1596ebee8c32c0ca77e784213a15e61d153feababdad47df",
+      "bytes": 178
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000000_update_0000.pt",
+      "sha256": "c3d07e5b4d3a9ac35895f73710a69e3559219b13bcb558b0a249b53bb804e323",
+      "bytes": 118153
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000001_update_0000.pt",
+      "sha256": "c35bba577f457c843471107643479ec59695c820d80fa742626ffa8750f62ab1",
+      "bytes": 272770
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000002_update_0000.pt",
+      "sha256": "6e7d3ed47c5a5ff18a4a010e619bd47f7d941cb2ffa5d73cec54ee64b9daf816",
+      "bytes": 427906
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000003_update_0000.pt",
+      "sha256": "63653a0cadf8e41e41ed52f53d1f5eeed98069ac6becab0cffc22a2522899d65",
+      "bytes": 582274
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000004_update_0000.pt",
+      "sha256": "9a49137292470055cafd0cecd8ed6759b954dabdb065200f00a1ff706c6372bf",
+      "bytes": 737719
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000005_update_0000.pt",
+      "sha256": "f33eeb1d39bbcae9ff9d49a0122a6495de015352abda981a42071ad1c5dae083",
+      "bytes": 892727
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000006_update_0000.pt",
+      "sha256": "f37b6db818acc7dc9e7a588079906fc4f71b761ced5c3f876559febdead559bb",
+      "bytes": 1047223
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000007_update_0000.pt",
+      "sha256": "42e4debff6d2e29a31d14002c0280dd86bcf2a365f07b2316fff9502902cdefa",
+      "bytes": 1201463
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/arbiter/weights/episode_000008_update_0001.pt",
+      "sha256": "c03beb57794b785f4812f25c2aaf0385bef77717079e8037439a46492e791eca",
+      "bytes": 342598
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/baseline.jsonl.gz",
+      "sha256": "87b053553100ad435d5fc27d98bf2f6441e4a48d5ec6f657989469908f364b89",
+      "bytes": 29619
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/baseline_sellers/agent_0.json",
+      "sha256": "feb197314abca0d57be181cfc5d56bae04ff078f6a1b91786b0f95772878d96f",
+      "bytes": 5729
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/baseline_sellers/agent_1.json",
+      "sha256": "4c31f5e42290db29f959041ce46bf24d90660757f31c966e227023325c7218ac",
+      "bytes": 31757
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/baseline_sellers/agent_2.json",
+      "sha256": "e6412afd5d25e0bb92ef5be52fc6eea35270ba54d53f8d14724692eb0c2bce11",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/baseline_sellers/agent_3.json",
+      "sha256": "17d331690d0929f9d1ad07d7c3d62e560e6d2cc571965f02bcff55478ccfd784",
+      "bytes": 94365
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/metrics.json",
+      "sha256": "a25e9925270a3f20de4dca1d984c2044f6fd33dc861c5495deb7500fa75bfb64",
+      "bytes": 477
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/regulated.jsonl.gz",
+      "sha256": "63768afae953ae47c21eb288a0f4834475919c465a5847ed25281abe3b27560b",
+      "bytes": 29243
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/regulated_sellers/agent_0.json",
+      "sha256": "e700f92443c9060e41d6f953f2dfe66b511c2c506be8f6f2726fbf956b2469bb",
+      "bytes": 6006
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/regulated_sellers/agent_1.json",
+      "sha256": "a8269e3f04a0fae8c2d52195f11648f4e892019b97381606b9ecd3fa9bb42126",
+      "bytes": 31754
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/regulated_sellers/agent_2.json",
+      "sha256": "cb29e7064317fe98a7784dd0a680c1345f773219340e570cc21dbb25e2325984",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00001/regulated_sellers/agent_3.json",
+      "sha256": "a910145f76998e78f58600ce1d6fa16f2759bf7128e8c62773401813f6729c62",
+      "bytes": 94362
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/baseline.jsonl.gz",
+      "sha256": "4cc548cf454ce07157190d908aa86149f8c306e95e8c22dcbe44b873c535fb32",
+      "bytes": 28904
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/baseline_sellers/agent_0.json",
+      "sha256": "7066b8c5ddba1aa0af5f5ffc481970d103ad817c1fffe09315967faa0cedc00a",
+      "bytes": 5901
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/baseline_sellers/agent_1.json",
+      "sha256": "b65d747a6809e548daa6d737b97bfaeaafb0652847c75cf1aa184d0b8848db39",
+      "bytes": 32476
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/baseline_sellers/agent_2.json",
+      "sha256": "11d3f0064a92e12ae75e6e916a3b3cfe2a2728791adc2a0186f714e87ca7c7b8",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/baseline_sellers/agent_3.json",
+      "sha256": "eca97b85c2c0c736549f1b6e79e6e2d0b0387cd7ac4173bf672810d6112bc27c",
+      "bytes": 95271
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/metrics.json",
+      "sha256": "059576df8c3092c3cc6f140f85ef39b9773b93ee45c5baf8624d674a58678c77",
+      "bytes": 475
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/regulated.jsonl.gz",
+      "sha256": "8e5c05af8917da23f6a2f15b9f68c9c1de7173403cd33690ff741b088e8a0423",
+      "bytes": 28241
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/regulated_sellers/agent_0.json",
+      "sha256": "a8a1af5e7df6c4129e39a35caf044fd951d2a7f8cdc8575f4bb82333d083fdb5",
+      "bytes": 6156
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/regulated_sellers/agent_1.json",
+      "sha256": "053192e89486ba93c4521a4ec1258c30b7375cfbcb7b88ad009e0453d04c8ebc",
+      "bytes": 32470
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/regulated_sellers/agent_2.json",
+      "sha256": "f3138ecfed62e4f3173f8849feb5a405cf7dd5f51392737251766b9523d72fc8",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00002/regulated_sellers/agent_3.json",
+      "sha256": "e0a69a1dd172c197c53821245af8a763e21cbef2dc192ab77c27550ab285976f",
+      "bytes": 95728
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/baseline.jsonl.gz",
+      "sha256": "a7abe63b77ab26827b69c1f53436f513c37bb3289a5447db94aab53bbdea18ba",
+      "bytes": 28693
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/baseline_sellers/agent_0.json",
+      "sha256": "d182b26defe744586a1a83e957416b3305fbd71ebd41468ce806e559d0f8169a",
+      "bytes": 6150
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/baseline_sellers/agent_1.json",
+      "sha256": "2a16366ceba83458e3aa21f2806144a512a75d4c047f24ebeed8c39f6cec9ee5",
+      "bytes": 32632
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/baseline_sellers/agent_2.json",
+      "sha256": "cbe7cadfa13afe81eaff2abdbff4c79af9a7fb6efb04b9d82a02cd50b34ac79e",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/baseline_sellers/agent_3.json",
+      "sha256": "b3d58b2933b57b6100c12f062b5b1faf7113f1d7cb0b2293c6605826e764c135",
+      "bytes": 95338
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/metrics.json",
+      "sha256": "c5e2c29c0c868caa6adc7aba928a7e73d86d0c9d41a394d08c36f5073edd202b",
+      "bytes": 476
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/regulated.jsonl.gz",
+      "sha256": "30a7d346184d47d507ebcb0d9653a1bf2529776946426fc0605187b75dcb3ed2",
+      "bytes": 28416
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/regulated_sellers/agent_0.json",
+      "sha256": "2ab1db91d0761141d228c8188232ee348d5433dfba978ac9250d00606b86e2a1",
+      "bytes": 6379
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/regulated_sellers/agent_1.json",
+      "sha256": "7547ff2c956aff32845dc4eabc94a3900b0ddb9fabc09f792ab55867695a561d",
+      "bytes": 32635
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/regulated_sellers/agent_2.json",
+      "sha256": "25f44c372b6c7cf3bdba04ddfd6cb5c7aebc8cd3e21524c6680e02441a06f75e",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00003/regulated_sellers/agent_3.json",
+      "sha256": "d88fad6806c25a688da8218125c7d1388acf7be4aa598caf9e4ee7a073d6e3f9",
+      "bytes": 95789
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/baseline.jsonl.gz",
+      "sha256": "c53f85a2356a2fb900c3f6e87c9c4aac43f45c23c69ca81213a664f538a91ed1",
+      "bytes": 28991
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/baseline_sellers/agent_0.json",
+      "sha256": "1b6652cae33bf4394f456c1b89190dea4c482473272a1fcd8588f7b5a99fd160",
+      "bytes": 6230
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/baseline_sellers/agent_1.json",
+      "sha256": "fcdac0bd0420663d64571c03f9712637c833fb3d876fc620ca15b10aaa022a6a",
+      "bytes": 36042
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/baseline_sellers/agent_2.json",
+      "sha256": "59c69152484959f7e22703c45facab5c30762c8b7fdfe19a91c9f63f43bdd9a5",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/baseline_sellers/agent_3.json",
+      "sha256": "dcae66b389f7b07835f76940ba77eced3480c27d22dbe625cc28772a4fd1074e",
+      "bytes": 95338
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/metrics.json",
+      "sha256": "3e6c7cae924a0563c4f43f385c5a319eb62e922cb632a8bd1400298120e2eaf9",
+      "bytes": 473
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/regulated.jsonl.gz",
+      "sha256": "eb2cc92dad8002c9fb569a6bc6bd81db3d1e195726213355c8bd9fe6fee6494c",
+      "bytes": 30010
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/regulated_sellers/agent_0.json",
+      "sha256": "22ae586cf86c8ec7a010ee5535ae7453b97360fcc5a4fead4a89d9e35123a3aa",
+      "bytes": 6374
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/regulated_sellers/agent_1.json",
+      "sha256": "85e1e494d7a3311333b86a248607c43f8b374a5f796a9f91cea013cc6e727401",
+      "bytes": 35465
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/regulated_sellers/agent_2.json",
+      "sha256": "84db95cf321f1464d142083e59e59d8cdd4ca49771875ca1f92fc8a8f2996389",
+      "bytes": 292
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00004/regulated_sellers/agent_3.json",
+      "sha256": "13316342684442fb71cddaca9e4676a37933eeaf26e30db71bea5b5dc8e24c7c",
+      "bytes": 95785
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/baseline.jsonl.gz",
+      "sha256": "c687d6cc35b13740c8b9787e64dea1caf4712946d2393898ffab27099d48f2cc",
+      "bytes": 28239
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/baseline_sellers/agent_0.json",
+      "sha256": "3c9ba79e52bf0e4bacd998cf0fec158eade0a50a8b3c866aa745c1f6c7fc4ffe",
+      "bytes": 6328
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/baseline_sellers/agent_1.json",
+      "sha256": "bbc4478caaef986cb53a6edf6cd4e0cdddda1914680833c95a960904f0226e59",
+      "bytes": 36164
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/baseline_sellers/agent_2.json",
+      "sha256": "f709d9a2ba532b4f3ecd32f5a748d5b91ef08b4bbf36f9ea8d81c8ba13baf565",
+      "bytes": 280
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/baseline_sellers/agent_3.json",
+      "sha256": "375851b505bfc4557abce4026d0c064ffc50832900e837b705135cbb8cefb7cf",
+      "bytes": 95341
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/metrics.json",
+      "sha256": "c638ce3d00e6cbb3c4046f3afed2667008863e6a0f2cb8f90563dc4a7cd6ee9b",
+      "bytes": 475
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/regulated.jsonl.gz",
+      "sha256": "ff81bb4f325422dc771a71ffe54bb50ba3ebc128dadc9b5cf06d557af422d2e5",
+      "bytes": 28299
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/regulated_sellers/agent_0.json",
+      "sha256": "071ee38abb65059266dd9d20076a0d7f621e0c7df80d302d18c3fc60c87fce02",
+      "bytes": 6488
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/regulated_sellers/agent_1.json",
+      "sha256": "6ef85c920a0cce9aea4a93ea9442e3d5c9d24b21cf6f97889f734167cd49a5eb",
+      "bytes": 35564
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/regulated_sellers/agent_2.json",
+      "sha256": "0d8250563ac3d04e4c107917ee1bb6fd0abf1527530015a18f2b7d8f9fe05a1e",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00005/regulated_sellers/agent_3.json",
+      "sha256": "2af8ea4de948c48004ce64fa14fdaf0b3e4ada134f2149ea0b5d4585bb5b1529",
+      "bytes": 95794
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/baseline.jsonl.gz",
+      "sha256": "5626d893d78709598c08f41297c47ee54d9cf7fb985ff5af13406856c0efcf4a",
+      "bytes": 28898
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/baseline_sellers/agent_0.json",
+      "sha256": "0240af2db2567f80da58fd0ca317b4b1c0d0298b4ef05fc456376cc8518ef66a",
+      "bytes": 6366
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/baseline_sellers/agent_1.json",
+      "sha256": "c99ba78f13704ed140916dc9e9cabac5826d03eac0e9c0f76a8265a770e8a933",
+      "bytes": 36277
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/baseline_sellers/agent_2.json",
+      "sha256": "04d4c4e80ecce766b6d99b778cb55c00bf38fa22ff8209072191f29261a4169c",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/baseline_sellers/agent_3.json",
+      "sha256": "8abf500fd122994b439992c790ffd9e3d5c12f73aa1a4502fbfba4acd4e238ed",
+      "bytes": 95335
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/metrics.json",
+      "sha256": "5eadc31feb6ccdabe58d96746279204d83896c9882725a8a9e7ad58ab679472b",
+      "bytes": 474
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/regulated.jsonl.gz",
+      "sha256": "083f7ef0fb07ffe2f696799b278737c928727dc761a66a600d56127ae6cdfe5e",
+      "bytes": 29005
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/regulated_sellers/agent_0.json",
+      "sha256": "233c3031039718c2187f939f4a1ac7b9973db9cd9674257cdcef06e0c91ba185",
+      "bytes": 6554
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/regulated_sellers/agent_1.json",
+      "sha256": "b0e8d056034da634a7a16f0b1e9ff6c9b5ca58968032caad66b946dc5a1d4557",
+      "bytes": 35695
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/regulated_sellers/agent_2.json",
+      "sha256": "8db309de555a089ce070d8cbb6de52cd473d8466d8ef38320d0f845f48c6cdf4",
+      "bytes": 293
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00006/regulated_sellers/agent_3.json",
+      "sha256": "d2d5f329eb6113872ede809365c4bb98ce9921e63ab0d8759ef1e65c2b68bb91",
+      "bytes": 95790
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/baseline.jsonl.gz",
+      "sha256": "89fd153ba6ead53bf7f0f7aa0057d9ca43cb629126e60c7ee28c4048f83223e6",
+      "bytes": 29912
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/baseline_sellers/agent_0.json",
+      "sha256": "13ffa1e0d0376274b52cbd3ac31e9f3f441795dc8ded233ae416743b7793662c",
+      "bytes": 6364
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/baseline_sellers/agent_1.json",
+      "sha256": "f966c2965c1f8ab1cfdddaa60a31a2267087fcabd2381ec93e1f2a3fffa93807",
+      "bytes": 36387
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/baseline_sellers/agent_2.json",
+      "sha256": "4e633d2bd40dd08432c1b9141a2d342bd971995a1f1dfa0b1f252321f19e84b5",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/baseline_sellers/agent_3.json",
+      "sha256": "f3fe09ec956c5c3713b1e42227cce77e402e13a96951411b3db8de20426c60a8",
+      "bytes": 95890
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/metrics.json",
+      "sha256": "f062d1559f078d8319f395ee348cb3be065288b6d9a39c29156154a4c42144bd",
+      "bytes": 474
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/regulated.jsonl.gz",
+      "sha256": "9bc503c9e6306ed4f585b4beca3919d236cd2bfae3c2f77da25198ae0f110d52",
+      "bytes": 29548
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/regulated_sellers/agent_0.json",
+      "sha256": "e15ed42ecdf572ce3cebeb658d276331652d1e8239acc6436aa14920f4ad821b",
+      "bytes": 6560
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/regulated_sellers/agent_1.json",
+      "sha256": "8aceaae1e67f33cdeda023636d9b8afae07e603282e2dde0aa0075e17144da35",
+      "bytes": 35777
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/regulated_sellers/agent_2.json",
+      "sha256": "b35284587766291e4c93a0d97134fdfba58c834a1afafbc8d19f0b25ee9caa62",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00007/regulated_sellers/agent_3.json",
+      "sha256": "b06c8ec1ded1c5db0a63b1cc5b40b1503ddb70a2feb509da0e9e5ab97a0948e1",
+      "bytes": 96638
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/baseline.jsonl.gz",
+      "sha256": "8cde188eef6d1daab83334f14412726a47f0d97f2c62995f96434be7d26dd6b0",
+      "bytes": 27765
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/baseline_sellers/agent_0.json",
+      "sha256": "2c4c1a0b1342c44f932035fb604efc64d54054271c2bf19c543f67d94e983edf",
+      "bytes": 6678
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/baseline_sellers/agent_1.json",
+      "sha256": "24c43665d4a0bd280f6660cc9caa1eed85e2a74d21be43c06ffdee8994cc82ae",
+      "bytes": 40019
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/baseline_sellers/agent_2.json",
+      "sha256": "d54a01ac09f61af658bcec8b734270fb4068c7fb26bc144b456597bdf44e1147",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/baseline_sellers/agent_3.json",
+      "sha256": "5cdc600fa8953cd80f6a0edbac80c121f33b7e2ea8a5a507bb00081d745cb8eb",
+      "bytes": 95902
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/metrics.json",
+      "sha256": "ccb9643feb83833266a83fce295f0766d6bc11fa7156fc8b49ce96c7a9fbf78b",
+      "bytes": 479
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/regulated.jsonl.gz",
+      "sha256": "d727240a3f52201c422d0f6b42f784e6ea7ddce593c38f0b4d702720b20f75b1",
+      "bytes": 28162
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/regulated_sellers/agent_0.json",
+      "sha256": "dd5c1a134ad7c338be339d141f7d2368d1b7942fa0b924cc5d9f385635683bd6",
+      "bytes": 6795
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/regulated_sellers/agent_1.json",
+      "sha256": "7df42501f39e69fd9a0ecbe0b060540aa799aae5ca3759c9b09cb2439005d1c5",
+      "bytes": 40052
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/regulated_sellers/agent_2.json",
+      "sha256": "d9700e82512b6f9ccbf78b1252d96241757e5c86bc64821ec445185a978f9702",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/game_00008/regulated_sellers/agent_3.json",
+      "sha256": "fab4730ce8323acf6c6883db970d716bca3dd427a17712491b6bf9e515be6309",
+      "bytes": 96637
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_1/progress.json",
+      "sha256": "90db3a2c480ae0e6192f1831077ae4521354cfea12bf32266d642d1cd9f90b9b",
+      "bytes": 206
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/index.json",
+      "sha256": "8b76c50111147534b6a5691e85e22caf1405b966112bf1d8982b2ed54eafe299",
+      "bytes": 1722
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/progress.json",
+      "sha256": "5528168ced243b62b689c1ef5cee1fa7f98f127ee6edf5e1c949ac59b895bed8",
+      "bytes": 178
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000000_update_0000.pt",
+      "sha256": "915f903edcee0ce6ab34e4ca2c75599942ec182c53cfc43e523bf6003e77ecfe",
+      "bytes": 118153
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000001_update_0000.pt",
+      "sha256": "56a543c33751d1c1f51319a909d8867744459867c748d1842b85010cbc0548aa",
+      "bytes": 272450
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000002_update_0000.pt",
+      "sha256": "1079a8e37f6547d1f64b15a94e7bf9c01ff3a2e79105c01263d67614e5aded12",
+      "bytes": 426754
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000003_update_0000.pt",
+      "sha256": "f674951138d9a95f9b0974cb74f70035855d428365aa864a002b75519f9e1b02",
+      "bytes": 581890
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000004_update_0000.pt",
+      "sha256": "17888f387ef15b5b5ed7898c1449169d63c6f973e88eb8a68076274b893a21d6",
+      "bytes": 737399
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000005_update_0000.pt",
+      "sha256": "c1bcdc3c028ae8edaae93eef4520f72d322efe8ba0e81437c91af4e23d85b7e2",
+      "bytes": 892919
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000006_update_0000.pt",
+      "sha256": "c47d358066301d9ff72e6b7d4eadfb91cec8f1d8a2e3a2e1b7b022be20227241",
+      "bytes": 1048695
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000007_update_0000.pt",
+      "sha256": "ca06733918766901827148e84b08bba64731689e2b9905da8644f57aa4e81013",
+      "bytes": 1204215
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/arbiter/weights/episode_000008_update_0001.pt",
+      "sha256": "5db0fe941cc51b883fe75c5eeda9834805216fd6ef30d0b1a7d4b2a5f66a71e8",
+      "bytes": 342598
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/baseline.jsonl.gz",
+      "sha256": "f7bd7591da53caaaeba7eab2cd92de178b6089719a7b55c32a5e8b5e9d5e123b",
+      "bytes": 28660
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/baseline_sellers/agent_0.json",
+      "sha256": "6a54aa8575e21cc07508835dc744ba777f16cbd06864cb528ffeb5b2ac87ff6e",
+      "bytes": 5444
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/baseline_sellers/agent_1.json",
+      "sha256": "b2115f5383429ab9ec6962a4fa4eb2a43361d82cbd13f31ef46443d0912d1645",
+      "bytes": 30962
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/baseline_sellers/agent_2.json",
+      "sha256": "4737f57f2a1f600578d18515fd194b2a84e0177fb0bdc591ef5cfcbff5151bbe",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/baseline_sellers/agent_3.json",
+      "sha256": "f2a58959bac23dea73b605885026c11fcba2da24242fad832046a999ec0496dc",
+      "bytes": 94358
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/metrics.json",
+      "sha256": "ae883a95b22e8a19872d5a794b67bc5656249ece5e0a176e0cb3e04c68eadc3e",
+      "bytes": 473
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/regulated.jsonl.gz",
+      "sha256": "c0e4120887c7f027bff0d42197202cdcb71ef21264063779002f3d64adc0cb8c",
+      "bytes": 28661
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/regulated_sellers/agent_0.json",
+      "sha256": "6a54aa8575e21cc07508835dc744ba777f16cbd06864cb528ffeb5b2ac87ff6e",
+      "bytes": 5444
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/regulated_sellers/agent_1.json",
+      "sha256": "b2115f5383429ab9ec6962a4fa4eb2a43361d82cbd13f31ef46443d0912d1645",
+      "bytes": 30962
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/regulated_sellers/agent_2.json",
+      "sha256": "4737f57f2a1f600578d18515fd194b2a84e0177fb0bdc591ef5cfcbff5151bbe",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00001/regulated_sellers/agent_3.json",
+      "sha256": "f2a58959bac23dea73b605885026c11fcba2da24242fad832046a999ec0496dc",
+      "bytes": 94358
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/baseline.jsonl.gz",
+      "sha256": "49fd31f0cbf30d62fe19e55eb35ac5bd8e4e572cb75fdd60f893fb35f255abc5",
+      "bytes": 28539
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/baseline_sellers/agent_0.json",
+      "sha256": "e2f523b0882c1bd2328ad5d14779e1ba17cd628320d4dd1a69e40a5111169506",
+      "bytes": 5943
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/baseline_sellers/agent_1.json",
+      "sha256": "8e177d7fcb59e1be0c4c81c7d320e62d85da75d106ec954c7e907291ffe23131",
+      "bytes": 31116
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/baseline_sellers/agent_2.json",
+      "sha256": "70afebb4459fd0ec777b3d1dc69692d5b5f49530b9f128b9786496e17b0e3df1",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/baseline_sellers/agent_3.json",
+      "sha256": "a90c94b8f87c5d28528a466d6341323551b77ece8935a9f008548f7b1d238ad3",
+      "bytes": 94395
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/metrics.json",
+      "sha256": "eaf79d6251999a57a99f456a3835b2cc7f96d47477a05532ae3aad7938117753",
+      "bytes": 473
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/regulated.jsonl.gz",
+      "sha256": "ccbd409d9ddeb6c9dd0c6b5c26eb3cbf01bee6254afbf1a1c5c5e0650e28cec6",
+      "bytes": 28540
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/regulated_sellers/agent_0.json",
+      "sha256": "e2f523b0882c1bd2328ad5d14779e1ba17cd628320d4dd1a69e40a5111169506",
+      "bytes": 5943
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/regulated_sellers/agent_1.json",
+      "sha256": "8e177d7fcb59e1be0c4c81c7d320e62d85da75d106ec954c7e907291ffe23131",
+      "bytes": 31116
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/regulated_sellers/agent_2.json",
+      "sha256": "70afebb4459fd0ec777b3d1dc69692d5b5f49530b9f128b9786496e17b0e3df1",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00002/regulated_sellers/agent_3.json",
+      "sha256": "a90c94b8f87c5d28528a466d6341323551b77ece8935a9f008548f7b1d238ad3",
+      "bytes": 94395
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/baseline.jsonl.gz",
+      "sha256": "5876e58929446268b4ebae0b4c10b3e6c00d9cb7699fed6b309f9e5c0220a23b",
+      "bytes": 29741
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/baseline_sellers/agent_0.json",
+      "sha256": "24f3340b04d58556f1adc6f33cc34349dd909c52ab8ffafd37e1f9e2c25fa80f",
+      "bytes": 6061
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/baseline_sellers/agent_1.json",
+      "sha256": "5a81bdd9eb2fbb923c90d796301a3025dd3da3c81274372c9c7de5acd00c24bc",
+      "bytes": 32550
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/baseline_sellers/agent_2.json",
+      "sha256": "308b0762fdb34b296db72e9c7ffde3a8a2c27adc2cf521f7eb006d889a3f6a68",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/baseline_sellers/agent_3.json",
+      "sha256": "a2afa6395a492a85db798333aca5ff0ee243686971838a2d016afb73e1f2d841",
+      "bytes": 94395
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/metrics.json",
+      "sha256": "6fa3f2080c83d2c45da37d92080bc54c42b2ac092c5b3b0992b49300cc501d07",
+      "bytes": 476
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/regulated.jsonl.gz",
+      "sha256": "5bc899f82266964fc37cffb7ff9a49bd86005cc1468d60d6f1ac49cfb7cf6b8f",
+      "bytes": 29296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/regulated_sellers/agent_0.json",
+      "sha256": "277a932453fa7d10f01c03a32544a2311d957427bf36eefc2b5011343010cd3d",
+      "bytes": 6019
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/regulated_sellers/agent_1.json",
+      "sha256": "515dbf7da5ef57363cdede52fd359885342787168147b69e0094183aa37bfe9f",
+      "bytes": 31915
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/regulated_sellers/agent_2.json",
+      "sha256": "800e849b3ea3789105edf5eb0f58029a71ebabf1f6a540b166495ed03b334667",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00003/regulated_sellers/agent_3.json",
+      "sha256": "1be388460db09ab539f5b8b5916b972fcbf13cb66a8b7d18d64d2a094e7057cf",
+      "bytes": 94393
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/baseline.jsonl.gz",
+      "sha256": "dc7cb3bcf4439aac87159011533d41882720c1da0bf381633662e60f076bdbbe",
+      "bytes": 28636
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/baseline_sellers/agent_0.json",
+      "sha256": "d91a1c50f806c2a012e2bd6507bf6cc0770320809bbf38db435f0c6678ec7a5a",
+      "bytes": 6100
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/baseline_sellers/agent_1.json",
+      "sha256": "4676f18e336e3a613779f626df629447694dcb298803e6451d8c68eeb4ed688f",
+      "bytes": 33264
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/baseline_sellers/agent_2.json",
+      "sha256": "a1dcf8296849a7e922d9eee0e526dfa08486fb3a5f6e58850f81aec0d9f5a30e",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/baseline_sellers/agent_3.json",
+      "sha256": "ba503b580934755122bc6a41cef508e5448e95de05db8071250c87db7c19c47d",
+      "bytes": 94395
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/metrics.json",
+      "sha256": "5d232d84283f3edfecdb59eb1d4e4273a976daf48490e017c76b299cf72e4a80",
+      "bytes": 470
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/regulated.jsonl.gz",
+      "sha256": "3f9a1f1610be353fef16b17d8d580fb4db8a86365b06c379066fb776659669b7",
+      "bytes": 28564
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/regulated_sellers/agent_0.json",
+      "sha256": "fff5dde16502c75df7e7d799925b9a45b665108a79d90a5f93261c9a0e1ffcc3",
+      "bytes": 6058
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/regulated_sellers/agent_1.json",
+      "sha256": "3c73966c37c5e2d95d7c5e8874f8fbfa13fb60342370b88f963617b60a08a48a",
+      "bytes": 32628
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/regulated_sellers/agent_2.json",
+      "sha256": "b5ef12dd369529f4c2afb3c9f6f0b3618e12f116bd05a81f19fea53b0568f809",
+      "bytes": 293
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00004/regulated_sellers/agent_3.json",
+      "sha256": "6ca270db72c936558f652e4454d85d790cf864ac4c66f91f33210407d3227ae4",
+      "bytes": 94393
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/baseline.jsonl.gz",
+      "sha256": "508c88d5bdcb41e200d501c26c42f739754d488a42ad2ded05a9b842f762b501",
+      "bytes": 28191
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/baseline_sellers/agent_0.json",
+      "sha256": "a6cd6135a0a9a760a77819a81035778e32077ad46fc89794294b88ed9d0b586d",
+      "bytes": 6173
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/baseline_sellers/agent_1.json",
+      "sha256": "276834e5e2d70f49546dda0a48404a7572575fa703c38e390eccb7d5c239f729",
+      "bytes": 33690
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/baseline_sellers/agent_2.json",
+      "sha256": "0d9fda5e8437d3fc2aab14b2f067c17e60d82d4d57f515f31621c3e8b51a0f67",
+      "bytes": 296
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/baseline_sellers/agent_3.json",
+      "sha256": "7746aa23bb0ab9b699429c3ac3144040ffb84a6007d914dd4afcb886287fd363",
+      "bytes": 94411
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/metrics.json",
+      "sha256": "cae73ebb72280ae7425b930b13da0cbf48fe0b4a5324a1319c23c7d7dc23178d",
+      "bytes": 480
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/regulated.jsonl.gz",
+      "sha256": "d127793dac52e510116652444a0e7be0dce33ec0000db772dd8d161e165c51a7",
+      "bytes": 28387
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/regulated_sellers/agent_0.json",
+      "sha256": "b330b7a00c9bacd01a440de95924a0757255ce796a0220d27386bd793d176dc3",
+      "bytes": 6128
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/regulated_sellers/agent_1.json",
+      "sha256": "0fcea30fc7feef3036aa10cf3eb35baa9cbd7b966741b9548ae3b9db4160ef3b",
+      "bytes": 32959
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/regulated_sellers/agent_2.json",
+      "sha256": "c8aa679529c5f82bebdf59f6f158f1263ad601b3594e61a7ebdfe3d1a89581bb",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00005/regulated_sellers/agent_3.json",
+      "sha256": "e6a954a669f1d04fee4f4d6e162b4333b3294e5470a99d087973daf347948404",
+      "bytes": 94401
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/baseline.jsonl.gz",
+      "sha256": "a300ebb7195f4e462e6b483f7dbab92a42efe71ca8e1b3c35ab638e480749bc9",
+      "bytes": 30126
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/baseline_sellers/agent_0.json",
+      "sha256": "92f795223d611d19ddbc924927e0ebe5b7ddc216521ac83371065c97645a5006",
+      "bytes": 6276
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/baseline_sellers/agent_1.json",
+      "sha256": "fd1ba8091cd04bf7124098e51bd7fc06d5caf7d83910639c5e8fab3ca3e21189",
+      "bytes": 33823
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/baseline_sellers/agent_2.json",
+      "sha256": "dc60805d405209e6acc416a660b1b38f5b8163b473eb55658b26fc4e4b258892",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/baseline_sellers/agent_3.json",
+      "sha256": "44b326a6ca7dd8f339a062301068bd46366828156d465473d0d255e51b45f0f7",
+      "bytes": 94433
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/metrics.json",
+      "sha256": "e0ffdad9a4befaa489310500ba93ce132a20e1305e854e47e94539efb30840ee",
+      "bytes": 474
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/regulated.jsonl.gz",
+      "sha256": "2bd3022f23c106a9a49f947944889691fa7704542d9447fab51ce9f71b21520b",
+      "bytes": 29378
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/regulated_sellers/agent_0.json",
+      "sha256": "4df77b3f0656da51751298fbc552abd02b093e5c177217226208b3ba511f1363",
+      "bytes": 6130
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/regulated_sellers/agent_1.json",
+      "sha256": "f81fd0d16c028728c65e75306a017cd4db657d5bde8cb9b0a09e42df0b03cba9",
+      "bytes": 33079
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/regulated_sellers/agent_2.json",
+      "sha256": "d530fb51285c8e524e8026fee1a2f4f73a2c3f951b94384a5640225cdd216ac5",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00006/regulated_sellers/agent_3.json",
+      "sha256": "8fe12c716b364f1348b55a984683a577571a576a0ed1beb383b3dc8c5c72b725",
+      "bytes": 94415
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/baseline.jsonl.gz",
+      "sha256": "37e0ff5b8cd0c6a81e05ca161f64c309c6f80d0df11b520adf8c091ec5fb56c0",
+      "bytes": 29232
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/baseline_sellers/agent_0.json",
+      "sha256": "69084fe028f349d52c8fcd46bfc0557dad37fe4b717d40f70a35081b945ca007",
+      "bytes": 6462
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/baseline_sellers/agent_1.json",
+      "sha256": "5f9d4a44e78f53872ad2e0af5df36dd96a7308001e3e5004f55521b83f0a6c89",
+      "bytes": 33973
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/baseline_sellers/agent_2.json",
+      "sha256": "bb589aad5c7c37bb5df95135de93015c5593b8946d029d82b7349b2f13ea450e",
+      "bytes": 282
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/baseline_sellers/agent_3.json",
+      "sha256": "81b96dfd7eac8c0cb61e671233afc32170df27c52f8f3272e6ba10563e22b391",
+      "bytes": 94889
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/metrics.json",
+      "sha256": "ceee51890979c2864968ead7eb9d3932497c309837a7b8828e881fd73b49610f",
+      "bytes": 474
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/regulated.jsonl.gz",
+      "sha256": "0ed93d67e36f8f9e4e1cdc6ce486312c71140cc759e544fb3d89d4fc6a218699",
+      "bytes": 30243
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/regulated_sellers/agent_0.json",
+      "sha256": "d7e8d62858d22db2a6e45f91344bbe6636e1c000580bab0da3a42ab019019b69",
+      "bytes": 6281
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/regulated_sellers/agent_1.json",
+      "sha256": "41b05ea9a5e868a711f98a039d2dfd2c24cf11a9f3ee504b877b7f1b48d34c4b",
+      "bytes": 33849
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/regulated_sellers/agent_2.json",
+      "sha256": "51370d2045aa56bf1bcf28ddd67db1b9aea088b3afe22d1430a3fed6fafbfe08",
+      "bytes": 295
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00007/regulated_sellers/agent_3.json",
+      "sha256": "490def24a05b05bd108e8ad8980ab933fa8694485d357ae98e1ede4ebc63b28b",
+      "bytes": 94847
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/baseline.jsonl.gz",
+      "sha256": "4146369c465f9e8ad71b5dafedad648f516d39d306a01e5f75af1c4f7b278af5",
+      "bytes": 28440
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/baseline_sellers/agent_0.json",
+      "sha256": "c6081b7d6069f8e6e8059b121fc67b851bd0bce157a334c99594efd4298dbcda",
+      "bytes": 6462
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/baseline_sellers/agent_1.json",
+      "sha256": "9496472305647123f7b2fb5a9b2f0659cf6181528ffce9e45395cb64e00c2d5f",
+      "bytes": 39400
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/baseline_sellers/agent_2.json",
+      "sha256": "f6afa0c29b8ce84b51864addf0f623b532667bb21dce3c98d32c943cfaa69078",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/baseline_sellers/agent_3.json",
+      "sha256": "ee7e9744920a26eb9668a33f601c16486c16cffadf91212aedd1efbd96fb1a41",
+      "bytes": 95779
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/metrics.json",
+      "sha256": "70f26826e5259f2bc6638cffe721519648fd7a73da575de22e3dce63b5bb327f",
+      "bytes": 473
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/regulated.jsonl.gz",
+      "sha256": "745a76885b0d456580c126f93513ad8f2f8adbcd1edc9af9d4914c80611a63bb",
+      "bytes": 29279
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/regulated_sellers/agent_0.json",
+      "sha256": "53f44d2e5433bf7c3400d0751d6ccc37dd2bcff40b09d2c425905a1198266803",
+      "bytes": 6415
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/regulated_sellers/agent_1.json",
+      "sha256": "64828b6e0f9d06e0c8e4bd0ff30dc7997f6baf8328e0a56a1d54831d6d44707e",
+      "bytes": 39236
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/regulated_sellers/agent_2.json",
+      "sha256": "0304ebe514f3a00c6928c667c15f477ee4f3ff40b9dc1c67d5160803434cddf5",
+      "bytes": 294
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/game_00008/regulated_sellers/agent_3.json",
+      "sha256": "2c13eb9c69e9578249d4c69a0f428d1c3f1c05d63f4bd305fe472e108c4e7bfa",
+      "bytes": 95700
+    },
+    {
+      "path": "runs/transferred_ppo_latest/train/model_2/progress.json",
+      "sha256": "90db3a2c480ae0e6192f1831077ae4521354cfea12bf32266d642d1cd9f90b9b",
+      "bytes": 206
+    }
+  ]
+}
