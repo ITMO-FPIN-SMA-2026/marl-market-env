@@ -14,13 +14,8 @@ arbiter:
   min_fine: 1.0
   max_fine: 100.0
   policy:
-    impl: 'ppo_arbiter:PPOArbiter'
+    impl: 'ppo_arbiter.online:OnlinePPOArbiter'
     kwargs:
       model_seed: 0
-      settings:
-        fine_amount: 25.0
-        fine_cooldown: 5
-        fine_budget: 100.0
-        use_previous_reward: true
-        separate_critic: true
-      checkpoint_out: 'runs/ppo_arbiter/latest.pt'
+      state_path: 'runs/ppo_arbiter/online.pt'
+      warm_start_path: 'runs/ppo_arbiter/both_seed_0_best.pt'

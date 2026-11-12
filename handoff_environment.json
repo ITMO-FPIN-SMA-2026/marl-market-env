@@ -1,0 +1,23 @@
+{
+  "source_platform": "macOS-15.7.1-arm64-arm-64bit-Mach-O",
+  "python": "3.14.4",
+  "packages": {
+    "pip": "26.1"
+  },
+  "portable_minimums": {
+    "python": "3.12+ recommended",
+    "torch": ">=2.6; install an NVIDIA CUDA build on the target PC"
+  },
+  "original_native_commit": "35e0a4d55d5a4f44761af815d86aeadec861f8fa",
+  "branch": "arbiter-transfer-portable",
+  "all_old_stages_preserved": true,
+  "source_training_runtime": {
+    "python": "3.14.4",
+    "torch": "2.15.0",
+    "numpy": "2.5.4",
+    "networkx": "3.7",
+    "pyyaml": "6.0.3",
+    "pytest": "9.2.0",
+    "training_device": "MPS"
+  }
+}
