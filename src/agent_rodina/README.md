@@ -36,7 +36,7 @@ agents:
       # kwargs: {damping: 0.35, join_slack: 0.08, max_cartel_premium: 0.12, learn_rate: 0.05}
 ```
 
-Готовый конфиг: [`experiments/agent_rodina.yaml`](experiments/agent_rodina.yaml)
+Готовый конфиг: [`experiments/agent_rodina.yaml`](agent_rodina.yaml)
 (продавец 0 — наш агент; состав соперников как у Askarov).
 
 ## Install / run

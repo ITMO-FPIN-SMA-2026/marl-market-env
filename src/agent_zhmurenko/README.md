@@ -27,13 +27,13 @@
 
 ### Штатный запуск
 
-Поставляемая модель `regime_1` получена за 2 500 обучающих эпизодов и 125 000 обновлений. Класс `zhmurenko_agent:ZhmurenkoVladimirAgent` автоматически загружает `models/q_agent.json` из своего пакета. При загрузке проверяются совместимость таблицы и параметры рынка. Во время оценки значения Q остаются замороженными.
+Поставляемая модель `regime_1` получена за 2 500 обучающих эпизодов и 125 000 обновлений. Класс `agent_zhmurenko:ZhmurenkoVladimirAgent` автоматически загружает `models/q_agent.json` из своего пакета. При загрузке проверяются совместимость таблицы и параметры рынка. Во время оценки значения Q остаются замороженными.
 
 Из корня репозитория в активном окружении Python:
 
 ```powershell
 python -m pip install -e .
-python -m social_market_env.run experiments/zhmurenko_agent.yaml --runs-dir runs/zhmurenko_agent --strict
+python -m social_market_env.run experiments/agent_zhmurenko.yaml --runs-dir runs/agent_zhmurenko --strict
 ```
 
 В YAML можно указать другую совместимую таблицу через `kwargs: {model_path: 'путь/к/таблице.json'}`. Режим с пустой таблицей включается явно через `kwargs: {fresh: true}`.
@@ -46,9 +46,9 @@ python -m social_market_env.run experiments/zhmurenko_agent.yaml --runs-dir runs
 
 ```powershell
 $root = Join-Path ([IO.Path]::GetTempPath()) 'ITMO_Q_NEW_RUN'
-python -m zhmurenko_agent.research.experiment train --root $root --repeat 0
-python -m zhmurenko_agent.research.experiment train --root $root --repeat 1
-python -m zhmurenko_agent.research.experiment train --root $root --repeat 2
+python -m agent_zhmurenko.research.experiment train --root $root --repeat 0
+python -m agent_zhmurenko.research.experiment train --root $root --repeat 1
+python -m agent_zhmurenko.research.experiment train --root $root --repeat 2
 ```
 
 Флаг `--resume` продолжает обучение с последнего общего чекпойнта пары. Параметр `--max-episodes` должен задавать бюджет выше уже завершённого числа эпизодов.
@@ -56,7 +56,7 @@ python -m zhmurenko_agent.research.experiment train --root $root --repeat 2
 После завершения всех трёх повторов команда `bundle` выбирает модель по валидации, до итоговой оценки. Она обновляет `models/q_agent.json` и `models/provenance.json` в пакете.
 
 ```powershell
-python -m zhmurenko_agent.research.analysis bundle --root $root
+python -m agent_zhmurenko.research.analysis bundle --root $root
 ```
 
 ## Результаты апробации
