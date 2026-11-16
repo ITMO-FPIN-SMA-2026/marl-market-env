@@ -36,21 +36,24 @@ def test_reset_and_opening_price() -> None:
     assert action.price == 23.0  # cost + opening_markup
 
 
-def test_joins_near_best_response_offer() -> None:
-    agent = RodinaAgent(damping=0.0, max_cartel_premium=0.2)
+def test_joins_when_expected_coalition_reward_beats_solo() -> None:
+    """A fair-weight share of the pooled cartel profit should beat solo BR."""
+    agent = RodinaAgent(damping=0.0, formation_prior=0.95, join_slack=0.05)
     agent.reset(agent_id=0, seed=0, training=False)
-    solo_obs = _obs(offer=None, last_prices={0: 35.0, 1: 40.0, 2: 40.0})
+    last_prices = {0: 35.0, 1: 40.0, 2: 40.0}
+    solo_obs = _obs(offer=None, last_prices=last_prices)
     solo_price = RodinaAgent(damping=0.0)._solo_price(solo_obs)
+    # Same cartel price as solo BR, but a large payout weight captures partner profit.
     offer = CoalitionOffer(
-        plan_id=2, members=(0, 1), recommended_price=solo_price * 1.05, payout_weight=0.5
+        plan_id=2, members=(0, 1), recommended_price=solo_price, payout_weight=0.9
     )
-    action = agent.act(_obs(offer=offer, last_prices={0: 35.0, 1: 40.0, 2: 40.0}))
+    action = agent.act(_obs(offer=offer, last_prices=last_prices))
     assert action.coalition_choice == 2
-    assert action.price == pytest.approx(solo_price * 1.05)
+    assert action.price == pytest.approx(solo_price)
 
 
 def test_defects_from_overpriced_cartel() -> None:
-    agent = RodinaAgent(damping=0.0, max_cartel_premium=0.12)
+    agent = RodinaAgent(damping=0.0, formation_prior=0.9)
     agent.reset(agent_id=0, seed=0, training=False)
     offer = CoalitionOffer(plan_id=2, members=(0, 1), recommended_price=90.0, payout_weight=0.5)
     action = agent.act(_obs(offer=offer, last_prices={0: 40.0, 1: 40.0, 2: 40.0}))
@@ -88,6 +91,45 @@ def test_restricted_agent_refuses_offer() -> None:
     )
     action = agent.act(obs)
     assert action.coalition_choice is None
+
+
+def test_low_formation_prior_can_block_risky_join() -> None:
+    """If the cartel only pays when others join, a low formation prior should refuse.
+
+    Accepting locks in the cartel price: on failure the agent keeps only its own
+    gross profit at that high price (no rollback to the solo best response).
+    """
+    last_prices = {0: 35.0, 1: 35.0, 2: 35.0, 3: 35.0}
+    # Large cartel price: alone at that price is bad; equal share of the pool can look fine.
+    offer = CoalitionOffer(
+        plan_id=7,
+        members=(0, 1, 2, 3),
+        recommended_price=70.0,
+        payout_weight=0.25,
+    )
+    optimistic = RodinaAgent(damping=0.0, formation_prior=0.95, join_slack=0.0)
+    optimistic.reset(agent_id=0, seed=0, training=False)
+    pessimistic = RodinaAgent(damping=0.0, formation_prior=0.05, join_slack=0.0)
+    pessimistic.reset(agent_id=0, seed=0, training=False)
+
+    opt_action = optimistic.act(_obs(offer=offer, last_prices=last_prices))
+    pes_action = pessimistic.act(_obs(offer=offer, last_prices=last_prices))
+
+    # Sanity: success share should beat failure payoff for this offer shape.
+    success = optimistic._expected_coalition_share(
+        _obs(offer=offer, last_prices=last_prices), offer=offer
+    )
+    failure = optimistic._expected_own_profit(
+        _obs(offer=offer, last_prices=last_prices), my_price=70.0
+    )
+    solo = optimistic._expected_own_profit(
+        _obs(offer=offer, last_prices=last_prices),
+        my_price=optimistic._solo_price(_obs(offer=None, last_prices=last_prices)),
+    )
+    assert success > solo
+    assert failure < solo
+    assert opt_action.coalition_choice == 7
+    assert pes_action.coalition_choice is None
 
 
 def test_observe_transition_updates_when_training() -> None:
