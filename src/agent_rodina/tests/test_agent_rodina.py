@@ -142,7 +142,7 @@ def test_observe_transition_updates_when_training() -> None:
     assert agent.damping != before or agent._ema_reward != 0.0
 
 
-def test_observe_transition_noop_when_not_training() -> None:
+def test_observe_transition_noop_damping_when_not_training() -> None:
     agent = RodinaAgent(damping=0.5, learn_rate=0.2)
     agent.reset(agent_id=0, seed=0, training=False)
     before_damping = agent.damping
@@ -152,6 +152,25 @@ def test_observe_transition_noop_when_not_training() -> None:
     agent.observe_transition(observation=obs, action=action, reward=10.0, next_observation=obs, done=False)
     assert agent.damping == before_damping
     assert agent._ema_reward == before_ema
+
+
+def test_calibrates_formation_prior_from_outcomes_even_in_eval() -> None:
+    """After accepts, formation_prior moves toward success/failure inferred from reward."""
+    agent = RodinaAgent(damping=0.0, formation_prior=0.55, learn_rate=0.4, join_slack=0.0)
+    agent.reset(agent_id=0, seed=0, training=False)
+    last_prices = {0: 35.0, 1: 35.0, 2: 35.0, 3: 35.0}
+    offer = CoalitionOffer(plan_id=7, members=(0, 1, 2, 3), recommended_price=70.0, payout_weight=0.25)
+    obs = _obs(offer=offer, last_prices=last_prices)
+    # Force a join path by temporarily trusting formation.
+    agent.formation_prior = 0.95
+    action = agent.act(obs)
+    assert action.coalition_choice == 7
+    assert agent._forecast is not None
+    e_fail = float(agent._forecast["e_fail"])
+    before = agent.formation_prior
+    # Realized reward looks like alone-at-cartel-price → prior should fall.
+    agent.observe_transition(observation=obs, action=action, reward=e_fail, next_observation=obs, done=False)
+    assert agent.formation_prior < before
 
 
 @pytest.mark.parametrize("topology", ["complete", "star", "path"])
