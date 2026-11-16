@@ -18,7 +18,8 @@ class RodinaAgent(MarketAgentAPI):
     * damped best-response pricing against last-step rivals;
     * preferential coalition joining by comparing expected solo vs coalition reward
       (including the risk that other members refuse and the cartel never forms);
-    * optional online adaptation of damping / join bias when ``training=True``.
+    * online calibration of formation chance from realized outcomes;
+    * optional adaptation of damping / join bias when ``training=True``.
     """
 
     def __init__(
@@ -27,11 +28,12 @@ class RodinaAgent(MarketAgentAPI):
         market: dict[str, Any] | None = None,
         damping: float = 0.35,
         opening_markup: float = 5.0,
-        join_slack: float = 0.08,
+        join_slack: float = 0.05,
         max_cartel_premium: float = 0.12,
         min_payout_weight: float = 0.05,
-        formation_prior: float = 0.7,
+        formation_prior: float = 0.55,
         learn_rate: float = 0.05,
+        calibrate_formation: bool = True,
     ) -> None:
         self.market = MarketConfig(**(market or {}))
         self.base_damping = float(np.clip(damping, 0.0, 0.95))
@@ -40,25 +42,30 @@ class RodinaAgent(MarketAgentAPI):
         # Kept for YAML / constructor compatibility; join now uses expected rewards.
         self.max_cartel_premium = max_cartel_premium
         self.min_payout_weight = min_payout_weight
-        self.formation_prior = float(np.clip(formation_prior, 0.05, 0.95))
+        self.base_formation_prior = float(np.clip(formation_prior, 0.05, 0.95))
+        self.formation_prior = self.base_formation_prior
         self.learn_rate = learn_rate
+        self.calibrate_formation = calibrate_formation
 
         self.agent_id = 0
         self.training = False
         self.damping = self.base_damping
         self.join_bias = 0.0
+        self.reward_residual = 0.0  # EMA of (realized - predicted); corrects forecast bias
         self._ema_reward = 0.0
         self._joined_last = False
         self._solo_last = False
+        self._forecast: dict[str, float] | None = None
         self.rng = np.random.default_rng(0)
 
     def reset(self, *, agent_id: int, seed: int, training: bool) -> None:
-        """Prepare for a new episode; keep learned damping/join bias across episodes."""
+        """Prepare for a new episode; keep calibrated priors / join bias across episodes."""
         self.agent_id = agent_id
         self.training = training
         self.rng = np.random.default_rng(seed)
         self._joined_last = False
         self._solo_last = False
+        self._forecast = None
         # Mild exploration noise only while training.
         if training:
             self.damping = float(np.clip(self.base_damping + self.rng.normal(0.0, 0.02), 0.05, 0.9))
@@ -72,6 +79,7 @@ class RodinaAgent(MarketAgentAPI):
 
         solo = self._solo_price(observation)
         offer = observation.offer
+        self._forecast = None
 
         if offer is not None and not observation.restricted and self._should_join(observation, solo):
             self._joined_last = True
@@ -80,6 +88,8 @@ class RodinaAgent(MarketAgentAPI):
 
         self._joined_last = False
         self._solo_last = True
+        e_solo = self._expected_own_profit(observation, my_price=solo)
+        self._forecast = {"kind": 0.0, "predicted": e_solo + self.reward_residual, "e_solo": e_solo}
         price = solo
         if self.training:
             # Small price jitter while learning; clipped by the environment sanitizer.
@@ -95,8 +105,30 @@ class RodinaAgent(MarketAgentAPI):
         next_observation: AgentObservation | None,
         done: bool,
     ) -> None:
-        """Adapt damping and join bias from realized reward when training."""
-        del observation, action, next_observation, done
+        """Calibrate formation chance / forecast bias; adapt damping when training."""
+        del next_observation, done
+        forecast = self._forecast
+        self._forecast = None
+
+        if forecast is not None:
+            predicted = float(forecast.get("predicted", 0.0))
+            residual = reward - predicted
+            rate = max(self.learn_rate, 0.05)
+            self.reward_residual = (1.0 - rate) * self.reward_residual + rate * residual
+
+            if self.calibrate_formation and forecast.get("kind", 0.0) >= 0.5:
+                e_success = float(forecast["e_success"])
+                e_fail = float(forecast["e_fail"])
+                # Infer whether the cartel paid like success or like alone-at-cartel-price.
+                formed = abs(reward - e_success) <= abs(reward - e_fail)
+                target = 1.0 if formed else 0.0
+                self.formation_prior = float(
+                    np.clip((1.0 - rate) * self.formation_prior + rate * target, 0.05, 0.95)
+                )
+                self.base_formation_prior = (
+                    (1.0 - 0.5 * rate) * self.base_formation_prior + (0.5 * rate) * self.formation_prior
+                )
+
         if not self.training:
             return
 
@@ -109,9 +141,17 @@ class RodinaAgent(MarketAgentAPI):
         self.base_damping = (1.0 - self.learn_rate) * self.base_damping + self.learn_rate * self.damping
 
         if self._joined_last:
-            self.join_bias = float(np.clip(self.join_bias + self.learn_rate * np.sign(delta) * 0.1, -0.2, 0.25))
+            # Also nudge join_bias from whether join beat the stashed solo forecast.
+            if forecast is not None and "e_solo" in forecast:
+                beat_solo = reward >= float(forecast["e_solo"])
+                step = self.learn_rate * (0.1 if beat_solo else -0.1)
+            else:
+                step = self.learn_rate * np.sign(delta) * 0.1
+            self.join_bias = float(np.clip(self.join_bias + step, -0.2, 0.25))
         elif self._solo_last:
             self.join_bias = float(np.clip(self.join_bias - self.learn_rate * np.sign(delta) * 0.05, -0.2, 0.25))
+
+        del observation, action
 
     def _solo_price(self, observation: AgentObservation) -> float:
         """Damped best response to last-step competitor prices."""
@@ -135,7 +175,7 @@ class RodinaAgent(MarketAgentAPI):
         members refuse, the environment still clears the market at that price and
         the agent keeps only its own gross profit (no fallback to the solo BR
         price). The observation does not expose a failure probability, so we mix
-        success and failure payoffs with ``formation_prior`` (+ learned join bias).
+        success and failure payoffs with a calibrated ``formation_prior``.
         """
         offer = observation.offer
         assert offer is not None
@@ -145,24 +185,40 @@ class RodinaAgent(MarketAgentAPI):
             return False
 
         solo_reward = self._expected_own_profit(observation, my_price=solo_price)
-        join_reward = self._expected_join_reward(observation, offer=offer)
+        success = self._expected_coalition_share(observation, offer=offer)
+        failure = self._expected_own_profit(observation, my_price=float(offer.recommended_price))
+        join_reward = self._mix_join_reward(observation, success=success, failure=failure)
 
-        slack = self.join_slack * max(abs(solo_reward), 1.0)
-        # join_bias also nudges the comparison directly (same units as relative slack).
-        slack += self.join_bias * max(abs(solo_reward), 1.0)
+        # Correct systematic forecast bias learned from past residuals.
+        solo_adj = solo_reward + self.reward_residual
+        join_adj = join_reward + self.reward_residual
+
+        slack = self.join_slack * max(abs(solo_adj), 1.0)
+        slack += self.join_bias * max(abs(solo_adj), 1.0)
 
         if observation.last_evaluation is not None and observation.last_evaluation.fine > 0:
-            # After a fine, require a clearer advantage to join again.
-            slack -= 0.04 * max(abs(solo_reward), 1.0)
+            slack -= 0.04 * max(abs(solo_adj), 1.0)
         if observation.last_profit < 0:
-            slack -= 0.02 * max(abs(solo_reward), 1.0)
+            slack -= 0.02 * max(abs(solo_adj), 1.0)
 
-        return join_reward + slack >= solo_reward
+        decide = join_adj + slack >= solo_adj
+        self._forecast = {
+            "kind": 1.0 if decide else 0.0,
+            "predicted": (join_reward if decide else solo_reward) + self.reward_residual,
+            "e_solo": solo_reward,
+            "e_join": join_reward,
+            "e_success": success,
+            "e_fail": failure,
+        }
+        return decide
 
     def _expected_join_reward(self, observation: AgentObservation, *, offer: CoalitionOffer) -> float:
         """Mixture of formed-cartel share and alone-at-cartel-price fallback."""
         success = self._expected_coalition_share(observation, offer=offer)
         failure = self._expected_own_profit(observation, my_price=float(offer.recommended_price))
+        return self._mix_join_reward(observation, success=success, failure=failure)
+
+    def _mix_join_reward(self, observation: AgentObservation, *, success: float, failure: float) -> float:
         p_form = float(np.clip(self.formation_prior + self.join_bias, 0.05, 0.95))
         if observation.last_evaluation is not None and observation.last_evaluation.fine > 0:
             p_form = float(np.clip(p_form - 0.1, 0.05, 0.95))
@@ -172,8 +228,9 @@ class RodinaAgent(MarketAgentAPI):
         """Own pool share if every listed member complies at the recommended price.
 
         The offer only carries this agent's recommended price; we approximate that
-        other members are asked to post the same cartel price. Unknown rival costs
-        are proxied by this agent's cost (observation has no foreign costs).
+        other members are asked to post the same cartel price. Rival unit costs are
+        inferred from last prices and this agent's own margin (observation has no
+        foreign costs).
         """
         cartel_price = float(offer.recommended_price)
         prices = self._price_snapshot(observation, my_price=cartel_price)
@@ -181,7 +238,7 @@ class RodinaAgent(MarketAgentAPI):
             prices[int(member)] = cartel_price
         outcome = clear_market(
             prices=prices,
-            costs={agent_id: observation.cost for agent_id in prices},
+            costs=self._estimate_costs(observation, prices=prices),
             market=self.market,
         )
         pool = sum(outcome.gross_profits.get(int(member), 0.0) for member in offer.members)
@@ -192,17 +249,32 @@ class RodinaAgent(MarketAgentAPI):
         prices = self._price_snapshot(observation, my_price=my_price)
         outcome = clear_market(
             prices=prices,
-            costs={agent_id: observation.cost for agent_id in prices},
+            costs=self._estimate_costs(observation, prices=prices),
             market=self.market,
         )
         return float(outcome.gross_profits.get(observation.agent_id, 0.0))
+
+    def _estimate_costs(self, observation: AgentObservation, *, prices: dict[int, float]) -> dict[int, float]:
+        """Own cost exact; rivals ≈ last price minus own recent margin (clipped)."""
+        own_id = observation.agent_id
+        if observation.last_price is not None:
+            markup = max(0.5, float(observation.last_price) - observation.cost)
+        else:
+            markup = max(0.5, self.opening_markup)
+        costs: dict[int, float] = {}
+        for agent_id, price in prices.items():
+            if agent_id == own_id:
+                costs[agent_id] = float(observation.cost)
+                continue
+            # Prefer last observed price of that rival when estimating their cost.
+            ref = float(observation.market.last_prices.get(agent_id, price))
+            costs[agent_id] = float(np.clip(ref - markup, self.market.p_min * 0.5, ref - 1e-3))
+        return costs
 
     def _price_snapshot(self, observation: AgentObservation, *, my_price: float) -> dict[int, float]:
         """Last-step prices with this agent's price overwritten."""
         prices = {int(agent_id): float(price) for agent_id, price in observation.market.last_prices.items()}
         prices[observation.agent_id] = float(my_price)
-        if observation.agent_id not in prices:
-            prices[observation.agent_id] = float(my_price)
         return prices
 
 
